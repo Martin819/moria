@@ -1,8 +1,6 @@
-
 # MOIS – Moria – Analýza plateb
 
 ## Funkční návrh
-
 - motivace, vize, high level pohled na řešení spolu s Big picture
 - Popis okolí microservice + rozhraní
 - Návrhy obrazovek – wireframes, UX prvky s popisem
@@ -19,12 +17,9 @@
 - Technologie – důvody použití
 
 ## HW Infrastruktura a SW licence – sizing HW, licence
-
 - Logické schéma HW infrastruktury – popis pokrytí nefunkčních požadavků a škálovatelnost (z pohledu cloudu - zdroje, škálování apod.)
    
-
 ## Cenový odhad – cenová kalkulace i s licenčními poplatky. Oblasti:
-
 - Analýza a specifikace
 - Implementace
 - Testy funkčnosti, výkonu a stability aplikace (na straně zhotovitele)
@@ -34,11 +29,7 @@
 - Celková cena
 
 ## Projektový plán
-
 - od úvodní studie až po zavedení, uvést konkrétní termíny, návrh jednotlivých etap
-
-## Projektový plán
-
 
 ## Autoři
 
