@@ -1,5 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
+import moment from 'moment';
 import { withStyles, ExpansionPanel, ExpansionPanelSummary, Typography, Grid, Grow } from '@material-ui/core/';
 import { Badge } from 'reactstrap';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
@@ -14,11 +15,11 @@ const TransactionItem = props => {
           <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
             <Grid container direction="row" spacing={24}>
               <Grid item>
-                <Typography className={classes.date}>{valueDate}</Typography>
+                <Typography className={classes.date}>{moment(valueDate).format('DD MMM YYYY')}</Typography>
               </Grid>
               <Grid item xs>
                 <Grid container justify="space-between" alignItems="center">
-                  <Grid item justify="flex-start">
+                  <Grid item>
                     <Badge color="warning" pill>
                       {category}
                     </Badge>

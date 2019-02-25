@@ -33,14 +33,11 @@ const TransactionItemPanelDetail = props => {
             </Select>
           </FormControl>
         </Grid>
-
         <Grid item>
-          <Typography>
-            <hr />
-            <Button outline color="success" type="submit">
-              Detail
-            </Button>
-          </Typography>
+          <hr />
+          <Button outline color="success" type="submit">
+            Detail
+          </Button>
         </Grid>
       </Grid>
     </ExpansionPanelDetails>
