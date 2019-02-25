@@ -1,7 +1,11 @@
-import { GET_TRANSACTIONS, TRANSACTIONS_LOADING } from '../actions/types';
+import { GET_TRANSACTIONS, TRANSACTIONS_LOADING, FILTER_TRANSACTIONS } from '../actions/types';
+import { NONE, LAST_WEEK, LAST_MONTH, LAST_SIX_MONTHS, LAST_YEAR } from '../constants/transactionListFilters';
+import moment from 'moment';
 
 const initialState = {
   transactions: [],
+  visibleTransactions: [],
+  selectedFilter: NONE.id,
   loading: false
 };
 
@@ -11,16 +15,55 @@ export default function(state = initialState, action) {
       return {
         ...state,
         transactions: action.payload.transactions,
+        visibleTransactions: action.payload.transactions,
         loading: false
       };
     }
     case TRANSACTIONS_LOADING: {
       return {
         ...state,
+        selectedFilter: NONE.id,
         loading: true
+      };
+    }
+    case FILTER_TRANSACTIONS: {
+      return {
+        ...state,
+        selectedFilter: action.payload,
+        visibleTransactions: filterTransactions(action.payload, state.transactions)
       };
     }
     default:
       return state;
   }
 }
+
+const filterTransactions = (selectedFilter, transactions) => {
+  switch (selectedFilter) {
+    case NONE.id: {
+      return [...transactions];
+    }
+    case LAST_WEEK.id: {
+      return transactions.filter(t => {
+        return moment(t.valueDate).isAfter(moment().subtract(7, 'd'));
+      });
+    }
+    case LAST_MONTH.id: {
+      return transactions.filter(t => {
+        return moment(t.valueDate).isAfter(moment().subtract(1, 'M'));
+      });
+    }
+    case LAST_SIX_MONTHS.id: {
+      return transactions.filter(t => {
+        return moment(t.valueDate).isAfter(moment().subtract(6, 'M'));
+      });
+    }
+    case LAST_YEAR.id: {
+      return transactions.filter(t => {
+        return moment(t.valueDate).isAfter(moment().subtract(1, 'y'));
+      });
+    }
+    default:
+      return [...transactions];
+  }
+};

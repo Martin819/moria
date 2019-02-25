@@ -1,50 +1,12 @@
-import { GET_TRANSACTIONS, TRANSACTIONS_LOADING } from './types';
-const data = {
-  transactions: [
-    {
-      id: 1,
-      valueDate: '29 Jan 2019',
-      transactionType: 'CARD',
-      value: {
-        amount: 220,
-        currency: 'CZK'
-      },
-      partyDescription: 'Billa',
-      category: 'ELECTRONICS',
-      message: 'Additional info'
-    },
-    {
-      id: 2,
-      valueDate: '30 Jan 2019',
-      transactionType: 'CARD',
-      value: {
-        amount: 2200,
-        currency: 'EUR'
-      },
-      partyDescription: 'Tesco',
-      category: 'FOOD',
-      message: 'Additional info'
-    },
-    {
-      id: 3,
-      valueDate: '31 Jan 2019',
-      transactionType: 'CARD',
-      value: {
-        amount: 250,
-        currency: 'USD'
-      },
-      partyDescription: 'Albert',
-      category: 'HOME EQUIPMENT',
-      message: 'Additional info'
-    }
-  ]
-};
+import { GET_TRANSACTIONS, TRANSACTIONS_LOADING, FILTER_TRANSACTIONS } from './types';
+import { transactionsData } from '../utils/exampleResponse';
+
 export const getData = () => dispatch => {
   dispatch(setItemsLoading());
   setTimeout(() => {
     dispatch({
       type: GET_TRANSACTIONS,
-      payload: data
+      payload: transactionsData
     });
   }, 1000);
 
@@ -59,5 +21,12 @@ export const getData = () => dispatch => {
 export const setItemsLoading = () => {
   return {
     type: TRANSACTIONS_LOADING
+  };
+};
+
+export const setTransactionFilter = filterId => {
+  return {
+    type: FILTER_TRANSACTIONS,
+    payload: filterId
   };
 };

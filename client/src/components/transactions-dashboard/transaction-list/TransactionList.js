@@ -3,16 +3,17 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import TransactionItem from '../transaction-item/TransactionItem';
 import { Spinner } from 'reactstrap';
+import TransactionFilterContainer from '../../../containers/transactions/TransactionFilterContainer';
 
 const TransactionsList = props => {
-  console.log(props);
   const { classes, transactions, isLoading } = props;
-  const transactionItems = transactions.map(t => {
-    return <TransactionItem {...t} />;
+  const transactionItems = transactions.map(transaction => {
+    return <TransactionItem key={transaction.id} {...transaction} />;
   });
   return (
     <div className={classes.root}>
       <h2>Transactions</h2>
+      <TransactionFilterContainer />
       {isLoading ? (
         <div className="text-center">
           <Spinner type="grow" color="primary" />

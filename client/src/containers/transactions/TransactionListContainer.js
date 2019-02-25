@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { getData } from '../../actions/transactionActions';
@@ -12,16 +12,16 @@ class TransactionListContainer extends Component {
 
   render() {
     return (
-      <div>
+      <Fragment>
         <AccountBalanceInfo />
         <TransactionList {...this.props} />
-      </div>
+      </Fragment>
     );
   }
 }
 
 const mapStateToProps = state => ({
-  transactions: state.transactions.transactions,
+  transactions: state.transactions.visibleTransactions,
   isLoading: state.transactions.loading
 });
 
