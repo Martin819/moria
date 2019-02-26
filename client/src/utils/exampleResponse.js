@@ -86,3 +86,27 @@ export const transactionsData = {
     }
   ]
 };
+
+export const rulesData = [
+  {
+    id: 1,
+    name: 'Rule 1',
+    category: 'FOOD',
+    conditions: [],
+    default: true
+  },
+  {
+    id: 2,
+    name: 'Rule 2',
+    category: 'ELECTRONICS',
+    conditions: [],
+    default: true
+  },
+  {
+    id: 3,
+    name: 'Rule 3',
+    category: 'HOME_EQUIPMENTS',
+    conditions: [],
+    default: true
+  }
+];
