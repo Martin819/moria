@@ -12,7 +12,6 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Map;
 
 
 @RestController
@@ -44,7 +43,7 @@ public class MainController {
 
         //neco takovyho prijde
         Date date = new Date();
-        Payment payment = new Payment("Billa", new BigDecimal(250), false, date, "bagrovicovic");
+        Payment payment = new Payment("H&M sdfgdsdfgs", new BigDecimal(250), false, date, "bagrovicovic");
         //--------------------------------------------
 
         CategoryScorer categoryScorer = new CategoryScorer();

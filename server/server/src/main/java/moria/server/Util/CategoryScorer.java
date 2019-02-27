@@ -2,9 +2,7 @@ package moria.server.Util;
 
 import moria.server.Dto.Payment;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -26,14 +24,13 @@ public class CategoryScorer {
         scorePropabilityOfRetailers(retailer); //přidá bod ke kategoriim, ve kterých se obchodnik nachazi
 
 
-
         //Najdu nejvyssi hodnoceni ve scoredCategories (pokud jsou 2 a vice se stejným, beru to prvni) -> to je nase kategorie kde se obchodnik nachazi
         String categoryWithHighestPropability = "";
         int maxValue = 0;
-        for (Map.Entry<String, Integer> entry : scoredCategories.entrySet()){
+        for (Map.Entry<String, Integer> entry : scoredCategories.entrySet()) {
             Integer score = entry.getValue();
             String retailers = entry.getKey();
-            if (score > maxValue){
+            if (score > maxValue) {
                 maxValue = score;
                 categoryWithHighestPropability = retailers;
             }
@@ -44,24 +41,26 @@ public class CategoryScorer {
     /**
      * mame obchodnika z prichozi platby - projedu vsechny obchodniky, ktery mam v kategoriich a hledam, zdali se nějaká 2 jména neshoduji
      * pokud se shodují, vlozim si je do foundCategories
+     *
      * @param retailer hledany obchodnik v kategoriich
      */
     private void scorePropabilityOfRetailers(String retailer) {
         ArrayList<String> foundCategories = new ArrayList<>();
-        for (Map.Entry<String, ArrayList<String>> entry : categories.entrySet()){
+        for (Map.Entry<String, ArrayList<String>> entry : categories.entrySet()) {
 
             String category = entry.getKey();
             ArrayList<String> retailers = entry.getValue();
 
-            if (retailers != null){
-                for (String retailerName : retailers){
-                    if (retailerName.contains(retailer)) foundCategories.add(category);
+            if (retailers != null) {
+                for (String retailerName : retailers) {
+                    //tohlento umi vyhledat nazev obchodnika v souveti -> najde napr. Billa v blabla Billa bla bla
+                    if ( retailer.matches(".*" + retailerName +".*")) foundCategories.add(category);
                 }
             }
         }
 
         //tyto kategorie pak dostanou +1 bod v scoredCategories hashmape
-        for (String categoryName : foundCategories){
+        for (String categoryName : foundCategories) {
             int score = scoredCategories.get(categoryName);
             scoredCategories.put(categoryName, score + 1);
         }
