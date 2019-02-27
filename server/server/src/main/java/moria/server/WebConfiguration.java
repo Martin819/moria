@@ -7,4 +7,5 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupp
 @Configuration
 @EnableWebMvc
 public class WebConfiguration extends WebMvcConfigurationSupport {
+
 }
