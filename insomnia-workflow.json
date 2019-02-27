@@ -1,0 +1,232 @@
+{
+	"_type": "export",
+	"__export_format": 3,
+	"__export_date": "2019-02-20T09:46:46.505Z",
+	"__export_source": "insomnia.desktop.app:v6.3.2",
+	"resources": [
+		{
+			"_id": "wrk_a252c496b35f4de8ac4429730f232378",
+			"created": 1550505413252,
+			"description": "",
+			"modified": 1550505413252,
+			"name": "MOIS - banking",
+			"parentId": null,
+			"_type": "workspace"
+		},
+		{
+			"_id": "env_0ec61fbc85cf45b6aae504e9a2e1e492",
+			"color": null,
+			"created": 1550505413638,
+			"data": {
+				"accountId": 123
+			},
+			"isPrivate": false,
+			"metaSortKey": 1550505413638,
+			"modified": 1550506997851,
+			"name": "New Environment",
+			"parentId": "wrk_a252c496b35f4de8ac4429730f232378",
+			"_type": "environment"
+		},
+		{
+			"_id": "jar_1b33a42ec7ba41eaacfff4af9af53137",
+			"cookies": [],
+			"created": 1550505413676,
+			"modified": 1550505413676,
+			"name": "Default Jar",
+			"parentId": "wrk_a252c496b35f4de8ac4429730f232378",
+			"_type": "cookie_jar"
+		},
+		{
+			"_id": "fld_c4094b8f22b8477ba890acd99109eeb4",
+			"created": 1550505711576,
+			"description": "",
+			"environment": {},
+			"metaSortKey": -1550505711576,
+			"modified": 1550505711576,
+			"name": "transactions",
+			"parentId": "wrk_a252c496b35f4de8ac4429730f232378",
+			"_type": "request_group"
+		},
+		{
+			"_id": "fld_539efa194de64304ba619a67b02ce756",
+			"created": 1550505808845,
+			"description": "",
+			"environment": {},
+			"metaSortKey": -1550505808845,
+			"modified": 1550505816383,
+			"name": "payments",
+			"parentId": "wrk_a252c496b35f4de8ac4429730f232378",
+			"_type": "request_group"
+		},
+		{
+			"_id": "env_2d239aeb61454e53b9f13b69d15292ec",
+			"color": null,
+			"created": 1550505552384,
+			"data": {
+				"baseUrl": "https://mois-banking.herokuapp.com/v1/"
+			},
+			"isPrivate": false,
+			"metaSortKey": 1550505552384,
+			"modified": 1550505581886,
+			"name": "prod",
+			"parentId": "env_0ec61fbc85cf45b6aae504e9a2e1e492",
+			"_type": "environment"
+		},
+		{
+			"_id": "env_c48a358b04d242ed80572b5649149bc3",
+			"color": null,
+			"created": 1550505559314,
+			"data": {
+				"baseUrl": "http://localhost:8000/v1/"
+			},
+			"isPrivate": false,
+			"metaSortKey": 1550505559314,
+			"modified": 1550505605435,
+			"name": "localhost",
+			"parentId": "env_0ec61fbc85cf45b6aae504e9a2e1e492",
+			"_type": "environment"
+		},
+		{
+			"_id": "req_4cc7fae5037640eeba2f3d9c629e2a39",
+			"authentication": {},
+			"body": {},
+			"created": 1550505484802,
+			"description": "",
+			"headers": [],
+			"isPrivate": false,
+			"metaSortKey": -1550505484802,
+			"method": "GET",
+			"modified": 1550509089756,
+			"name": "findByDate",
+			"parameters": [
+				{
+					"id": "pair_18e266810c2f45258fbedcf5e71896fa",
+					"name": "dateFrom",
+					"value": "2019-02-18T14:02:29.346Z"
+				},
+				{
+					"id": "pair_662b7b1e5cf945cfa709beda2bd50a6b",
+					"name": "dateTo",
+					"value": "2019-02-18T18:02:29.346Z"
+				},
+				{
+					"id": "pair_8f71c109e608406b99d1b808e8f501ec",
+					"name": "accountId",
+					"value": "{{ accountId  }}"
+				}
+			],
+			"parentId": "fld_c4094b8f22b8477ba890acd99109eeb4",
+			"settingDisableRenderRequestBody": false,
+			"settingEncodeUrl": true,
+			"settingMaxTimelineDataSize": 1000,
+			"settingRebuildPath": true,
+			"settingSendCookies": true,
+			"settingStoreCookies": true,
+			"url": "{{ baseUrl  }}transaction/findByDate",
+			"_type": "request"
+		},
+		{
+			"_id": "req_d8de354ac4ec42d997f3eb5b4b4856a7",
+			"authentication": {},
+			"body": {
+				"mimeType": "application/json",
+				"text": "{\n  \"id\": \"string\",\n  \"accountId\": \"{{ accountId  }}\",\n  \"value\": {\n    \"amount\": 0,\n    \"currency\": \"string\"\n  },\n  \"partyAccount\": {\n    \"prefix\": \"string\",\n    \"accountNumber\": \"string\",\n    \"bankCode\": \"string\"\n  },\n  \"partyDescription\": \"string\",\n  \"direction\": \"INCOMING\",\n  \"transactionType\": \"PAYMENT_HOME\",\n  \"valueDate\": \"2019-02-18T16:02:29.346Z\",\n  \"bookingDate\": \"2019-02-18T16:02:29.346Z\",\n  \"userDescription\": \"string\",\n  \"payerMessage\": \"string\",\n  \"payeeMessage\": \"string\",\n  \"categoryId\": 0,\n  \"transactionFee\": 0,\n  \"transactionFeeCanceled\": true,\n  \"additionalInfoDomestic\": {\n    \"constantSymbol\": \"string\",\n    \"variableSymbol\": \"string\",\n    \"specificSymbol\": \"string\"\n  },\n  \"additionalInfoForeign\": {\n    \"originalValue\": {\n      \"amount\": 0,\n      \"currency\": \"string\"\n    },\n    \"exchangeRate\": 0\n  },\n  \"additionalInfoCard\": {\n    \"mcc\": \"string\",\n    \"merchantName\": \"string\",\n    \"cardNumber\": \"string\"\n  }\n}"
+			},
+			"created": 1550505730384,
+			"description": "",
+			"headers": [
+				{
+					"id": "pair_cf1c2bf2d8d046f2a8e0bb2f8814c917",
+					"name": "Content-Type",
+					"value": "application/json"
+				}
+			],
+			"isPrivate": false,
+			"metaSortKey": -1550505484752,
+			"method": "POST",
+			"modified": 1550654787062,
+			"name": "create",
+			"parameters": [],
+			"parentId": "fld_c4094b8f22b8477ba890acd99109eeb4",
+			"settingDisableRenderRequestBody": false,
+			"settingEncodeUrl": true,
+			"settingMaxTimelineDataSize": 1000,
+			"settingRebuildPath": true,
+			"settingSendCookies": true,
+			"settingStoreCookies": true,
+			"url": "{{ baseUrl  }}transaction",
+			"_type": "request"
+		},
+		{
+			"_id": "req_79efb5cfe444411c858d53c79902dcea",
+			"authentication": {},
+			"body": {
+				"mimeType": "application/json",
+				"text": "{\n  \"value\": {\n    \"amount\": 5000,\n    \"currency\": \"CZK\"\n  },\n  \"partyAccount\": {\n    \"prefix\": \"47\",\n    \"accountNumber\": \"123456789\",\n    \"bankCode\": \"8080\"\n  },\n  \"dueDate\": \"2019-02-18T16:21:17.067Z\",\n  \"recuringPayment\": {\n    \"firstPayment\": \"2019-02-18T16:21:17.067Z\",\n    \"lastPayment\": \"2019-02-18T16:21:17.067Z\",\n    \"interval\": \"WEEK\"\n  },\n  \"additionalInfo\": {\n    \"constantSymbol\": \"8080\",\n    \"variableSymbol\": \"861225\",\n    \"specificSymbol\": \"8\"\n  },\n  \"id\": 0,\n  \"accountId\": \"{{ accountId  }}\",\n  \"editableByUser\": true,\n  \"realizationStatus\": \"RTS_EDITED\"\n}"
+			},
+			"created": 1550505831105,
+			"description": "",
+			"headers": [
+				{
+					"id": "pair_b3820c4bfb3c4940a193941ffa1fc831",
+					"name": "Content-Type",
+					"value": "application/json"
+				}
+			],
+			"isPrivate": false,
+			"metaSortKey": -1550505831105,
+			"method": "POST",
+			"modified": 1550509218612,
+			"name": "create",
+			"parameters": [],
+			"parentId": "fld_539efa194de64304ba619a67b02ce756",
+			"settingDisableRenderRequestBody": false,
+			"settingEncodeUrl": true,
+			"settingMaxTimelineDataSize": 1000,
+			"settingRebuildPath": true,
+			"settingSendCookies": true,
+			"settingStoreCookies": true,
+			"url": "{{ baseUrl  }}payment",
+			"_type": "request"
+		},
+		{
+			"_id": "req_3d014257697e406c8449070d99bb6766",
+			"authentication": {},
+			"body": {},
+			"created": 1550505868310,
+			"description": "",
+			"headers": [],
+			"isPrivate": false,
+			"metaSortKey": -1550505831055,
+			"method": "GET",
+			"modified": 1550509105827,
+			"name": "findByDate",
+			"parameters": [
+				{
+					"id": "pair_18e266810c2f45258fbedcf5e71896fa",
+					"name": "dateFrom",
+					"value": "2012-04-23T18:25:43.511Z"
+				},
+				{
+					"id": "pair_662b7b1e5cf945cfa709beda2bd50a6b",
+					"name": "dateTo",
+					"value": "2020-04-23T18:25:43.511Z"
+				},
+				{
+					"id": "pair_2131e5182c254fe4a3ec7f24dfe2cec6",
+					"name": "accountId",
+					"value": "{{ accountId  }}"
+				}
+			],
+			"parentId": "fld_539efa194de64304ba619a67b02ce756",
+			"settingDisableRenderRequestBody": false,
+			"settingEncodeUrl": true,
+			"settingMaxTimelineDataSize": 1000,
+			"settingRebuildPath": true,
+			"settingSendCookies": true,
+			"settingStoreCookies": true,
+			"url": "{{ baseUrl  }}payment/findByDate",
+			"_type": "request"
+		}
+	]
+}
