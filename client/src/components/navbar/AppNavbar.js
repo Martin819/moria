@@ -34,7 +34,7 @@ class AppNavbar extends Component {
                 </NavItem>
                 <NavItem>
                   <NavLink className="nav-link" to="/graphs">
-                    Graphs
+                    Statistics
                   </NavLink>
                 </NavItem>
               </Nav>
