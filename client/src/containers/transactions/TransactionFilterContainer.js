@@ -8,7 +8,9 @@ class TransactionFilterContainer extends Component {
   render() {
     return (
       <Fragment>
+        {/* TODO: TransactionFilterArea*/}
         <TransactionFilter
+          label="Time period"
           selectedFilter={this.props.selectedFilter}
           handleFilterChange={this.props.handleFilterChange}
         />

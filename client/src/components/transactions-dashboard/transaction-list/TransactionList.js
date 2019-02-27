@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
+import { Grid } from '@material-ui/core/';
 import TransactionItem from '../transaction-item/TransactionItem';
 import { Spinner } from 'reactstrap';
 import TransactionFilterContainer from '../../../containers/transactions/TransactionFilterContainer';
@@ -10,17 +11,31 @@ const TransactionsList = props => {
   const transactionItems = transactions.map(transaction => {
     return <TransactionItem key={transaction.id} {...transaction} />;
   });
+
   return (
     <div className={classes.root}>
       <h2>Transactions</h2>
-      <TransactionFilterContainer />
-      {isLoading ? (
-        <div className="text-center">
-          <Spinner type="grow" color="primary" />
-        </div>
-      ) : (
-        transactionItems
-      )}
+      <Grid container direction="column" spacing={8}>
+        <Grid item xs>
+          <Grid container spacing={16}>
+            <Grid item md={6} xs={12}>
+              <TransactionFilterContainer />
+            </Grid>
+            <Grid item md={6} xs={12}>
+              <TransactionFilterContainer />
+            </Grid>
+          </Grid>
+        </Grid>
+        <Grid item xs>
+          {isLoading ? (
+            <div className="text-center">
+              <Spinner type="grow" color="primary" />
+            </div>
+          ) : (
+            transactionItems
+          )}
+        </Grid>
+      </Grid>
     </div>
   );
 };
@@ -33,10 +48,6 @@ const styles = theme => ({
   root: {
     width: '55%',
     marginTop: '20px'
-  },
-  spinner: {
-    maxWidth: '100%',
-    margin: 'auto'
   }
 });
 

@@ -1,11 +1,11 @@
 import { GET_TRANSACTIONS, TRANSACTIONS_LOADING, FILTER_TRANSACTIONS } from '../actions/types';
-import { NONE, LAST_WEEK, LAST_MONTH, LAST_SIX_MONTHS, LAST_YEAR } from '../constants/transactionListFilters';
+import { ALL_TIME, LAST_WEEK, LAST_MONTH, LAST_SIX_MONTHS, LAST_YEAR } from '../constants/transactionListFilters';
 import moment from 'moment';
 
 const initialState = {
   transactions: [],
   visibleTransactions: [],
-  selectedFilter: NONE.id,
+  selectedFilter: ALL_TIME.id,
   loading: false
 };
 
@@ -22,7 +22,7 @@ export default function(state = initialState, action) {
     case TRANSACTIONS_LOADING: {
       return {
         ...state,
-        selectedFilter: NONE.id,
+        selectedFilter: ALL_TIME.id,
         loading: true
       };
     }
@@ -40,7 +40,7 @@ export default function(state = initialState, action) {
 
 const filterTransactions = (selectedFilter, transactions) => {
   switch (selectedFilter) {
-    case NONE.id: {
+    case ALL_TIME.id: {
       return [...transactions];
     }
     case LAST_WEEK.id: {
