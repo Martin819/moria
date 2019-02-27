@@ -1,0 +1,232 @@
+{
+	"info": {
+		"_postman_id": "66e2483e-eb1c-43e0-b835-79c0f3c33479",
+		"name": "Swagger Banking",
+		"description": "Simple Banking API used for MOIS on UHK. Api is derived from AIR bank API: https://www.airbank.cz/novinky-z-airbank/2017/open-api/open-api-banking.html#top",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "transaction",
+			"item": [
+				{
+					"name": "Add a new transaction",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "Transaction object that needs to be added"
+						},
+						"url": {
+							"raw": "https://mois-banking.herokuapp.com/v1/transaction?accountId={{accountId}}",
+							"protocol": "https",
+							"host": [
+								"mois-banking",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"v1",
+								"transaction"
+							],
+							"query": [
+								{
+									"key": "accountId",
+									"value": "{{accountId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Finds transactions by date",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://mois-banking.herokuapp.com/v1/transaction/findByDate?dateFrom={{dateFrom}}&dateTo={{dateTo}}&accountId={{accountId}}",
+							"protocol": "https",
+							"host": [
+								"mois-banking",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"v1",
+								"transaction",
+								"findByDate"
+							],
+							"query": [
+								{
+									"key": "dateFrom",
+									"value": "{{dateFrom}}"
+								},
+								{
+									"key": "dateTo",
+									"value": "{{dateTo}}"
+								},
+								{
+									"key": "accountId",
+									"value": "{{accountId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "Folder for transaction"
+		},
+		{
+			"name": "payment",
+			"item": [
+				{
+					"name": "Update payment",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "Payment object that needs to be updated"
+						},
+						"url": {
+							"raw": "https://mois-banking.herokuapp.com/v1/payment?accountId={{accountId}}",
+							"protocol": "https",
+							"host": [
+								"mois-banking",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"v1",
+								"payment"
+							],
+							"query": [
+								{
+									"key": "accountId",
+									"value": "{{accountId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add a new payment",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "Payment object that needs to be added"
+						},
+						"url": {
+							"raw": "https://mois-banking.herokuapp.com/v1/payment?accountId={{accountId}}",
+							"protocol": "https",
+							"host": [
+								"mois-banking",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"v1",
+								"payment"
+							],
+							"query": [
+								{
+									"key": "accountId",
+									"value": "{{accountId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Finds payment by date",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://mois-banking.herokuapp.com/v1/payment/findByDate?dateFrom={{dateFrom}}&dateTo={{dateTo}}&accountId={{accountId}}",
+							"protocol": "https",
+							"host": [
+								"mois-banking",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"v1",
+								"payment",
+								"findByDate"
+							],
+							"query": [
+								{
+									"key": "dateFrom",
+									"value": "{{dateFrom}}"
+								},
+								{
+									"key": "dateTo",
+									"value": "{{dateTo}}"
+								},
+								{
+									"key": "accountId",
+									"value": "{{accountId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "Folder for payment"
+		}
+	]
+}
