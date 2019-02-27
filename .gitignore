@@ -1,2 +1,8 @@
 node_modules/*
 *.ldb
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
