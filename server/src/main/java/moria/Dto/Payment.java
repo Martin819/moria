@@ -13,7 +13,7 @@ public class Payment {
 
 
     @Getter @Setter private String payer;
-    @Getter @Setter private BigDecimal transferMoney;
+    @Getter @Setter private double transferMoney;
     @Getter @Setter private boolean incomingPayment;
     @Getter @Setter private Date dateOfPayment;
     @Getter @Setter private String description;
