@@ -1,6 +1,6 @@
-package moria.server.Util;
+package moria.Util;
 
-import moria.server.Dto.Payment;
+import moria.Dto.Payment;
 
 import java.util.ArrayList;
 import java.util.HashMap;

@@ -1,8 +1,8 @@
-package moria.server.controller;
+package moria.controller;
 
-import moria.server.Dto.Category;
-import moria.server.Dto.Payment;
-import moria.server.Util.CategoryScorer;
+import moria.Dto.Category;
+import moria.Dto.Payment;
+import moria.Util.CategoryScorer;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,11 +15,12 @@ import java.util.HashMap;
 
 
 @RestController
-public class MainController {
+public class PaymentController {
 
     private Category category = new Category();
     private HashMap<String, ArrayList<String>> dummyCategories = new HashMap<>();
 
+    // jen pro testovací účely
     @GetMapping(path = "/items", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public String sendItems() {
 

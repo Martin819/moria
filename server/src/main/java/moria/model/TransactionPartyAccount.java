@@ -1,4 +1,4 @@
-package moria.server.model;
+package moria.model;
 
 public class TransactionPartyAccount {
 

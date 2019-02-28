@@ -1,16 +1,16 @@
-package moria.server.model;
+package moria.model;
 
 import java.math.BigDecimal;
 
-public class TransactionForeignOriginalValue {
+public class TransactionValue {
 
     private BigDecimal amount;
     private String currency;
 
-    public TransactionForeignOriginalValue() {
+    public TransactionValue() {
     }
 
-    public TransactionForeignOriginalValue(BigDecimal amount, String currency) {
+    public TransactionValue(BigDecimal amount, String currency) {
         this.amount = amount;
         this.currency = currency;
     }

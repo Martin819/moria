@@ -1,4 +1,4 @@
-package moria.server.Dto;
+package moria.Dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
