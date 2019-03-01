@@ -41,3 +41,7 @@ echo "##### Waiting for nodes to aquire External IPs #####"
 sleep 1m
 kubectl get services | grep ${xtradb_node_name}
 kubectl get services | grep ${grafana_node_name}
+
+echo "##### Grant privilegies to MySQL users #####"
+kubectl exec --namespace default -ti db-cluster-pxc-0 -c database -- mysql -e "GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY '${mysql_root_password}';"
+kubectl exec --namespace default -ti db-cluster-pxc-0 -c database -- mysql -e "GRANT ALL PRIVILEGES ON *.* TO '${mysql_user_name}'@'%' IDENTIFIED BY '${mysql_user_password}';"
