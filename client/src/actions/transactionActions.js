@@ -1,7 +1,8 @@
-import { GET_TRANSACTIONS, TRANSACTIONS_LOADING, FILTER_TRANSACTIONS } from './types';
+import { GET_TRANSACTIONS, TRANSACTIONS_LOADING, SET_FILTER } from './types';
 import { transactionsData } from '../utils/exampleResponse';
 
-export const getData = () => dispatch => {
+export const getData = () => (dispatch, getState) => {
+  console.log('getstate', getState());
   dispatch(setItemsLoading());
   setTimeout(() => {
     dispatch({
@@ -26,7 +27,7 @@ export const setItemsLoading = () => {
 
 export const setTransactionFilter = filterId => {
   return {
-    type: FILTER_TRANSACTIONS,
+    type: SET_FILTER,
     payload: filterId
   };
 };

@@ -2,25 +2,20 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { setTransactionFilter } from '../../actions/transactionActions';
-import TransactionFilter from '../../components/transactions-dashboard/transaction-list/TransactionFilter';
+import TransactionFilterArea from '../../components/transactions-dashboard/transaction-list/TransactionFilterArea';
 
 class TransactionFilterContainer extends Component {
   render() {
     return (
       <Fragment>
-        {/* TODO: TransactionFilterArea*/}
-        <TransactionFilter
-          label="Time period"
-          selectedFilter={this.props.selectedFilter}
-          handleFilterChange={this.props.handleFilterChange}
-        />
+        <TransactionFilterArea filters={this.props.filters} handleFilterChange={this.props.handleFilterChange} />
       </Fragment>
     );
   }
 }
 
 const mapStateToProps = state => ({
-  selectedFilter: state.transactions.selectedFilter
+  filters: state.transactions.filters
 });
 
 const mapDispatchToProps = (dispatch, ownProps) => {

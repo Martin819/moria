@@ -17,14 +17,7 @@ const TransactionsList = props => {
       <h2>Transactions</h2>
       <Grid container direction="column" spacing={8}>
         <Grid item xs>
-          <Grid container spacing={16}>
-            <Grid item md={6} xs={12}>
-              <TransactionFilterContainer />
-            </Grid>
-            <Grid item md={6} xs={12}>
-              <TransactionFilterContainer />
-            </Grid>
-          </Grid>
+          <TransactionFilterContainer />
         </Grid>
         <Grid item xs>
           {isLoading ? (

@@ -10,7 +10,8 @@ export const transactionsData = {
       },
       partyDescription: 'Billa',
       category: 'ELECTRONICS',
-      message: 'Additional info'
+      message: 'Additional info',
+      direction: 'OUTGOING'
     },
     {
       id: 2,
@@ -22,7 +23,8 @@ export const transactionsData = {
       },
       partyDescription: 'Tesco',
       category: 'FOOD',
-      message: 'Additional info'
+      message: 'Additional info',
+      direction: 'OUTGOING'
     },
     {
       id: 3,
@@ -34,7 +36,8 @@ export const transactionsData = {
       },
       partyDescription: 'Albert',
       category: 'HOME EQUIPMENT',
-      message: 'Additional info'
+      message: 'Additional info',
+      direction: 'OUTGOING'
     },
     {
       id: 4,
@@ -46,7 +49,8 @@ export const transactionsData = {
       },
       partyDescription: 'Albert',
       category: 'HOME EQUIPMENT',
-      message: 'Additional info'
+      message: 'Additional info',
+      direction: 'OUTGOING'
     },
     {
       id: 5,
@@ -58,7 +62,8 @@ export const transactionsData = {
       },
       partyDescription: 'Albert',
       category: 'HOME EQUIPMENT',
-      message: 'Additional info'
+      message: 'Additional info',
+      direction: 'OUTGOING'
     },
     {
       id: 6,
@@ -70,7 +75,8 @@ export const transactionsData = {
       },
       partyDescription: 'Albert',
       category: 'HOME EQUIPMENT',
-      message: 'Additional info'
+      message: 'Additional info',
+      direction: 'OUTGOING'
     },
     {
       id: 7,
@@ -82,7 +88,8 @@ export const transactionsData = {
       },
       partyDescription: 'Albert',
       category: 'HOME EQUIPMENT',
-      message: 'Additional info'
+      message: 'Additional info',
+      direction: 'OUTGOING'
     }
   ]
 };
