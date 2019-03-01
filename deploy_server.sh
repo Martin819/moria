@@ -29,10 +29,15 @@ echo "Please check if both server and client are the same version:"
 ./helm version
 
 echo "##### Install XtraDB cluster #####"
-helm install --name $xtradb_cluster_name --set mysqlRootPassword=$mysql_root_password,mysqlUser=$mysql_user_name,mysqlPassword=$mysql_user_password,mysqlDatabase=$mysql_database stable/percona-xtradb-cluster
+helm install --name ${xtradb_cluster_name} --set mysqlRootPassword=${mysql_root_password},mysqlUser=${mysql_user_name},mysqlPassword=${mysql_user_password},mysqlDatabase=${mysql_database} stable/percona-xtradb-cluster
 
 echo "##### Expose XtraDB node #####"
-kubectl expose service ${xtradb_cluster_name}-pxc --port=3306 --target-port=3306 --name=$xtradb_node_name --type="LoadBalancer"
+kubectl expose service ${xtradb_cluster_name}-pxc --port=3306 --target-port=3306 --name=${xtradb_node_name} --type="LoadBalancer"
 
 echo "##### Expose Prometheus-Galera node #####"
-kubectl expose service $grafana_cluster_name --port=$grafana_cluster_port --target-port=$grafana_cluster_target_port --name=$grafana_node_name --type="LoadBalancer"
+kubectl expose service ${grafana_cluster_name} --port=${grafana_cluster_port} --target-port=${grafana_cluster_target_port} --name=${grafana_node_name} --type="LoadBalancer"
+
+echo "##### Waiting for nodes to aquire External IPs #####"
+sleep 1m
+kubectl get services | grep ${xtradb_node_name}
+kubectl get services | grep ${grafana_node_name}
