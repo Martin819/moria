@@ -1,36 +1,24 @@
 package moria.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
-@Entity
+@Embeddable
 public class TransactionPartyAccount {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+    @Column(name = "partyPrefix")
     private String prefix;
+    @Column(name = "partyAccountNumber")
     private String accountNumber;
+    @Column(name = "partyBankCode")
     private String bankCode;
 
     public TransactionPartyAccount() {
     }
 
-    public TransactionPartyAccount(int id, String prefix, String accountNumber, String bankCode) {
-        this.id = id;
+    public TransactionPartyAccount(String prefix, String accountNumber, String bankCode) {
         this.prefix = prefix;
         this.accountNumber = accountNumber;
         this.bankCode = bankCode;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getPrefix() {

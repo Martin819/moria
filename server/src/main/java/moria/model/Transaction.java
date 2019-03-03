@@ -1,18 +1,17 @@
 package moria.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.io.Serializable;
 
-@Entity
+@Entity(name = "transactions")
 public class Transaction implements Serializable {
 
     @Id
     private String id;
     private String accountId;
+    @Embedded
     private TransactionValue value;
+    @Embedded
     private TransactionPartyAccount partyAccount;
     private String partyDescription;
     private String direction;
@@ -25,8 +24,11 @@ public class Transaction implements Serializable {
     private String categoryId;
     private String transactionFee;
     private String transactionFeeCanceled;
+    @Embedded
     private TransactionAdditionalInfoDomestic additionalInfoDomestic;
+    @Embedded
     private TransactionAdditionalInfoForeign additionalInfoForeign;
+    @Embedded
     private TransactionAdditionalInfoCard additionalInfoCard;
 
     public Transaction() {

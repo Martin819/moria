@@ -1,35 +1,20 @@
 package moria.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.math.BigDecimal;
 
-@Entity
+@Embeddable
 public class TransactionValue {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
     private BigDecimal amount;
     private String currency;
 
     public TransactionValue() {
     }
 
-    public TransactionValue(int id, BigDecimal amount, String currency) {
-        this.id = id;
+    public TransactionValue(BigDecimal amount, String currency) {
         this.amount = amount;
         this.currency = currency;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public BigDecimal getAmount() {

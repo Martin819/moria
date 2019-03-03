@@ -1,36 +1,23 @@
 package moria.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
-@Entity
+@Embeddable
 public class TransactionForeignOriginalValue implements Serializable {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+    @Column(name = "foreignAmount")
     private BigDecimal amount;
+    @Column(name = "foreignCurrency")
     private String currency;
 
     public TransactionForeignOriginalValue() {
     }
 
-    public TransactionForeignOriginalValue(int id, BigDecimal amount, String currency) {
-        this.id = id;
+    public TransactionForeignOriginalValue(BigDecimal amount, String currency) {
         this.amount = amount;
         this.currency = currency;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public BigDecimal getAmount() {
