@@ -10,13 +10,13 @@ import Checkbox from '@material-ui/core/Checkbox';
 import { rulesData } from '../../../utils/exampleResponse';
 import EnhancedTableHead from './EnhancedTableHead';
 import EnhancedTableToolbar from './EnhancedTableToolbar';
+import { Spinner } from 'reactstrap';
 
 class RulesTable extends Component {
   state = {
     order: 'asc',
     orderBy: 'name',
     selected: [],
-    data: rulesData,
     page: 0,
     rowsPerPage: 5
   };
@@ -34,13 +34,13 @@ class RulesTable extends Component {
 
   handleSelectAllClick = event => {
     if (event.target.checked) {
-      this.setState(state => ({ selected: state.data.map(n => n.id) }));
+      this.setState({ selected: this.props.rules.map(n => n.id) });
       return;
     }
     this.setState({ selected: [] });
   };
 
-  handleClick = (event, id) => {
+  handleCheckboxClick = (event, id) => {
     const { selected } = this.state;
     const selectedIndex = selected.indexOf(id);
     let newSelected = [];
@@ -66,68 +66,90 @@ class RulesTable extends Component {
     this.setState({ rowsPerPage: event.target.value });
   };
 
+  handleDelete = () => {};
+
+  handleAdd = () => {
+    this.props.toggleModal();
+  };
+
+  handleRowClick = (event, ruleId) => {
+    if (event.target.type === 'checkbox') return;
+    this.props.handleRuleEdit(ruleId);
+  };
+
   isSelected = id => this.state.selected.indexOf(id) !== -1;
 
   render() {
-    const { classes } = this.props;
-    const { data, order, orderBy, selected, rowsPerPage, page } = this.state;
-    const emptyRows = rowsPerPage - Math.min(rowsPerPage, data.length - page * rowsPerPage);
+    const { classes, rules } = this.props;
+    const { order, orderBy, selected, rowsPerPage, page } = this.state;
+    const emptyRows = rowsPerPage - Math.min(rowsPerPage, rules.length - page * rowsPerPage);
 
     return (
       <Paper className={classes.root}>
-        <EnhancedTableToolbar numSelected={selected.length} />
-        <div className={classes.tableWrapper}>
-          <Table className={classes.table} aria-labelledby="tableTitle">
-            <EnhancedTableHead
-              numSelected={selected.length}
-              order={order}
-              orderBy={orderBy}
-              onSelectAllClick={this.handleSelectAllClick}
-              onRequestSort={this.handleRequestSort}
-              rowCount={data.length}
-            />
-            <TableBody>
-              {stableSort(data, getSorting(order, orderBy))
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map(n => {
-                  const isSelected = this.isSelected(n.id);
-                  return (
-                    <TableRow
-                      hover
-                      //TODO: onClick={event => this.handleRowClick(event, n.id)}
-                      role="checkbox"
-                      aria-checked={isSelected}
-                      tabIndex={-1}
-                      key={n.id}
-                      selected={isSelected}
-                    >
-                      <TableCell padding="checkbox">
-                        <Checkbox checked={isSelected} onClick={event => this.handleClick(event, n.id)} />
-                      </TableCell>
-                      <TableCell component="th" scope="row" padding="none">
-                        {n.name}
-                      </TableCell>
-                      <TableCell align="left" padding="none">
-                        {n.category}
-                      </TableCell>
-                      <TableCell align="left" padding="none">
-                        {n.default.toString()}
-                      </TableCell>
-                    </TableRow>
-                  );
-                })}
-              {emptyRows > 0 && (
-                <TableRow style={{ height: 49 * emptyRows }}>
-                  <TableCell colSpan={6} />
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
-        </div>
+        <EnhancedTableToolbar
+          numSelected={selected.length}
+          handleAdd={this.handleAdd}
+          handleDelete={this.handleDelete}
+        />
+        {this.props.loading ? (
+          <div className="text-center">
+            <Spinner type="grow" color="primary" />
+          </div>
+        ) : (
+          <div className={classes.tableWrapper}>
+            <Table className={classes.table} aria-labelledby="tableTitle">
+              <EnhancedTableHead
+                numSelected={selected.length}
+                order={order}
+                orderBy={orderBy}
+                onSelectAllClick={this.handleSelectAllClick}
+                onRequestSort={this.handleRequestSort}
+                rowCount={rules.length}
+              />
+              <TableBody>
+                {stableSort(rules, getSorting(order, orderBy))
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .map(n => {
+                    const isSelected = this.isSelected(n.id);
+                    return (
+                      <TableRow
+                        hover
+                        onClick={event => this.handleRowClick(event, n.id)}
+                        role="checkbox"
+                        aria-checked={isSelected}
+                        tabIndex={-1}
+                        key={n.id}
+                        selected={isSelected}
+                      >
+                        <TableCell padding="checkbox">
+                          <Checkbox checked={isSelected} onClick={event => this.handleCheckboxClick(event, n.id)} />
+                        </TableCell>
+                        <TableCell component="th" scope="row" padding="none">
+                          {n.name}
+                        </TableCell>
+                        <TableCell align="left" padding="none">
+                          {n.category}
+                        </TableCell>
+                        <TableCell align="left" padding="none">
+                          {n.default.toString()}
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
+                {emptyRows > 0 && (
+                  <TableRow style={{ height: 49 * emptyRows }}>
+                    <TableCell colSpan={6} />
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </div>
+        )}
+
         <TablePagination
           rowsPerPageOptions={[5, 10, 25]}
           component="div"
-          count={data.length}
+          count={rules.length}
           rowsPerPage={rowsPerPage}
           page={page}
           backIconButtonProps={{

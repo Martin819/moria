@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import RulesTable from './rules-table/RulesTable';
+import RulesAreaContainer from '../../containers/rules/RulesAreaContainer';
 
 export default class RulesSettings extends Component {
   render() {
     return (
       <div>
         <h1>Rules</h1>
-        <RulesTable />
+        <RulesAreaContainer />
       </div>
     );
   }
