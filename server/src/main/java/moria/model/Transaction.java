@@ -2,13 +2,15 @@ package moria.model;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.Date;
 
 @Entity(name = "transactions")
 public class Transaction implements Serializable {
 
     @Id
     private String id;
-    private String accountId;
+    private int accountId;
     @Embedded
     private TransactionValue value;
     @Embedded
@@ -16,14 +18,16 @@ public class Transaction implements Serializable {
     private String partyDescription;
     private String direction;
     private String transactionType;
-    private String valueDate;
-    private String bookingDate;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date valueDate;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date bookingDate;
     private String userDescription;
     private String payerMessage;
     private String payeeMessage;
-    private String categoryId;
-    private String transactionFee;
-    private String transactionFeeCanceled;
+    private int categoryId;
+    private BigDecimal transactionFee;
+    private boolean transactionFeeCanceled;
     @Embedded
     private TransactionAdditionalInfoDomestic additionalInfoDomestic;
     @Embedded
@@ -34,7 +38,7 @@ public class Transaction implements Serializable {
     public Transaction() {
     }
 
-    public Transaction(String id, String accountId, TransactionValue value, TransactionPartyAccount partyAccount, String partyDescription, String direction, String transactionType, String valueDate, String bookingDate, String userDescription, String payerMessage, String payeeMessage, String categoryId, String transactionFee, String transactionFeeCanceled, TransactionAdditionalInfoDomestic additionalInfoDomestic, TransactionAdditionalInfoForeign additionalInfoForeign, TransactionAdditionalInfoCard additionalInfoCard) {
+    public Transaction(String id, int accountId, TransactionValue value, TransactionPartyAccount partyAccount, String partyDescription, String direction, String transactionType, Date valueDate, Date bookingDate, String userDescription, String payerMessage, String payeeMessage, int categoryId, BigDecimal transactionFee, boolean transactionFeeCanceled, TransactionAdditionalInfoDomestic additionalInfoDomestic, TransactionAdditionalInfoForeign additionalInfoForeign, TransactionAdditionalInfoCard additionalInfoCard) {
         this.id = id;
         this.accountId = accountId;
         this.value = value;
@@ -63,11 +67,11 @@ public class Transaction implements Serializable {
         this.id = id;
     }
 
-    public String getAccountId() {
+    public int getAccountId() {
         return accountId;
     }
 
-    public void setAccountId(String accountId) {
+    public void setAccountId(int accountId) {
         this.accountId = accountId;
     }
 
@@ -111,19 +115,19 @@ public class Transaction implements Serializable {
         this.transactionType = transactionType;
     }
 
-    public String getValueDate() {
+    public Date getValueDate() {
         return valueDate;
     }
 
-    public void setValueDate(String valueDate) {
+    public void setValueDate(Date valueDate) {
         this.valueDate = valueDate;
     }
 
-    public String getBookingDate() {
+    public Date getBookingDate() {
         return bookingDate;
     }
 
-    public void setBookingDate(String bookingDate) {
+    public void setBookingDate(Date bookingDate) {
         this.bookingDate = bookingDate;
     }
 
@@ -151,27 +155,27 @@ public class Transaction implements Serializable {
         this.payeeMessage = payeeMessage;
     }
 
-    public String getCategoryId() {
+    public int getCategoryId() {
         return categoryId;
     }
 
-    public void setCategoryId(String categoryId) {
+    public void setCategoryId(int categoryId) {
         this.categoryId = categoryId;
     }
 
-    public String getTransactionFee() {
+    public BigDecimal getTransactionFee() {
         return transactionFee;
     }
 
-    public void setTransactionFee(String transactionFee) {
+    public void setTransactionFee(BigDecimal transactionFee) {
         this.transactionFee = transactionFee;
     }
 
-    public String getTransactionFeeCanceled() {
+    public boolean isTransactionFeeCanceled() {
         return transactionFeeCanceled;
     }
 
-    public void setTransactionFeeCanceled(String transactionFeeCanceled) {
+    public void setTransactionFeeCanceled(boolean transactionFeeCanceled) {
         this.transactionFeeCanceled = transactionFeeCanceled;
     }
 
