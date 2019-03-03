@@ -1,7 +1,17 @@
 package moria.model;
 
-public class TransactionAdditionalInfoDomestic {
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import java.io.Serializable;
 
+@Entity
+public class TransactionAdditionalInfoDomestic implements Serializable {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private int id;
     private String constantSymbol;
     private String variableSymbol;
     private String specificSymbol;
@@ -9,10 +19,19 @@ public class TransactionAdditionalInfoDomestic {
     public TransactionAdditionalInfoDomestic() {
     }
 
-    public TransactionAdditionalInfoDomestic(String constantSymbol, String variableSymbol, String specificSymbol) {
+    public TransactionAdditionalInfoDomestic(int id, String constantSymbol, String variableSymbol, String specificSymbol) {
+        this.id = id;
         this.constantSymbol = constantSymbol;
         this.variableSymbol = variableSymbol;
         this.specificSymbol = specificSymbol;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getConstantSymbol() {
