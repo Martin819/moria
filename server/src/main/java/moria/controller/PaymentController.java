@@ -46,10 +46,5 @@ public class PaymentController {
 
     }
 
-    @PostMapping(path = "/newRule")
-    public void createRule(Rule rule) {
-
-
-    }
 
 }
