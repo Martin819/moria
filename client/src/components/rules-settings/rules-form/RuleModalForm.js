@@ -6,7 +6,7 @@ class RuleModalForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      ruleName: '',
+      name: '',
       category: '',
       partyName: '',
       compare: '',
@@ -14,6 +14,22 @@ class RuleModalForm extends React.Component {
       transactionType: '',
       description: ''
     };
+  }
+
+  componentDidMount() {
+    const { editedRule } = this.props;
+    if (editedRule !== null) {
+      this.setState(
+        {
+          name: editedRule.name,
+          category: editedRule.category,
+          partyName: editedRule.partyName,
+          amount: editedRule.amount.toString(),
+          description: editedRule.description
+        },
+        () => console.log(this.state)
+      );
+    }
   }
 
   handleSubmit = event => {
@@ -28,7 +44,7 @@ class RuleModalForm extends React.Component {
   };
 
   render() {
-    console.log(this.props);
+    //console.log(this.props);
     return (
       <div>
         <Modal

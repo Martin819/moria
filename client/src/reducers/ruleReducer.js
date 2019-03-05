@@ -1,4 +1,4 @@
-import { GET_RULES, RULES_LOADING, TOGGLE_RULE_MODAL, RULE_EDIT, RULE_SUBMIT } from '../actions/types';
+import { GET_RULES, RULES_LOADING, TOGGLE_RULE_MODAL, RULE_ADD, RULE_EDIT, RULE_SUBMIT } from '../actions/types';
 
 const initialState = {
   rules: [],
@@ -25,6 +25,13 @@ export default function(state = initialState, action) {
     case TOGGLE_RULE_MODAL: {
       return {
         ...state,
+        isModalOpened: !state.isModalOpened
+      };
+    }
+    case RULE_ADD: {
+      return {
+        ...state,
+        editedRule: null,
         isModalOpened: !state.isModalOpened
       };
     }

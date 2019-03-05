@@ -10,7 +10,8 @@ import Tooltip from '@material-ui/core/Tooltip';
 const tableColumnHeaders = [
   { id: 'name', numeric: false, disablePadding: true, label: 'Rule name' },
   { id: 'category', numeric: false, disablePadding: true, label: 'Category' },
-  { id: 'default', numeric: false, disablePadding: true, label: 'Default rule' }
+  { id: 'partyName', numeric: false, disablePadding: true, label: 'Party name' },
+  { id: 'amount', numeric: false, disablePadding: true, label: 'Amount' }
 ];
 
 class EnhancedTableHead extends React.Component {

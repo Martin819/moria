@@ -7,6 +7,7 @@ export const SET_FILTER = 'SET_FILTER';
 export const GET_RULES = 'GET_RULES';
 export const TOGGLE_RULE_MODAL = 'TOGGLE_RULE_MODAL';
 export const RULES_LOADING = 'RULES_LOADING';
+export const RULE_ADD = 'RULE_ADD';
 export const RULE_EDIT = 'RULE_EDIT';
 export const RULE_SUBMIT = 'RULE_SUBMIT';
 

@@ -1,4 +1,4 @@
-import { GET_RULES, TOGGLE_RULE_MODAL, RULES_LOADING, RULE_EDIT, RULE_SUBMIT } from './types';
+import { GET_RULES, TOGGLE_RULE_MODAL, RULES_LOADING, RULE_ADD, RULE_EDIT, RULE_SUBMIT } from './types';
 import { rulesData } from '../utils/exampleResponse';
 
 export const getRules = () => dispatch => {
@@ -9,6 +9,12 @@ export const getRules = () => dispatch => {
       payload: rulesData
     });
   }, 1000);
+};
+
+export const handleRuleAdd = () => {
+  return {
+    type: RULE_ADD
+  };
 };
 
 export const handleRuleEdit = ruleId => dispatch => {

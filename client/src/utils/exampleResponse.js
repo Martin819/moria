@@ -98,22 +98,41 @@ export const rulesData = [
   {
     id: 1,
     name: 'Rule 1',
+    partyName: 'Billa',
     category: 'FOOD',
-    conditions: [],
-    default: true
+    amount: 500,
+    compare: 'LESS_THAN',
+    direction: 'OUTGOING',
+    description: 'My rule one, buying food from Billa'
   },
   {
     id: 2,
     name: 'Rule 2',
-    category: 'ELECTRONICS',
-    conditions: [],
-    default: true
+    partyName: 'Albert',
+    category: 'FOOD',
+    amount: 500,
+    compare: 'LESS_THAN',
+    direction: 'OUTGOING',
+    description: 'My rule two'
   },
   {
     id: 3,
     name: 'Rule 3',
+    partyName: 'OBI',
     category: 'HOME_EQUIPMENTS',
-    conditions: [],
-    default: true
+    amount: 1000,
+    compare: 'MORE_THAN',
+    direction: 'OUTGOING',
+    description: 'My rule three'
+  },
+  {
+    id: 4,
+    name: 'Rule 4',
+    partyName: 'ELECTRO WORLD',
+    category: 'ELECTRONICS',
+    amount: 1000,
+    compare: 'MORE_THAN',
+    direction: 'OUTGOING',
+    description: 'My rule four'
   }
 ];

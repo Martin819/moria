@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
-import { getRules, toggleModal, handleRuleSubmit, handleRuleEdit } from '../../actions/ruleActions';
+import { getRules, toggleModal, handleRuleSubmit, handleRuleAdd, handleRuleEdit } from '../../actions/ruleActions';
 import RulesTable from '../../components/rules-settings/rules-table/RulesTable';
 import RuleModalForm from '../../components/rules-settings/rules-form/RuleModalForm';
 import { bindActionCreators } from 'redux';
@@ -18,6 +18,7 @@ class RulesAreaContainer extends Component {
           rules={this.props.rules}
           loading={this.props.loading}
           toggleModal={this.props.toggleModal}
+          handleRuleAdd={this.props.handleRuleAdd}
           handleRuleEdit={ruleId => this.props.handleRuleEdit(ruleId)}
         />
         {this.props.isModalOpened && (
@@ -41,7 +42,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = (dispatch, ownProps) => {
-  return bindActionCreators({ getRules, toggleModal, handleRuleSubmit, handleRuleEdit }, dispatch);
+  return bindActionCreators({ getRules, toggleModal, handleRuleSubmit, handleRuleAdd, handleRuleEdit }, dispatch);
 };
 
 export default connect(

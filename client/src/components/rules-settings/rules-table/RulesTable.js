@@ -69,7 +69,7 @@ class RulesTable extends Component {
   handleDelete = () => {};
 
   handleAdd = () => {
-    this.props.toggleModal();
+    this.props.handleRuleAdd();
   };
 
   handleRowClick = (event, ruleId) => {
@@ -83,12 +83,11 @@ class RulesTable extends Component {
     const { classes, rules } = this.props;
     const { order, orderBy, selected, rowsPerPage, page } = this.state;
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, rules.length - page * rowsPerPage);
-
     return (
       <Paper className={classes.root}>
         <EnhancedTableToolbar
           numSelected={selected.length}
-          handleAdd={this.handleAdd}
+          handleAdd={this.props.handleRuleAdd}
           handleDelete={this.handleDelete}
         />
         {this.props.loading ? (
@@ -131,7 +130,10 @@ class RulesTable extends Component {
                           {n.category}
                         </TableCell>
                         <TableCell align="left" padding="none">
-                          {n.default.toString()}
+                          {n.partyName}
+                        </TableCell>
+                        <TableCell align="left" padding="none">
+                          {n.compare} {n.amount} {n.direction}
                         </TableCell>
                       </TableRow>
                     );
