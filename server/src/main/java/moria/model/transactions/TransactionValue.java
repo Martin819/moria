@@ -1,4 +1,4 @@
-package moria.model;
+package moria.model.transactions;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
