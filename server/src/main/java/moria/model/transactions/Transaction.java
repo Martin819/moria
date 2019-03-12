@@ -9,7 +9,9 @@ import java.util.Date;
 public class Transaction implements Serializable {
 
     @Id
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+    @Column(nullable = true)
     private int accountId;
     @Embedded
     private TransactionValue value;
@@ -25,8 +27,10 @@ public class Transaction implements Serializable {
     private String userDescription;
     private String payerMessage;
     private String payeeMessage;
+    @Column(nullable = true)
     private int categoryId;
     private BigDecimal transactionFee;
+    @Column(nullable = true)
     private boolean transactionFeeCanceled;
     @Embedded
     private TransactionAdditionalInfoDomestic additionalInfoDomestic;
@@ -38,7 +42,7 @@ public class Transaction implements Serializable {
     public Transaction() {
     }
 
-    public Transaction(String id, int accountId, TransactionValue value, TransactionPartyAccount partyAccount, String partyDescription, String direction, String transactionType, Date valueDate, Date bookingDate, String userDescription, String payerMessage, String payeeMessage, int categoryId, BigDecimal transactionFee, boolean transactionFeeCanceled, TransactionAdditionalInfoDomestic additionalInfoDomestic, TransactionAdditionalInfoForeign additionalInfoForeign, TransactionAdditionalInfoCard additionalInfoCard) {
+    public Transaction(int id, int accountId, TransactionValue value, TransactionPartyAccount partyAccount, String partyDescription, String direction, String transactionType, Date valueDate, Date bookingDate, String userDescription, String payerMessage, String payeeMessage, int categoryId, BigDecimal transactionFee, boolean transactionFeeCanceled, TransactionAdditionalInfoDomestic additionalInfoDomestic, TransactionAdditionalInfoForeign additionalInfoForeign, TransactionAdditionalInfoCard additionalInfoCard) {
         this.id = id;
         this.accountId = accountId;
         this.value = value;
@@ -59,11 +63,11 @@ public class Transaction implements Serializable {
         this.additionalInfoCard = additionalInfoCard;
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 

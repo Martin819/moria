@@ -1,7 +1,5 @@
 package moria.model.rules;
 
-import org.springframework.dao.DataAccessException;
-
 import javax.persistence.*;
 import java.util.Date;
 
@@ -9,7 +7,7 @@ import java.util.Date;
 public class Ruleset {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 // VALUE
     private String valueFromValue;
@@ -47,7 +45,7 @@ public class Ruleset {
     private String variableSymbolFromValue;
     private String variableSymbolFromOperator;
     private String variableSymbolToValue;
-    private String varibaleSymbolToOperator;
+    private String variableSymbolToOperator;
     private String specificSymbolValue;
 // CARDS
     private String mccValue;
@@ -58,7 +56,7 @@ public class Ruleset {
     public Ruleset() {
     }
 
-    public Ruleset(String valueFromValue, String valueFromOperator, String valueToValue, String valueToOperator, String partyPrefixValue, String partyAccountNumberValue, String partyBankCodeValue, String partyDescriptionValue, String partyDescriptionOperator, Date valueDateFromValue, String valueDateFromOperator, Date valueDateToValue, String valueDateToOperator, Date bookingDateFromValue, String bookingDateFromOperator, Date bookingDateToValue, String bookingDateToOperator, String userDescriptionValue, String userDescriptionOperator, String payerMessageValue, String payerMessageOperator, String payeeMessageValue, String payeeMessageOperator, String constantSymbolValue, String variableSymbolFromValue, String variableSymbolFromOperator, String variableSymbolToValue, String varibaleSymbolToOperator, String specificSymbolValue, String mccValue, String merchantNameValue, String merchantNameOperator, String cardNumberValue) {
+    public Ruleset(String valueFromValue, String valueFromOperator, String valueToValue, String valueToOperator, String partyPrefixValue, String partyAccountNumberValue, String partyBankCodeValue, String partyDescriptionValue, String partyDescriptionOperator, Date valueDateFromValue, String valueDateFromOperator, Date valueDateToValue, String valueDateToOperator, Date bookingDateFromValue, String bookingDateFromOperator, Date bookingDateToValue, String bookingDateToOperator, String userDescriptionValue, String userDescriptionOperator, String payerMessageValue, String payerMessageOperator, String payeeMessageValue, String payeeMessageOperator, String constantSymbolValue, String variableSymbolFromValue, String variableSymbolFromOperator, String variableSymbolToValue, String variableSymbolToOperator, String specificSymbolValue, String mccValue, String merchantNameValue, String merchantNameOperator, String cardNumberValue) {
         this.valueFromValue = valueFromValue;
         this.valueFromOperator = valueFromOperator;
         this.valueToValue = valueToValue;
@@ -86,7 +84,7 @@ public class Ruleset {
         this.variableSymbolFromValue = variableSymbolFromValue;
         this.variableSymbolFromOperator = variableSymbolFromOperator;
         this.variableSymbolToValue = variableSymbolToValue;
-        this.varibaleSymbolToOperator = varibaleSymbolToOperator;
+        this.variableSymbolToOperator = variableSymbolToOperator;
         this.specificSymbolValue = specificSymbolValue;
         this.mccValue = mccValue;
         this.merchantNameValue = merchantNameValue;
@@ -318,12 +316,12 @@ public class Ruleset {
         this.variableSymbolToValue = variableSymbolToValue;
     }
 
-    public String getVaribaleSymbolToOperator() {
-        return varibaleSymbolToOperator;
+    public String getVariableSymbolToOperator() {
+        return variableSymbolToOperator;
     }
 
-    public void setVaribaleSymbolToOperator(String varibaleSymbolToOperator) {
-        this.varibaleSymbolToOperator = varibaleSymbolToOperator;
+    public void setVariableSymbolToOperator(String variableSymbolToOperator) {
+        this.variableSymbolToOperator = variableSymbolToOperator;
     }
 
     public String getSpecificSymbolValue() {
