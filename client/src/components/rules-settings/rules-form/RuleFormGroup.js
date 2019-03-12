@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import { Col, FormGroup, FormFeedback, Label, Input } from 'reactstrap';
-import { allCategories } from '../../../constants/rules';
+import { allCategories } from '../../../constants/categories';
 
 class RuleFormGroup extends React.Component {
   render() {

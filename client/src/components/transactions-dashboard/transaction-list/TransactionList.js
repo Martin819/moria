@@ -9,7 +9,13 @@ import TransactionFilterContainer from '../../../containers/transactions/Transac
 const TransactionsList = props => {
   const { classes, transactions, isLoading } = props;
   const transactionItems = transactions.map(transaction => {
-    return <TransactionItem key={transaction.id} {...transaction} />;
+    return (
+      <TransactionItem
+        key={transaction.id}
+        {...transaction}
+        handleTransactionCategorySubmit={props.handleTransactionCategorySubmit}
+      />
+    );
   });
 
   return (
@@ -40,7 +46,8 @@ TransactionsList.propTypes = {
 const styles = theme => ({
   root: {
     width: '55%',
-    marginTop: '20px'
+    marginTop: '20px',
+    marginBottom: '70px'
   }
 });
 

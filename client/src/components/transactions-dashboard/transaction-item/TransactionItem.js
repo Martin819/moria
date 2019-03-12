@@ -7,7 +7,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import TransactionItemPanelDetail from './TransactionItemPanelDetail';
 
 const TransactionItem = props => {
-  const { classes, id, partyDescription, valueDate, transactionType, value, message, category } = props;
+  const { classes, id, partyDescription, valueDate, transactionType, value, message, category, direction } = props;
   return (
     <Fragment>
       <Grow in={true} timeout={500}>
@@ -29,15 +29,26 @@ const TransactionItem = props => {
                     </Typography>
                   </Grid>
                   <Grid item>
-                    <Typography className={classes.amount}>
-                      {value.amount.toLocaleString('cs-cz', { style: 'currency', currency: value.currency })}&nbsp;
-                    </Typography>
+                    {direction === 'INCOMING' ? (
+                      <Typography className={classes.amountPositive}>
+                        {value.amount.toLocaleString('cs-cz', { style: 'currency', currency: value.currency })}
+                      </Typography>
+                    ) : (
+                      <Typography className={classes.amountNegative}>
+                        {'- ' + value.amount.toLocaleString('cs-cz', { style: 'currency', currency: value.currency })}
+                      </Typography>
+                    )}
                   </Grid>
                 </Grid>
               </Grid>
             </Grid>
           </ExpansionPanelSummary>
-          <TransactionItemPanelDetail message={message} id={id} />
+          <TransactionItemPanelDetail
+            message={message}
+            id={id}
+            category={category}
+            handleTransactionCategorySubmit={props.handleTransactionCategorySubmit}
+          />
         </ExpansionPanel>
       </Grow>
     </Fragment>
@@ -60,7 +71,12 @@ const styles = theme => ({
     fontSize: theme.typography.pxToRem(15),
     paddingTop: 3
   },
-  amount: {
+  amountPositive: {
+    fontSize: theme.typography.pxToRem(18),
+    color: 'green',
+    fontWeight: 600
+  },
+  amountNegative: {
     fontSize: theme.typography.pxToRem(18),
     color: 'red',
     fontWeight: 600

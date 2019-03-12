@@ -1,6 +1,19 @@
 export const transactionsData = {
   transactions: [
     {
+      id: 1614565,
+      valueDate: '2018-12-24T15:41:50.126Z',
+      transactionType: 'BANK_TRANSFER',
+      value: {
+        amount: 44000,
+        currency: 'CZK'
+      },
+      partyDescription: 'Unicorn',
+      category: 'OTHER',
+      message: 'Wage',
+      direction: 'INCOMING'
+    },
+    {
       id: 1,
       valueDate: '2018-12-25T15:41:50.126Z',
       transactionType: 'CARD',
@@ -19,7 +32,7 @@ export const transactionsData = {
       transactionType: 'CARD',
       value: {
         amount: 2200,
-        currency: 'EUR'
+        currency: 'CZK'
       },
       partyDescription: 'Tesco',
       category: 'FOOD',
@@ -32,10 +45,10 @@ export const transactionsData = {
       transactionType: 'CARD',
       value: {
         amount: 250,
-        currency: 'USD'
+        currency: 'CZK'
       },
       partyDescription: 'Albert',
-      category: 'HOME EQUIPMENT',
+      category: 'HOME_EQUIPMENT',
       message: 'Additional info',
       direction: 'OUTGOING'
     },
@@ -48,7 +61,7 @@ export const transactionsData = {
         currency: 'CZK'
       },
       partyDescription: 'Albert',
-      category: 'HOME EQUIPMENT',
+      category: 'HOME_EQUIPMENT',
       message: 'Additional info',
       direction: 'OUTGOING'
     },
@@ -61,7 +74,7 @@ export const transactionsData = {
         currency: 'CZK'
       },
       partyDescription: 'Albert',
-      category: 'HOME EQUIPMENT',
+      category: 'HOME_EQUIPMENT',
       message: 'Additional info',
       direction: 'OUTGOING'
     },
@@ -74,7 +87,7 @@ export const transactionsData = {
         currency: 'CZK'
       },
       partyDescription: 'Albert',
-      category: 'HOME EQUIPMENT',
+      category: 'HOME_EQUIPMENT',
       message: 'Additional info',
       direction: 'OUTGOING'
     },
@@ -87,7 +100,7 @@ export const transactionsData = {
         currency: 'CZK'
       },
       partyDescription: 'Albert',
-      category: 'HOME EQUIPMENT',
+      category: 'HOME_EQUIPMENT',
       message: 'Additional info',
       direction: 'OUTGOING'
     }
@@ -119,7 +132,7 @@ export const rulesData = [
     id: 3,
     name: 'Rule 3',
     partyName: 'OBI',
-    category: 'HOME_EQUIPMENTS',
+    category: 'HOME_EQUIPMENT',
     amount: 1000,
     compare: 'MORE_THAN',
     direction: 'OUTGOING',
