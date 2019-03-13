@@ -45,7 +45,7 @@ TransactionsList.propTypes = {
 
 const styles = theme => ({
   root: {
-    width: '55%',
+    width: '100%',
     marginTop: '20px',
     marginBottom: '70px'
   }
