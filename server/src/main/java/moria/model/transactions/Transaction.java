@@ -5,11 +5,11 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
+@SuppressWarnings("DefaultAnnotationParam")
 @Entity(name = "transactions")
 public class Transaction implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @Column(nullable = true)
     private int accountId;
