@@ -9,6 +9,10 @@ import java.util.List;
 public interface RulesetService {
 
     Ruleset findRulesetById(int id);
+
     List<Ruleset> findAllRulesets();
 
+    void saveRuleset(Ruleset ruleset);
+
+    void deleteById(int id);
 }

@@ -10,6 +10,8 @@ import java.util.List;
 public interface RulesetRepository extends JpaRepository<Ruleset, Integer> {
 
     Ruleset findById(int id);
+
     List<Ruleset> findAll();
 
+    void deleteById(int id);
 }
