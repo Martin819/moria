@@ -1,11 +1,9 @@
-package moria.Dto;
+package moria.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
-import java.math.BigDecimal;
 import java.util.Date;
 
 @AllArgsConstructor

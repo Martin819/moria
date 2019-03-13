@@ -1,6 +1,6 @@
 package moria.controller;
 
-import moria.Dto.Rule;
+import moria.dto.Rule;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;

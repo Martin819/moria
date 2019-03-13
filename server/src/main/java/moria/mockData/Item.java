@@ -1,4 +1,4 @@
-package moria.MockData;
+package moria.mockData;
 
 import lombok.*;
 

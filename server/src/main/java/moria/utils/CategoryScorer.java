@@ -1,8 +1,8 @@
-package moria.Util;
+package moria.utils;
 
-import moria.Dto.Category;
-import moria.Dto.Payment;
-import moria.Dto.Rule;
+import moria.dto.Category;
+import moria.dto.Payment;
+import moria.dto.Rule;
 
 import java.text.ParseException;
 import java.util.ArrayList;

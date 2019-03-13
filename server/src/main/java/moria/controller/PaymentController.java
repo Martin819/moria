@@ -1,8 +1,7 @@
 package moria.controller;
 
-import moria.Dto.Payment;
-import moria.Dto.Rule;
-import moria.Util.CategoryScorer;
+import moria.dto.Payment;
+import moria.utils.CategoryScorer;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
