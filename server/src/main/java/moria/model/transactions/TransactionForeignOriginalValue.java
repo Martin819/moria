@@ -1,9 +1,12 @@
 package moria.model.transactions;
 
+import lombok.*;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
+@Data
 @Embeddable
 public class TransactionForeignOriginalValue implements Serializable {
 
@@ -12,27 +15,4 @@ public class TransactionForeignOriginalValue implements Serializable {
     @Column(name = "foreignCurrency")
     private String currency;
 
-    public TransactionForeignOriginalValue() {
-    }
-
-    public TransactionForeignOriginalValue(BigDecimal amount, String currency) {
-        this.amount = amount;
-        this.currency = currency;
-    }
-
-    public BigDecimal getAmount() {
-        return amount;
-    }
-
-    public void setAmount(BigDecimal amount) {
-        this.amount = amount;
-    }
-
-    public String getCurrency() {
-        return currency;
-    }
-
-    public void setCurrency(String currency) {
-        this.currency = currency;
-    }
 }

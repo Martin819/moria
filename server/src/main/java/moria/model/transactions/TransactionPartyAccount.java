@@ -1,7 +1,10 @@
 package moria.model.transactions;
 
+import lombok.*;
+
 import javax.persistence.*;
 
+@Data
 @Embeddable
 public class TransactionPartyAccount {
 
@@ -12,36 +15,4 @@ public class TransactionPartyAccount {
     @Column(name = "partyBankCode")
     private String bankCode;
 
-    public TransactionPartyAccount() {
-    }
-
-    public TransactionPartyAccount(String prefix, String accountNumber, String bankCode) {
-        this.prefix = prefix;
-        this.accountNumber = accountNumber;
-        this.bankCode = bankCode;
-    }
-
-    public String getPrefix() {
-        return prefix;
-    }
-
-    public void setPrefix(String prefix) {
-        this.prefix = prefix;
-    }
-
-    public String getAccountNumber() {
-        return accountNumber;
-    }
-
-    public void setAccountNumber(String accountNumber) {
-        this.accountNumber = accountNumber;
-    }
-
-    public String getBankCode() {
-        return bankCode;
-    }
-
-    public void setBankCode(String bankCode) {
-        this.bankCode = bankCode;
-    }
 }
