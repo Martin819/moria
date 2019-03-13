@@ -2,3 +2,16 @@ node_modules/*
 *.ldb
 
 .idea/*
+
+mock_data/~$user_description.xlsx
+mock_data/~$transaction_types.xlsx
+mock_data/~$symbols.xlsx
+mock_data/~$names.xlsx
+mock_data/~$messages.xlsx
+mock_data/~$merchant_name.xlsx
+mock_data/~$mcc.xlsx
+mock_data/~$data_for_sql.xlsx
+mock_data/~$data_for_json.xlsx
+mock_data/~$booking_date.xlsx
+
+client/.idea/*
