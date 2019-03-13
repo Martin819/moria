@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { ExpansionPanelDetails, Grid, Typography } from '@material-ui/core';
 import { Button, Form, FormGroup, Col, Row, Label, Input } from 'reactstrap';
-import { allCategories } from '../../../constants/categories';
+import { allOutgoingCategories } from '../../../constants/categories';
 
 class TransactionItemPanelDetail extends Component {
   constructor(props) {
@@ -47,7 +47,7 @@ class TransactionItemPanelDetail extends Component {
                         value={this.state.categoryId}
                         bsSize="sm"
                       >
-                        {allCategories.map(c => (
+                        {allOutgoingCategories.map(c => (
                           <option key={c.id} value={c.id}>
                             {c.text}
                           </option>

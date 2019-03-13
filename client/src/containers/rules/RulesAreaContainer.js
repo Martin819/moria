@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import { getRules, toggleModal, handleRuleSubmit, handleRuleAdd, handleRuleEdit } from '../../actions/ruleActions';
 import RulesTable from '../../components/rules-settings/rules-table/RulesTable';
-import RuleModalForm from '../../components/rules-settings/rules-form/RuleModalForm';
+import RuleFormController from '../../components/rules-settings/rules-form/RuleFormController';
 import { bindActionCreators } from 'redux';
 
 class RulesAreaContainer extends Component {
@@ -22,7 +22,7 @@ class RulesAreaContainer extends Component {
           handleRuleEdit={ruleId => this.props.handleRuleEdit(ruleId)}
         />
         {this.props.isModalOpened && (
-          <RuleModalForm
+          <RuleFormController
             editedRule={this.props.editedRule}
             isModalOpened={this.props.isModalOpened}
             toggleModal={this.props.toggleModal}
