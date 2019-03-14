@@ -2,10 +2,11 @@ import React, { Fragment, Component } from 'react';
 import moment from 'moment';
 import { withStyles, ExpansionPanel, ExpansionPanelSummary, Typography, Grid, Grow } from '@material-ui/core/';
 import { Button, Form, FormGroup, Col, Row, Label, Input } from 'reactstrap';
-import { allOutgoingCategories } from '../../../constants/categories';
+import { allOutgoingCategories, allCategories } from '../../../constants/categories';
 import { Badge } from 'reactstrap';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import TransactionItemPanelDetail from './TransactionItemPanelDetail';
+import { TransactionTypes } from '../../../constants/transactions';
 
 class TransactionItem extends Component {
   constructor(props) {
@@ -28,15 +29,27 @@ class TransactionItem extends Component {
   render() {
     const {
       classes,
-      id,
+      direction,
       partyDescription,
+      transactionPartyAccountPrefix,
+      transactionPartyAccountAccountNumber,
+      transactionPartyAccountBankCode,
+      transactionAdditionalInfoDomesticConstantSymbol,
+      transactionAdditionalInfoDomesticVariableSymbol,
+      payeeMessage,
+      payerMessage,
+      transactionAdditionalInfoCardMerchantName,
+      transactionValueAmount,
+      transactionValueCurrency,
       valueDate,
       transactionType,
-      value,
-      message,
-      category,
-      direction
+      category
     } = this.props;
+
+    const categoryEnum = allCategories.find(cat => cat.id === category);
+    const categoryText = categoryEnum === undefined ? 'Unknown' : categoryEnum.text;
+    const transactionTypeEnum = Object.values(TransactionTypes).find(type => type.id === transactionType);
+    const transactionTypeText = transactionTypeEnum === undefined ? 'Unknown' : transactionTypeEnum.text;
 
     return (
       <Fragment>
@@ -53,11 +66,13 @@ class TransactionItem extends Component {
                       <Row>
                         <Col sm={4}>
                           <Badge color="warning" pill>
-                            {category}
+                            {categoryText}
                           </Badge>
-                          <Typography className={classes.heading}>{partyDescription}</Typography>
+                          <Typography className={classes.heading}>
+                            {transactionAdditionalInfoCardMerchantName}
+                          </Typography>
                           <Typography>
-                            <span className={classes.secondaryHeading}>{transactionType}</span>
+                            <span className={classes.secondaryHeading}>{transactionTypeText}</span>
                           </Typography>
                         </Col>
                         <Col sm={4}>
@@ -103,14 +118,21 @@ class TransactionItem extends Component {
                     </Grid>
 
                     <Grid item xs className="text-md-right">
-                      {direction === 'INCOMING' ? (
-                        <Typography className={classes.amountPositive}>
-                          {value.amount.toLocaleString('cs-cz', { style: 'currency', currency: value.currency })}
-                        </Typography>
-                      ) : (
+                      {direction === 'OUTGOING' && (
                         <Typography className={classes.amountNegative}>
                           &#8722;&nbsp;
-                          {value.amount.toLocaleString('cs-cz', { style: 'currency', currency: value.currency })}
+                          {transactionValueAmount.toLocaleString('cs-cz', {
+                            style: 'currency',
+                            currency: transactionValueCurrency
+                          })}
+                        </Typography>
+                      )}
+                      {direction === 'INCOMING' && (
+                        <Typography className={classes.amountPositive}>
+                          {transactionValueAmount.toLocaleString('cs-cz', {
+                            style: 'currency',
+                            currency: transactionValueCurrency
+                          })}
                         </Typography>
                       )}
                     </Grid>
@@ -118,7 +140,7 @@ class TransactionItem extends Component {
                 </Grid>
               </Grid>
             </ExpansionPanelSummary>
-            <TransactionItemPanelDetail message={message} id={id} category={category} />
+            <TransactionItemPanelDetail message={payeeMessage} category={category} />
           </ExpansionPanel>
         </Grow>
       </Fragment>

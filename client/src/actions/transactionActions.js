@@ -1,22 +1,19 @@
 import { GET_TRANSACTIONS, TRANSACTIONS_LOADING, SET_FILTER, UPDATE_TRANSACTION_CATEGORY } from './types';
 import { transactionsData } from '../utils/exampleResponse';
+import axios from 'axios';
 
-export const getData = () => (dispatch, getState) => {
+export const getData = () => async (dispatch, getState) => {
   console.log('getstate', getState());
   dispatch(setItemsLoading());
-  setTimeout(() => {
+  try {
+    const response = await axios.get('/transactions');
     dispatch({
       type: GET_TRANSACTIONS,
-      payload: transactionsData
+      payload: response
     });
-  }, 1000);
-
-  //   axios.get('/api/items').then(res =>
-  //     dispatch({
-  //       type: GET_ITEMS,
-  //       payload: res.data
-  //     })
-  //   );
+  } catch (error) {
+    console.error(error);
+  }
 };
 
 export const setTransactionFilter = filterId => {

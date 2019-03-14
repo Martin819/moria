@@ -28,8 +28,8 @@ export default function(state = initialState, action) {
     case GET_TRANSACTIONS: {
       return {
         ...state,
-        transactions: action.payload.transactions.sort((t1, t2) => moment(t2.valueDate).diff(t1.valueDate)),
-        visibleTransactions: action.payload.transactions,
+        transactions: action.payload.data.sort((t1, t2) => moment(t2.valueDate).diff(t1.valueDate)),
+        visibleTransactions: action.payload.data,
         loading: false
       };
     }
