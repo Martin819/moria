@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import { Row, Col, FormGroup, FormFeedback, Label, Input } from 'reactstrap';
 import { allOutgoingCategories, allIncomingCategories } from '../../../constants/categories';
-import { allTransactionDirections, allTransactionTypes } from '../../../constants/transactions';
+import { TransactionValueOperators, TransactionDirections, TransactionTypes } from '../../../constants/transactions';
 
 const prefixRegex = /^[0-9]{0,6}$/;
 const bankAccountRegex = /^[0-9]{0,10}$/;
@@ -10,7 +10,7 @@ const bankCodeRegex = /^[0-9]{4}$/;
 class RuleFormBody extends React.Component {
   render() {
     console.log(this.props);
-    const amountChoiceComponent = this.createAmountChoice(this.props.compare || 'LESS_THAN');
+    const amountChoiceComponent = this.createAmountChoice(this.props.compare || TransactionValueOperators.LESS_THAN.id);
     const activeCategories =
       this.props.transactionDirection === 'INCOMING' ? allIncomingCategories : allOutgoingCategories;
     return (
@@ -60,7 +60,7 @@ class RuleFormBody extends React.Component {
                 onChange={e => this.props.handleChange(e)}
                 bsSize="sm"
               >
-                {allTransactionTypes.map(type => (
+                {Object.values(TransactionTypes).map(type => (
                   <option key={type.id} value={type.id}>
                     {type.text}
                   </option>
@@ -79,7 +79,7 @@ class RuleFormBody extends React.Component {
                 value={this.props.transactionDirection}
                 onChange={e => this.props.handleChange(e)}
               >
-                {allTransactionDirections.map(direction => (
+                {Object.values(TransactionDirections).map(direction => (
                   <option key={direction.id} value={direction.id}>
                     {direction.text}
                   </option>
@@ -165,9 +165,13 @@ class RuleFormBody extends React.Component {
               bsSize="sm"
               onChange={e => this.props.handleChange(e)}
             >
-              <option value={'LESS_THAN'}>Less than</option>
-              <option value={'MORE_THAN'}>More than</option>
-              <option value={'BETWEEN'}>Between</option>
+              {Object.values(TransactionValueOperators).map(o => {
+                return (
+                  <option key={o.id} value={o.id}>
+                    {o.text}
+                  </option>
+                );
+              })}
             </Input>
           </Col>
           {amountChoiceComponent}
@@ -193,7 +197,7 @@ class RuleFormBody extends React.Component {
 
   createAmountChoice = compare => {
     switch (compare) {
-      case 'LESS_THAN':
+      case TransactionValueOperators.LESS_THAN.id:
         return (
           <Col sm={6}>
             <Input
@@ -212,7 +216,7 @@ class RuleFormBody extends React.Component {
             <FormFeedback>Please specify a valid number.</FormFeedback>
           </Col>
         );
-      case 'MORE_THAN':
+      case TransactionValueOperators.MORE_THAN.id:
         return (
           <Col sm={6}>
             <Input
