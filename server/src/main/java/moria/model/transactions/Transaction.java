@@ -31,10 +31,10 @@ public class Transaction implements Serializable {
     private String payerMessage;
     private String payeeMessage;
     @Column(nullable = true)
-    private int categoryId;
+    private Integer categoryId;
     private BigDecimal transactionFee;
     @Column(nullable = true)
-    private boolean transactionFeeCanceled;
+    private Boolean transactionFeeCanceled;
     @Embedded
     private TransactionAdditionalInfoDomestic additionalInfoDomestic;
     @Embedded

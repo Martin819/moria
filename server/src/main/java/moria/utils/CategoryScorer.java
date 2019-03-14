@@ -1,14 +1,14 @@
 package moria.utils;
 
+import moria.SpringContext;
 import moria.dto.Category;
 import moria.dto.Payment;
 import moria.dto.Rule;
+import moria.model.rules.Ruleset;
+import moria.services.RulesetService;
 
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class CategoryScorer {
 
@@ -21,6 +21,10 @@ public class CategoryScorer {
 
     public String scoreCategories(Payment payment) throws ParseException {
         loadAllRules();
+
+        // vytáhnutí pravidel z databáze
+       /* RulesetService rulesetService = getRulesetService();
+        List<Ruleset> ruleSet = rulesetService.findAllRulesets();*/
 
         //sem se budou hodnotit skore pravdepodobnosti, kam to ma spadnout - nejdřív zkopíruju názvy kategorií do HashMapy
         for (Map.Entry<String, ArrayList<String>> entry : categories.entrySet()) {
@@ -46,7 +50,6 @@ public class CategoryScorer {
         }
         return categoryWithHighestPropability;
     }
-
 
     /**
      * mame obchodnika z prichozi platby - projedu vsechny obchodniky, ktery mam v kategoriich a hledam, zdali se nějaká 2 jména neshoduji
@@ -126,6 +129,11 @@ public class CategoryScorer {
         }
         return score;
     }
+
+    private RulesetService getRulesetService() {
+        return SpringContext.getBean(RulesetService.class);
+    }
+
 
 
     private void loadAllRules() {

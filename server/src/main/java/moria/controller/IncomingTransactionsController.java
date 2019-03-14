@@ -12,7 +12,7 @@ import java.util.Date;
 
 
 @RestController
-public class PaymentController {
+public class IncomingTransactionsController {
 
 
     // jen pro testovací účely
