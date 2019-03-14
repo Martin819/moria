@@ -4,7 +4,7 @@ export const APPAREL_FASHION = { id: 'APPAREL_FASHION', text: 'Apparel & fashion
 export const HOME_EQUIPMENT = { id: 'HOME_EQUIPMENT', text: 'Home equipment' };
 export const FUEL = { id: 'FUEL', text: 'Fuel' };
 export const UTILITIES = { id: 'UTILITIES', text: 'Utilities' };
-export const TOBBACO_PRESS = { id: 'TOBBACO_PRESS', text: 'Tobbaco & press' };
+export const TOBACCO_AND_PRESS = { id: 'TOBACCO_AND_PRESS', text: 'Tobacco & press' };
 export const PHONE_TV_INTERNET = { id: 'PHONE_TV_INTERNET', text: 'Phone / TV / Internet' };
 export const FARE = { id: 'FARE', text: 'Fare' };
 export const RENT = { id: 'RENT', text: 'Rent' };
@@ -12,7 +12,7 @@ export const REAL_ESTATE = { id: 'REAL_ESTATE', text: 'Real estate' };
 export const SPORT_AND_LEISURE = { id: 'SPORT_AND_LEISURE', text: 'Sport & leisure' };
 export const HEALTH_AND_BEAUTY = { id: 'HEALTH_AND_BEAUTY', text: 'Health & beauty' };
 export const ENTERTAINMENT = { id: 'ENTERTAINMENT', text: 'Entertainment' };
-export const TRAVELLING_ACCOMODATION = { id: 'TRAVELLING_ACCOMODATION', text: 'Travelling & accomodation' };
+export const TRAVELLING_AND_ACCOMMODATION = { id: 'TRAVELLING_AND_ACCOMMODATION', text: 'Travelling & accommodation' };
 export const ELECTRONICS = { id: 'ELECTRONICS', text: 'Electronics' };
 export const GAMBLING = { id: 'GAMBLING', text: 'Gambling' };
 export const LOANS_AND_MORTGAGES = { id: 'LOANS_AND_MORTGAGES', text: 'Loans & mortgages' };
@@ -51,7 +51,7 @@ export const allOutgoingCategories = [
   HOME_EQUIPMENT,
   FUEL,
   UTILITIES,
-  TOBBACO_PRESS,
+  TOBACCO_AND_PRESS,
   PHONE_TV_INTERNET,
   FARE,
   RENT,
@@ -59,7 +59,7 @@ export const allOutgoingCategories = [
   SPORT_AND_LEISURE,
   HEALTH_AND_BEAUTY,
   ENTERTAINMENT,
-  TRAVELLING_ACCOMODATION,
+  TRAVELLING_AND_ACCOMMODATION,
   ELECTRONICS,
   GAMBLING,
   LOANS_AND_MORTGAGES,
