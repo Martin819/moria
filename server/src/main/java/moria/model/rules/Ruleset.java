@@ -15,8 +15,8 @@ public class Ruleset {
     private int id;
     // VALUE
     private BigDecimal valueFromValue;
-    private String valueFromOperator;
     private BigDecimal valueToValue;
+    private String direction;
     // PARTY ACCOUNT
     private String partyPrefixValue;
     private String partyAccountNumberValue;
@@ -25,7 +25,7 @@ public class Ruleset {
     // DATE
     @Temporal(TemporalType.TIMESTAMP)
     private Date bookingDateFromValue;
-    private String bookingDateFromOperator;
+
     @Temporal(TemporalType.TIMESTAMP)
     private Date bookingDateToValue;
     // DESCRIPTIONS
@@ -43,4 +43,6 @@ public class Ruleset {
     private String mccValue;
     private String merchantNameValue;
     private String cardNumberValue;
+    //CATEGORY ID
+    private int categoryId;
 }
