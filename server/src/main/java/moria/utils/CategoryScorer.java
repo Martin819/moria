@@ -42,7 +42,7 @@ public class CategoryScorer {
             score += scoreTransactionValue(rule.getValueFromValue(), rule.getValueToValue());
             if (transaction.getDirection().equals("INCOMING"))
                 score += scoreTransactionMessage(rule.getPayerMessageValue(), transaction.getPayerMessage());
-            if (transaction.getDirection().equals("OUTCOMMING"))
+            if (transaction.getDirection().equals("OUTGOING"))
                 score += scoreTransactionMessage(rule.getPayeeMessageValue(), transaction.getPayeeMessage());
 
             String categoryName = rule.getUserDescriptionValue();
