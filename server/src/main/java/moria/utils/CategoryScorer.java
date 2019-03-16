@@ -23,6 +23,12 @@ public class CategoryScorer {
     //for test purpose only
     public int category;
 
+    /**
+     * Evalute category based on provided Transaction
+     * @param transaction provided transaction for evaluation
+     * @return ID of category from Enum or 0 - algorithm cant find proper category
+     */
+
     public int scoreCategories(Transaction transaction) {
         loadAllRules();
         this.transaction = transaction;
