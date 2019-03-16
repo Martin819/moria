@@ -8,6 +8,7 @@ import moria.model.rules.Ruleset;
 import moria.model.transactions.Transaction;
 import moria.model.transactions.TransactionPartyAccount;
 import moria.services.RulesetService;
+import moria.services.TransactionService;
 import org.joda.time.Duration;
 import org.joda.time.Interval;
 
@@ -19,16 +20,16 @@ public class CategoryScorer {
 
     private HashMap<String, ArrayList<String>> categories = new HashMap<>();
     private HashMap<String, Double> scoredCategories = new HashMap<>();
-    private ArrayList<Rule> allRules = new ArrayList<>();
 
-    private Category category = new Category();
     private HashMap<String, ArrayList<String>> dummyCategories = new HashMap<>();
 
-    ///////////////////////
     private List<Ruleset> ruleSet;
     private Transaction transaction;
 
-    public String scoreCategories(Transaction transaction){
+    //for test only
+    public int category;
+
+    public int scoreCategories(Transaction transaction) {
         loadAllRules();
         this.transaction = transaction;
 
@@ -39,7 +40,7 @@ public class CategoryScorer {
 //        }
 
         //sem se budou hodnotit skore pravdepodobnosti, kam to ma spadnout - nejdřív zkopíruju názvy kategorií do HashMapy
-        TreeMap<Double, String> categories = new TreeMap<>();
+        TreeMap<Double, Integer> categories = new TreeMap<>();
         for (Ruleset rule : ruleSet) {
             double score = 0;
             score += scorePartyAccount(rule.getDirection(), rule.getPartyPrefixValue(), rule.getPartyAccountNumberValue(), rule.getPartyBankCodeValue(), rule.getPartyDescriptionValue());
@@ -49,45 +50,29 @@ public class CategoryScorer {
                 score += scoreTransactionMessage(rule.getPayerMessageValue(), transaction.getPayerMessage());
             if (transaction.getDirection().equals("OUTCOMMING"))
                 score += scoreTransactionMessage(rule.getPayeeMessageValue(), transaction.getPayeeMessage());
-//            score += scorePayeeName(rule.get)
 
-
-          String categoryName = rule.getUserDescriptionValue();
+            String categoryName = rule.getUserDescriptionValue();
 //            scoredCategories.put(categoryName, score);
-
-
-            categories.put(score, categoryName);
+            categories.put(score, rule.getCategoryId());
         }
 
-//        String retailer = payment.getPayer(); //obchodnik z prichozi platby
-//
-//        scorePropabilityOfRetailers(retailer); //přidá bod ke kategoriim, ve kterých se obchodnik nachazi
-//
-//        scorePaymentBasedOnCustomerRules(payment); //prohleda pravidla od uzivatele a mrkne, zdali je tam nějaká shoda
-
-        //Najdu nejvyssi hodnoceni ve scoredCategories (pokud jsou 2 a vice se stejným, beru to prvni) -> to je nase kategorie kde se obchodnik nachazi
-//        String categoryWithHighestPropability = "";
-//        double maxValue = 0;
-//        for (Map.Entry<String, Double> entry : scoredCategories.entrySet()) {
-//            Double score = entry.getValue();
-//            String retailers = entry.getKey();
-//            if (score > maxValue) {
-//                maxValue = score;
-//                categoryWithHighestPropability = retailers;
-//            }
-//        }
-//        return categoryWithHighestPropability;
-
-        return String.valueOf(categories.firstEntry().getValue());
+        if (categories.firstEntry().getKey() == 0) {
+            return 0;
+        } else {
+            return categories.firstEntry().getValue();
+        }
     }
 
     private double scoreTransactionMessage(String rulePayeeMessage, String transactionPayeeMessage) {
         double score = 0;
-        if (transactionPayeeMessage.contains(rulePayeeMessage)) {
-            score++;
-        } else if (FuzzySearch.partialRatio(rulePayeeMessage, transactionPayeeMessage) > 50) {
-            score++;
+        if (rulePayeeMessage != null && transactionPayeeMessage != null) {
+            if (transactionPayeeMessage.contains(rulePayeeMessage)) {
+                score++;
+            } else if (FuzzySearch.partialRatio(rulePayeeMessage, transactionPayeeMessage) > 50) {
+                score++;
+            }
         }
+
         return score;
     }
 
@@ -115,7 +100,7 @@ public class CategoryScorer {
             }
         }
         //pokud je větší než
-        else if (valueToValue == null) {
+        else if (valueToValue.equals(BigDecimal.valueOf(0))) {
             if (transactionValue.compareTo(valueFromValue) > 0) {
                 score++;
             }
@@ -156,10 +141,10 @@ public class CategoryScorer {
         Duration duration = interval.toDuration();
 
         //kdyz je to v nějaký konkretni čas
-        if (Integer.valueOf(duration.toStandardMinutes().toString()) < 60) {
+        if (duration.toStandardMinutes().getMinutes() < 60) {
             Interval differenceBettweenRuleAndTransaction = new Interval(bookingDateFromValue.getTime(), transaction.getBookingDate().getTime());
             Duration durationBettweenRuleAndTransaction = differenceBettweenRuleAndTransaction.toDuration();
-            if (Integer.valueOf(durationBettweenRuleAndTransaction.toStandardMinutes().toString()) < 60) {
+            if (durationBettweenRuleAndTransaction.toStandardMinutes().getMinutes() < 60) {
                 score++;
             }
             //když je to do nějakého času
@@ -173,7 +158,7 @@ public class CategoryScorer {
                 score++;
             }
             //když je to v rozmezi nějakého času
-        } else if (Integer.valueOf(duration.toStandardMinutes().toString()) > 60) {
+        } else if (duration.toStandardMinutes().getMinutes() > 60) {
             Date bookingDate = transaction.getBookingDate();
             if (bookingDate.after(bookingDateFromValue) && bookingDate.before(bookingDateToValue)) {
                 score++;
@@ -186,95 +171,25 @@ public class CategoryScorer {
         double score = 0;
         TransactionPartyAccount transactionPartyAccount = transaction.getPartyAccount();
 
-        if (transaction.getDirection().equals(direction)) score += 2;
-        if (transactionPartyAccount.getPrefix().contains(partyPrefixValue)) score += 2;
-        if (transactionPartyAccount.getAccountNumber().contains(partyAccountNumberValue)) score += 2;
-        if (transactionPartyAccount.getBankCode().contains(partyBankCodeValue)) score += 2;
+        if (transaction != null && direction != null)
+            if (transaction.getDirection().equals(direction)) score += 2;
+
+        if (transactionPartyAccount != null && partyPrefixValue != null && transactionPartyAccount.getPrefix() != null)
+            if (transactionPartyAccount.getPrefix().contains(partyPrefixValue)) score += 2;
+        if (transactionPartyAccount != null && partyAccountNumberValue != null && transactionPartyAccount.getAccountNumber() != null)
+            if (transactionPartyAccount.getAccountNumber().contains(partyAccountNumberValue)) score += 2;
+        if (transactionPartyAccount != null && partyBankCodeValue != null && transactionPartyAccount.getBankCode() != null)
+            if (transactionPartyAccount.getBankCode().contains(partyBankCodeValue)) score += 2;
 
         return score;
     }
 
-//    /**
-//     * mame obchodnika z prichozi platby - projedu vsechny obchodniky, ktery mam v kategoriich a hledam, zdali se nějaká 2 jména neshoduji
-//     * pokud se shodují, vlozim si je do foundCategories
-//     *
-//     * @param retailer hledany obchodnik v kategoriich
-//     */
-//    private void scorePropabilityOfRetailers(String retailer) {
-//        ArrayList<String> foundCategories = new ArrayList<>();
-//        for (Map.Entry<String, ArrayList<String>> entry : categories.entrySet()) {
-//
-//            String category = entry.getKey();
-//            ArrayList<String> retailers = entry.getValue();
-//
-//            if (retailers != null) {
-//                for (String retailerName : retailers) {
-//                    //tohlento umi vyhledat nazev obchodnika v souveti -> najde napr. Billa v blabla Billa bla bla
-//                    if ( retailer.matches(".*" + retailerName +".*")) foundCategories.add(category);
-//                }
-//            }
-//        }
-//
-//        //tyto kategorie pak dostanou +1 bod v scoredCategories hashmape
-//        for (String categoryName : foundCategories) {
-//            int score = scoredCategories.get(categoryName);
-//            scoredCategories.put(categoryName, score + 1);
-//        }
-//    }
-//
-//
-//    /**
-//     * Prohleda všechny definovany pravidla a pokud maji nějakou část společnou s uživatelsky definovanými, přičte k nim nějaký skore
-//     * @param payment hledaná platba
-//     */
-//    private void scorePaymentBasedOnCustomerRules(Payment payment) throws ParseException {
-//
-//        HashMap<String, String> singleRule = new HashMap<>();
-//        for (Rule rule: allRules){
-//            int score = 0;
-//            singleRule = rule.getRules();
-//            String payer = singleRule.get("payer");
-//
-//            if ( payment.getPayer().matches(".*" + payer +".*")) score++;  //pokud se shoduje platce (nebo alespoň obsahuje tu část)
-//
-//            double transferMoney = Double.parseDouble(singleRule.get("transferMoney"));
-//            score = decideTheRule(singleRule.get("compare"), transferMoney, payment.getTransferMoney(), score); //pokud vyhovuje výše platby
-//
-//            if (payment.isIncomingPayment() == Boolean.valueOf(singleRule.get("incomingPayment"))) score++; //pokud je prichozi/odchozi stejne jako v pravidle
-//
-////            DateFormat dateFormat = new SimpleDateFormat("E yyyy.MM.dd 'at' hh:mm:ss a zzz");
-////            if (payment.getDateOfPayment().after(dateFormat.parse(singleRule.get("dateOfPayment")))) score += 0.5; //pokud je platba po zacatku platnosti pravidla - pomocne hodnoceni
-//
-//            scoredCategories.put(rule.getRuleName(), score);
-//        }
-//    }
-//
-//    /**
-//     *  Podle compare v pravidlu rozpozna, zdali to tomu pravidlu vyhovuje (připočítává se jenom 0,5 pro pomocne rozhodovani)
-//     * @param compare oznaceni, zdali je platba vyssi (>), mensi (<), nebo rovna (=)
-//     * @param ruleForTransferedMoney hodnota z pravidla
-//     * @param moneyFromPayment hodnota z posuzovane platby
-//     * @param score skore pravdepodobnosti daneho pravidla
-//     * @return vraci skore zvysene o 1, pokud to vyhovi danemu pravidlu
-//     */
-//    private int decideTheRule(String compare, double ruleForTransferedMoney, double moneyFromPayment, int score ) {
-//        switch (compare){
-//            case ">":
-//                if (moneyFromPayment > ruleForTransferedMoney) score += 0.5;
-//            break;
-//
-//            case "<":
-//                if (moneyFromPayment < ruleForTransferedMoney)  score += 0.5;
-//            break;
-//
-//            case "=":
-//                if (moneyFromPayment == ruleForTransferedMoney)  score += 0.5;
-//        }
-//        return score;
-//    }
-
     private RulesetService getRulesetService() {
         return SpringContext.getBean(RulesetService.class);
+    }
+
+    private TransactionService getTransactionService() {
+        return SpringContext.getBean(TransactionService.class);
     }
 
 
@@ -311,6 +226,17 @@ public class CategoryScorer {
     }
 
     public CategoryScorer() {
+
+        //for test purpose only
+        int max = 0;
+        TransactionService transactionService = getTransactionService();
+//        Transaction transaction = transactionService.findTransactionById("1");
+        List<Transaction> transactionList = transactionService.findAllTransactions();
+        for (Transaction transaction : transactionList) {
+            category = scoreCategories(transaction);
+            if (category > max) max = category;
+        }
+        category = max;
 
 //        //dummy data (tohle jakoby budeme mit (preddefinovany pravidla)
 //        ArrayList<String> supermarkets = new ArrayList<>();
