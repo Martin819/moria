@@ -20,12 +20,15 @@ const StatisticsDashboard = props => {
         <Grid container direction="row" justify="space-evenly">
           <Grid item lg={6} xs={12}>
             <Grid container direction="row" justify="flex-start">
-              <CustomPieChart />
+              <ChartContainer />
+
+              {/* <CustomPieChart /> */}
               {/* <div className={classNames('d-none d-xl-inline d-lg-inline', classes.border)} /> */}
             </Grid>
           </Grid>
           <Grid item lg={6} xs={12}>
-            <CustomPieChart />
+            {/* <CustomPieChart /> */}
+            <ChartContainer />
           </Grid>
         </Grid>
       </Grid>
