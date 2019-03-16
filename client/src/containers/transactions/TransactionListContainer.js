@@ -5,6 +5,7 @@ import { getData, handleTransactionCategorySubmit } from '../../actions/transact
 import TransactionList from '../../components/transactions-dashboard/transaction-list/TransactionList';
 import AccountBalanceInfo from '../../components/transactions-dashboard/account-balance-info/AccountBalanceInfo';
 import { bindActionCreators } from 'redux';
+import { computeAccountBalance } from '../../selectors/transactionSelectors';
 
 class TransactionListContainer extends Component {
   componentDidMount() {
@@ -14,7 +15,7 @@ class TransactionListContainer extends Component {
   render() {
     return (
       <Fragment>
-        <AccountBalanceInfo />
+        <AccountBalanceInfo balance={this.props.accountBalance} />
         <TransactionList {...this.props} />
       </Fragment>
     );
@@ -23,7 +24,8 @@ class TransactionListContainer extends Component {
 
 const mapStateToProps = state => ({
   transactions: state.transactions.visibleTransactions,
-  isLoading: state.transactions.loading
+  isLoading: state.transactions.loading,
+  accountBalance: computeAccountBalance(state)
 });
 
 const mapDispatchToProps = (dispatch, ownProps) => {

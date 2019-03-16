@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
-import { PieChart, Pie, Sector, Cell, ResponsiveContainer, Legend } from 'recharts';
+import { PieChart, Pie, Cell, Legend } from 'recharts';
 import { COLORS } from '../../constants/colors';
+import { isEqual } from 'lodash';
 
 const graphColors = COLORS;
 
 const RADIAN = Math.PI / 180;
-const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent, index }) => {
+const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent }) => {
   const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
   const x = cx + radius * Math.cos(-midAngle * RADIAN);
   const y = cy + radius * Math.sin(-midAngle * RADIAN);
@@ -18,21 +19,21 @@ const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, per
 };
 
 class CustomPieChart extends Component {
+  shouldComponentUpdate(nextProps) {
+    return !isEqual(this.props.chartData, nextProps.chartData);
+  }
+
   render() {
-    console.log(this.props);
-    const data = this.props.chartData;
+    const { chartData } = this.props;
     return (
-      //   <ResponsiveContainer width="99%" height="100%">
-      <ResponsiveContainer width={500} height={300}>
-        <PieChart margin={{ top: 0, right: 0, left: 50, bottom: 0 }}>
-          <Pie data={data} labelLine={false} label={renderCustomizedLabel} dataKey="value">
-            {data.map((entry, index) => (
-              <Cell key={`cell-${index}`} fill={graphColors[index % graphColors.length]} />
-            ))}
-          </Pie>
-          <Legend verticalAlign="middle" align="left" height={100} layout="vertical" />
-        </PieChart>
-      </ResponsiveContainer>
+      <PieChart width={500} height={300} margin={{ top: 0, right: 0, left: 20, bottom: 0 }}>
+        <Pie data={chartData} labelLine={false} label={renderCustomizedLabel} dataKey="value">
+          {chartData.map((entry, index) => (
+            <Cell key={`cell-${index}`} fill={graphColors[index % graphColors.length]} />
+          ))}
+        </Pie>
+        <Legend verticalAlign="middle" align="left" height={300} layout="vertical" />
+      </PieChart>
     );
   }
 }
