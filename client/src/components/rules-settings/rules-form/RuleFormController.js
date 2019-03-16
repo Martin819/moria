@@ -2,14 +2,14 @@ import React from 'react';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Form } from 'reactstrap';
 import RuleFormBody from './RuleFormBody';
 import { TransactionValueOperators, TransactionDirections, TransactionTypes } from '../../../constants/transactions';
-import { allIncomingCategories } from '../../../constants/categories';
+import { IncomingTransactionCategories } from '../../../constants/categories';
 
 class RuleFormController extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       name: '',
-      category: allIncomingCategories[0].id,
+      category: IncomingTransactionCategories.I_SALARY_OR_WAGE.id,
       transactionType: TransactionTypes.PAYMENT_HOME.id,
       transactionDirection: TransactionDirections.INCOMING.id,
       partyName: '',

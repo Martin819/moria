@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import { Row, Col, FormGroup, FormFeedback, Label, Input } from 'reactstrap';
-import { allOutgoingCategories, allIncomingCategories } from '../../../constants/categories';
+import { IncomingTransactionCategories, OutgoingTransactionCategories } from '../../../constants/categories';
 import { TransactionValueOperators, TransactionDirections, TransactionTypes } from '../../../constants/transactions';
 
 const prefixRegex = /^[0-9]{0,6}$/;
@@ -12,7 +12,7 @@ class RuleFormBody extends React.Component {
     console.log(this.props);
     const amountChoiceComponent = this.createAmountChoice(this.props.compare || TransactionValueOperators.LESS_THAN.id);
     const activeCategories =
-      this.props.transactionDirection === 'INCOMING' ? allIncomingCategories : allOutgoingCategories;
+      this.props.transactionDirection === 'INCOMING' ? IncomingTransactionCategories : OutgoingTransactionCategories;
     return (
       <Fragment>
         <Row form>
@@ -40,7 +40,7 @@ class RuleFormBody extends React.Component {
                 value={this.props.category}
                 onChange={e => this.props.handleChange(e)}
               >
-                {activeCategories.map(c => (
+                {Object.values(activeCategories).map(c => (
                   <option key={c.id} value={c.id}>
                     {c.text}
                   </option>

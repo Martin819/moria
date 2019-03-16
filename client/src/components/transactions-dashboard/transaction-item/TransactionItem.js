@@ -2,7 +2,7 @@ import React, { Fragment, Component } from 'react';
 import moment from 'moment';
 import { withStyles, ExpansionPanel, ExpansionPanelSummary, Typography, Grid, Grow } from '@material-ui/core/';
 import { Button, Form, FormGroup, Col, Row, Label, Input } from 'reactstrap';
-import { allOutgoingCategories, allCategories } from '../../../constants/categories';
+import { OutgoingTransactionCategories, TransactionCategories } from '../../../constants/categories';
 import { Badge } from 'reactstrap';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import TransactionItemPanelDetail from './TransactionItemPanelDetail';
@@ -46,7 +46,7 @@ class TransactionItem extends Component {
       category
     } = this.props;
 
-    const categoryEnum = allCategories.find(cat => cat.id === category);
+    const categoryEnum = Object.values(TransactionCategories).find(cat => cat.id === category);
     const categoryText = categoryEnum === undefined ? 'Unknown' : categoryEnum.text;
     const transactionTypeEnum = Object.values(TransactionTypes).find(type => type.id === transactionType);
     const transactionTypeText = transactionTypeEnum === undefined ? 'Unknown' : transactionTypeEnum.text;
@@ -91,7 +91,7 @@ class TransactionItem extends Component {
                                     value={this.state.categoryId}
                                     bsSize="sm"
                                   >
-                                    {allOutgoingCategories.map(c => (
+                                    {Object.values(OutgoingTransactionCategories).map(c => (
                                       <option key={c.id} value={c.id}>
                                         {c.text}
                                       </option>
