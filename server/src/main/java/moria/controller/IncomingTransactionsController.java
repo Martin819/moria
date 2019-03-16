@@ -2,10 +2,6 @@ package moria.controller;
 
 import me.xdrop.fuzzywuzzy.FuzzySearch;
 import moria.dto.Payment;
-import moria.model.transactions.Transaction;
-import moria.services.RulesetService;
-import moria.services.TransactionService;
-import moria.services.TransactionServiceImpl;
 import moria.utils.Categories;
 import moria.utils.CategoryScorer;
 import org.springframework.http.MediaType;
@@ -14,7 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.text.ParseException;
-import java.util.Date;
+import java.util.ArrayList;
 
 
 @RestController
@@ -23,11 +19,18 @@ public class IncomingTransactionsController {
 
     // jen pro testovací účely
     @GetMapping(path = "/items", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public String sendItems() throws ParseException {
+    public String[] sendItems() {
 
         CategoryScorer categoryScorer = new CategoryScorer();
-        return Categories.getCategoryById(categoryScorer.category);
+        ArrayList<Integer> list = categoryScorer.findCategoriesForTransaction();
+
+//        return Categories.getCategoryById(categoryScorer.category);
 //        return Categories.getCategoryById(111);
+        String[] strings = new String[list.size()];
+        for (int i = 0; i < strings.length - 1 ; i++ ){
+            strings[i] = Categories.getCategoryById(list.get(i));
+        }
+        return strings;
     }
 
     // jen pro testovací účely
@@ -40,15 +43,6 @@ public class IncomingTransactionsController {
     @PostMapping(path = "/incomingPayment")
     public void incomingPayment(Payment payment) {
 
-//        //neco takovyho prijde
-//        Date date2 = new Date();
-//        Payment payment = new Payment("bla bla Shell dsdfgs", 2250, false, date2, "bagrovicovic");
-//        //--------------------------------------------
-//
-//        CategoryScorer categoryScorer = new CategoryScorer();
-//
-//        //A pak budu hodnotit, zdali to spadá do nějaké námi předem definované kategorie
-//        return categoryScorer.scoreCategories(payment);
 
     }
 

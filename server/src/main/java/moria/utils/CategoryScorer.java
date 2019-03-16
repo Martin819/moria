@@ -11,6 +11,7 @@ import org.joda.time.Duration;
 import org.joda.time.Interval;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.TreeMap;
@@ -25,6 +26,7 @@ public class CategoryScorer {
 
     /**
      * Evalute category based on provided Transaction
+     *
      * @param transaction provided transaction for evaluation
      * @return ID of category from Enum or 0 - algorithm cant find proper category
      */
@@ -37,16 +39,24 @@ public class CategoryScorer {
         TreeMap<Double, Integer> categories = new TreeMap<>();
         for (Ruleset rule : ruleSet) {
             double score = 0;
-            score += scorePartyAccount(rule.getDirection(), rule.getPartyPrefixValue(), rule.getPartyAccountNumberValue(), rule.getPartyBankCodeValue(), rule.getPartyDescriptionValue());
+            if (checkNullForScoreParty(rule.getDirection(), rule.getPartyPrefixValue(), rule.getPartyAccountNumberValue(), rule.getPartyBankCodeValue(), rule.getPartyDescriptionValue())){
+                score += scorePartyAccount(rule.getDirection(), rule.getPartyPrefixValue(), rule.getPartyAccountNumberValue(), rule.getPartyBankCodeValue(), rule.getPartyDescriptionValue());
+            }
+
             score += scoreTransactionDate(rule.getBookingDateFromValue(), rule.getBookingDateToValue());
             score += scoreTransactionValue(rule.getValueFromValue(), rule.getValueToValue());
             if (transaction.getDirection().equals("INCOMING"))
                 score += scoreTransactionMessage(rule.getPayerMessageValue(), transaction.getPayerMessage());
             if (transaction.getDirection().equals("OUTGOING"))
                 score += scoreTransactionMessage(rule.getPayeeMessageValue(), transaction.getPayeeMessage());
+            if (transaction.getAdditionalInfoCard() != null ) if (checkNullForScoreCard(rule.getCardNumberValue(), transaction.getAdditionalInfoCard().getCardNumber())){
+                score += scoreCardNumber(rule.getCardNumberValue(), transaction.getAdditionalInfoCard().getCardNumber());
+            }
+            if (transaction.getAdditionalInfoDomestic() != null ) if (checkNullForConstantAndVarialbe(rule.getSpecificSymbolValue(), transaction.getAdditionalInfoDomestic().getSpecificSymbol())){
+                score += scoreConstantAndVariable(rule.getSpecificSymbolValue(), transaction.getAdditionalInfoDomestic().getSpecificSymbol());
+            }
 
-            String categoryName = rule.getUserDescriptionValue();
-//            scoredCategories.put(categoryName, score);
+//            String categoryName = rule.getUserDescriptionValue();
             categories.put(score, rule.getCategoryId());
         }
 
@@ -55,6 +65,36 @@ public class CategoryScorer {
         } else {
             return categories.firstEntry().getValue();
         }
+    }
+
+    private double scoreConstantAndVariable(String specificSymbolValue, String specificSymbol) {
+        double score = 0;
+        if (specificSymbol.contains(specificSymbolValue)) score += 2;
+        return score;
+    }
+
+    private boolean checkNullForConstantAndVarialbe(String specificSymbolValue, String specificSymbol) {
+        return (specificSymbol != null && specificSymbolValue != null);
+    }
+
+    private boolean checkNullForScoreCard(String cardNumberValue, String cardNumber) {
+        return (cardNumber != null && cardNumberValue != null);
+    }
+
+    private boolean checkNullForScoreParty(String direction, String partyPrefixValue, String partyAccountNumberValue, String partyBankCodeValue, String partyDescriptionValue) {
+        TransactionPartyAccount transactionPartyAccount = transaction.getPartyAccount();
+
+        return (transaction != null && direction != null && transactionPartyAccount != null && partyPrefixValue != null && transactionPartyAccount.getPrefix() != null
+                && partyAccountNumberValue != null && transactionPartyAccount.getAccountNumber() != null
+                && partyBankCodeValue != null && transactionPartyAccount.getBankCode() != null
+                && partyDescriptionValue != null && transaction != null && transaction.getPartyDescription() != null);
+    }
+
+
+    private double scoreCardNumber(String cardNumberValue, String cardNumber) {
+        double score = 0;
+         if (cardNumberValue.contains(cardNumber)) score += 2;
+        return score;
     }
 
     private double scoreTransactionMessage(String rulePayeeMessage, String transactionPayeeMessage) {
@@ -168,12 +208,10 @@ public class CategoryScorer {
         if (transaction != null && direction != null)
             if (transaction.getDirection().equals(direction)) score += 2;
 
-        if (transactionPartyAccount != null && partyPrefixValue != null && transactionPartyAccount.getPrefix() != null)
-            if (transactionPartyAccount.getPrefix().contains(partyPrefixValue)) score += 2;
-        if (transactionPartyAccount != null && partyAccountNumberValue != null && transactionPartyAccount.getAccountNumber() != null)
-            if (transactionPartyAccount.getAccountNumber().contains(partyAccountNumberValue)) score += 2;
-        if (transactionPartyAccount != null && partyBankCodeValue != null && transactionPartyAccount.getBankCode() != null)
-            if (transactionPartyAccount.getBankCode().contains(partyBankCodeValue)) score += 2;
+        if (transactionPartyAccount.getPrefix().contains(partyPrefixValue)) score += 2;
+        if (transactionPartyAccount.getAccountNumber().contains(partyAccountNumberValue)) score += 2;
+        if (transactionPartyAccount.getBankCode().contains(partyBankCodeValue)) score += 2;
+        if (partyDescriptionValue.contains(transaction.getPartyDescription())) score += 2;
 
         return score;
     }
@@ -198,12 +236,28 @@ public class CategoryScorer {
         //for test purpose only
         int max = 0;
         TransactionService transactionService = getTransactionService();
-//        Transaction transaction = transactionService.findTransactionById("1");
+        Transaction transaction2 = transactionService.findTransactionById(1);
         List<Transaction> transactionList = transactionService.findAllTransactions();
         for (Transaction transaction : transactionList) {
             category = scoreCategories(transaction);
             if (category > max) max = category;
         }
         category = max;
+    }
+
+    public ArrayList<Integer> findCategoriesForTransaction() {
+        ArrayList<Integer> list = new ArrayList<>();
+        TransactionService transactionService = getTransactionService();
+        List<Transaction> transactionList = transactionService.findAllTransactions();
+        for (Transaction transaction : transactionList) {
+            if (transaction.getCategoryId() == null) {
+                category = scoreCategories(transaction);
+                if (category != 0) {
+                    transactionService.setCategoryIdForTransactionById(transaction.getId(), category);
+                    list.add(category);
+                }
+            }
+        }
+        return list;
     }
 }

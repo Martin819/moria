@@ -16,7 +16,7 @@ public class TransactionServiceImpl implements TransactionService {
 
     // Returns Transaction by given ID
     @Override
-    public Transaction findTransactionById(String id) {
+    public Transaction findTransactionById(int id) {
         return transactionRepository.findById(id);
     }
 
@@ -82,7 +82,7 @@ public class TransactionServiceImpl implements TransactionService {
 
     // Sets categoryId to given ID for a Transaction identified by its ID
     @Override
-    public void setCategoryIdForTransactionById(String transactionId, int categoryId) {
+    public void setCategoryIdForTransactionById(int transactionId, int categoryId) {
         transactionRepository.setCategoryIdForTransactionById(transactionId, categoryId);
     }
 

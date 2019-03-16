@@ -9,7 +9,7 @@ import java.util.List;
 @Service
 public interface TransactionService {
 
-    Transaction findTransactionById(String id);
+    Transaction findTransactionById(int id);
 
     List<Transaction> findAllTransactions();
 
@@ -31,5 +31,5 @@ public interface TransactionService {
 
     List<Transaction> findAllAbroadTransactions();
 
-    void setCategoryIdForTransactionById(String transactionId, int categoryId);
+    void setCategoryIdForTransactionById(int transactionId, int categoryId);
 }
