@@ -4,8 +4,7 @@ import { Card, CardContent, Typography, Grow } from '@material-ui/core';
 
 const AccountBalanceInfo = props => {
   const { classes } = props;
-  const balance = 220245.08;
-
+  const balance = props.balance || 0;
   return (
     <div>
       <h2>Accounts</h2>
