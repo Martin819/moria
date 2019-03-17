@@ -237,6 +237,8 @@ public class CategoryScorer {
         int max = 0;
         TransactionService transactionService = getTransactionService();
         Transaction transaction2 = transactionService.findTransactionById(1);
+        Transaction transactionaa = transactionService.findTransactionById(1);
+        transactionService.setCategoryIdForTransactionById(1,11);
         List<Transaction> transactionList = transactionService.findAllTransactions();
         for (Transaction transaction : transactionList) {
             category = scoreCategories(transaction);
