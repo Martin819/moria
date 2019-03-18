@@ -1,5 +1,6 @@
 import React from 'react';
 import { Table } from 'reactstrap';
+import { Grow } from '@material-ui/core/';
 
 class StatisticsTable extends React.Component {
   render() {
@@ -14,17 +15,19 @@ class StatisticsTable extends React.Component {
         <tbody>
           {this.props.tableData.map((entry, index) => {
             return (
-              <tr key={`Tr_${index}`}>
-                <td key={`Td_${index}_1`} scope="row">
-                  {entry.name}
-                </td>
-                <td key={`Td_${index}_2`} className="text-right">
-                  {entry.value.toLocaleString('cs-cz', {
-                    style: 'currency',
-                    currency: 'CZK'
-                  })}
-                </td>
-              </tr>
+              <Grow in={true} timeout={500 + 150 * index}>
+                <tr key={`Tr_${index}`}>
+                  <td key={`Td_${index}_1`} scope="row">
+                    {entry.name}
+                  </td>
+                  <td key={`Td_${index}_2`} className="text-right">
+                    {entry.value.toLocaleString('cs-cz', {
+                      style: 'currency',
+                      currency: 'CZK'
+                    })}
+                  </td>
+                </tr>
+              </Grow>
             );
           })}
         </tbody>

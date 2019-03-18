@@ -1,10 +1,10 @@
 import React, { Fragment } from 'react';
 import ChartContainer from '../../containers/statistics/ChartContainer';
 import TransactionFilterContainer from '../../containers/transactions/TransactionFilterContainer';
-import { Grid, withStyles } from '@material-ui/core';
-import { TransactionDirections } from '../../constants/transactions';
-import StatisticsTable from './tabular-section/StatisticsTable';
 import TableContainer from '../../containers/statistics/TableContainer';
+import { Grid, withStyles } from '@material-ui/core';
+import { Spinner } from 'reactstrap';
+import { TransactionDirections } from '../../constants/transactions';
 
 const StatisticsDashboard = props => {
   return (
@@ -17,11 +17,19 @@ const StatisticsDashboard = props => {
           </Grid>
         </Grid>
         <Grid container direction="row" justify="space-evenly" className="mt-4">
-          <Grid item lg={6} xs={12} className="text-center">
-            <ChartContainer direction={TransactionDirections.INCOMING.id} />
+          <Grid item lg={6} xs={12} className={props.isLoading ? 'text-center' : ''}>
+            {!props.isLoading ? (
+              <ChartContainer direction={TransactionDirections.INCOMING.id} />
+            ) : (
+              <Spinner type="grow" color="primary" />
+            )}
           </Grid>
-          <Grid item lg={6} xs={12} className="text-center">
-            <ChartContainer direction={TransactionDirections.OUTGOING.id} />
+          <Grid item lg={6} xs={12} className={props.isLoading ? 'text-center' : ''}>
+            {!props.isLoading ? (
+              <ChartContainer direction={TransactionDirections.OUTGOING.id} />
+            ) : (
+              <Spinner type="grow" color="primary" />
+            )}
           </Grid>
         </Grid>
       </Grid>

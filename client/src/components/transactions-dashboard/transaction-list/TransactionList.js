@@ -8,10 +8,11 @@ import TransactionFilterContainer from '../../../containers/transactions/Transac
 
 const TransactionsList = props => {
   const { classes, transactions, isLoading } = props;
-  const transactionItems = transactions.map(transaction => {
+  const transactionItems = transactions.map((transaction, index) => {
     return (
       <TransactionItem
         key={transaction.id}
+        index={index}
         {...transaction}
         handleTransactionCategorySubmit={props.handleTransactionCategorySubmit}
       />

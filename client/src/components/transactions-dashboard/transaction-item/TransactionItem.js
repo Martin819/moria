@@ -29,6 +29,7 @@ class TransactionItem extends Component {
   render() {
     const {
       classes,
+      index,
       direction,
       partyDescription,
       transactionPartyAccountPrefix,
@@ -52,98 +53,94 @@ class TransactionItem extends Component {
     const transactionTypeText = transactionTypeEnum === undefined ? 'Unknown' : transactionTypeEnum.text;
 
     return (
-      <Fragment>
-        <Grow in={true} timeout={500}>
-          <ExpansionPanel>
-            <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-              <Grid container direction="row" spacing={24}>
-                <Grid item>
-                  <Typography className={classes.date}>{moment(valueDate).format('DD MMM YYYY')}</Typography>
-                </Grid>
-                <Grid item xs>
-                  <Grid container justify="space-between" alignItems="center">
-                    <Grid item xs={9}>
-                      <Row>
-                        <Col sm={4}>
-                          <Badge color="warning" pill>
-                            {categoryText}
-                          </Badge>
-                          <Typography className={classes.heading}>
-                            {transactionAdditionalInfoCardMerchantName}
-                          </Typography>
-                          <Typography>
-                            <span className={classes.secondaryHeading}>{transactionTypeText}</span>
-                          </Typography>
-                        </Col>
-                        <Col sm={4}>
-                          <Form>
-                            <FormGroup inline className="mt-3 mr-2">
-                              <Row form>
-                                <Col sm={10} className="p-0">
-                                  <Input
-                                    type="select"
-                                    name="categorySelect"
-                                    id="categorySelect"
-                                    onChange={e => this.handleCategoryChange(e)}
-                                    onClick={e => {
-                                      e.stopPropagation();
-                                    }}
-                                    value={this.state.categoryId}
-                                    bsSize="sm"
-                                  >
-                                    {Object.values(OutgoingTransactionCategories).map(c => (
-                                      <option key={c.id} value={c.id}>
-                                        {c.text}
-                                      </option>
-                                    ))}
-                                  </Input>
-                                </Col>
-                                <Col sm={2} className="p-0">
-                                  <Button
-                                    color="primary"
-                                    type="submit"
-                                    className="ml-md-2"
-                                    disabled={category === this.state.categoryId}
-                                    size="sm"
-                                    onClick={this.handleTransactionCategorySubmit}
-                                  >
-                                    Save
-                                  </Button>
-                                </Col>
-                              </Row>
-                            </FormGroup>
-                          </Form>
-                        </Col>
-                      </Row>
-                    </Grid>
+      <Grow in={true} timeout={500 + 100 * index}>
+        <ExpansionPanel>
+          <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+            <Grid container direction="row" spacing={24}>
+              <Grid item>
+                <Typography className={classes.date}>{moment(valueDate).format('DD MMM YYYY')}</Typography>
+              </Grid>
+              <Grid item xs>
+                <Grid container justify="space-between" alignItems="center">
+                  <Grid item xs={9}>
+                    <Row>
+                      <Col sm={4}>
+                        <Badge color="warning" pill>
+                          {categoryText}
+                        </Badge>
+                        <Typography className={classes.heading}>{transactionAdditionalInfoCardMerchantName}</Typography>
+                        <Typography>
+                          <span className={classes.secondaryHeading}>{transactionTypeText}</span>
+                        </Typography>
+                      </Col>
+                      <Col sm={4}>
+                        <Form>
+                          <FormGroup inline className="mt-3 mr-2">
+                            <Row form>
+                              <Col sm={10} className="p-0">
+                                <Input
+                                  type="select"
+                                  name="categorySelect"
+                                  id="categorySelect"
+                                  onChange={e => this.handleCategoryChange(e)}
+                                  onClick={e => {
+                                    e.stopPropagation();
+                                  }}
+                                  value={this.state.categoryId}
+                                  bsSize="sm"
+                                >
+                                  {Object.values(OutgoingTransactionCategories).map(c => (
+                                    <option key={c.id} value={c.id}>
+                                      {c.text}
+                                    </option>
+                                  ))}
+                                </Input>
+                              </Col>
+                              <Col sm={2} className="p-0">
+                                <Button
+                                  color="primary"
+                                  type="submit"
+                                  className="ml-md-2"
+                                  disabled={category === this.state.categoryId}
+                                  size="sm"
+                                  onClick={this.handleTransactionCategorySubmit}
+                                >
+                                  Save
+                                </Button>
+                              </Col>
+                            </Row>
+                          </FormGroup>
+                        </Form>
+                      </Col>
+                    </Row>
+                  </Grid>
 
-                    <Grid item xs className="text-md-right">
-                      {direction === 'OUTGOING' && (
-                        <Typography className={classes.amountNegative}>
-                          &#8722;&nbsp;
-                          {transactionValueAmount.toLocaleString('cs-cz', {
-                            style: 'currency',
-                            currency: transactionValueCurrency
-                          })}
-                        </Typography>
-                      )}
-                      {direction === 'INCOMING' && (
-                        <Typography className={classes.amountPositive}>
-                          {transactionValueAmount.toLocaleString('cs-cz', {
-                            style: 'currency',
-                            currency: transactionValueCurrency
-                          })}
-                        </Typography>
-                      )}
-                    </Grid>
+                  <Grid item xs className="text-md-right">
+                    {direction === 'OUTGOING' && (
+                      <Typography className={classes.amountNegative}>
+                        &#8722;&nbsp;
+                        {transactionValueAmount.toLocaleString('cs-cz', {
+                          style: 'currency',
+                          currency: transactionValueCurrency
+                        })}
+                      </Typography>
+                    )}
+                    {direction === 'INCOMING' && (
+                      <Typography className={classes.amountPositive}>
+                        {transactionValueAmount.toLocaleString('cs-cz', {
+                          style: 'currency',
+                          currency: transactionValueCurrency
+                        })}
+                      </Typography>
+                    )}
                   </Grid>
                 </Grid>
               </Grid>
-            </ExpansionPanelSummary>
-            <TransactionItemPanelDetail message={payeeMessage} category={category} />
-          </ExpansionPanel>
-        </Grow>
-      </Fragment>
+            </Grid>
+          </ExpansionPanelSummary>
+          <TransactionItemPanelDetail message={payeeMessage} category={category} />
+        </ExpansionPanel>
+      </Grow>
     );
   }
 }
