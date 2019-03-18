@@ -24,6 +24,16 @@ export const computeStatistics = () =>
     }
   );
 
+export const sumTransactions = () =>
+  createSelector(
+    [getTransactionsByDirection],
+    transactions => {
+      return _.chain(transactions)
+        .sumBy('transactionValueAmount')
+        .value();
+    }
+  );
+
 export const computeAccountBalance = createSelector(
   [getAllTransactions],
   transactions => {

@@ -10,15 +10,20 @@ class StatisticsDashboardContainer extends Component {
   }
 
   render() {
-    return <StatisticsDashboard />;
+    return <StatisticsDashboard isLoading={this.props.isLoading} />;
   }
 }
 
 StatisticsDashboardContainer.propTypes = {
-  getData: PropTypes.func.isRequired
+  getData: PropTypes.func.isRequired,
+  isLoading: PropTypes.bool.isRequired
 };
 
+const mapStateToProps = state => ({
+  isLoading: state.transactions.loading
+});
+
 export default connect(
-  null,
+  mapStateToProps,
   { getData }
 )(StatisticsDashboardContainer);
