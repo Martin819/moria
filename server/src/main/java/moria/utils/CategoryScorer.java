@@ -19,9 +19,11 @@ import java.util.TreeMap;
 
 public class CategoryScorer {
 
+    private static final double DIRECTION_SCORE = 1.75;
+    private static final int threshold = 75;
     private List<Ruleset> ruleSet;
     private Transaction transaction;
-    private static final int threshold = 75;
+
 
     //for test purpose only
     private int category;
@@ -66,7 +68,7 @@ public class CategoryScorer {
             }
 
             //podminka kvuli vybrani kategorie na zakladě incomming/outgoing
-            if (score < 0.3) score = 0;
+            if (score == DIRECTION_SCORE) score = 0;
 
             //počítá počet vyplněných pravidel a poté je jejich převrácenou hodnotou celého počtu násobí skore (pro zvýhodnění malého počtu vyplněných položek v rulesetu)
             double coefficient = findCoefficientBasedOnNumberOfParameters(rule);
@@ -169,7 +171,7 @@ public class CategoryScorer {
         }
         //pokud je to v rozmezi
         else if (resolution < 0) {
-            if (transactionValue.compareTo(valueFromValue) < 0 && transactionValue.compareTo(valueToValue) < 0) {
+            if (valueFromValue.compareTo(transactionValue) < 0 && transactionValue.compareTo(valueToValue) < 0) {
                 score++;
             }
         }
@@ -225,7 +227,7 @@ public class CategoryScorer {
         TransactionPartyAccount transactionPartyAccount = transaction.getPartyAccount();
 
         if (transaction != null && direction != null)
-            if (transaction.getDirection().equals(direction)) score += 0.25;
+            if (transaction.getDirection().equals(direction)) score += DIRECTION_SCORE;
 
         if (transactionPartyAccount.getPrefix().contains(partyPrefixValue)) score += 2;
         if (transactionPartyAccount.getAccountNumber().contains(partyAccountNumberValue)) score += 2;
