@@ -2,6 +2,7 @@ package moria.controller;
 
 import me.xdrop.fuzzywuzzy.FuzzySearch;
 import moria.dto.Payment;
+import moria.mockData.Category;
 import moria.utils.Categories;
 import moria.utils.CategoryScorer;
 import org.springframework.http.MediaType;
@@ -22,13 +23,13 @@ public class IncomingTransactionsController {
     public String[] sendItems() {
 
         CategoryScorer categoryScorer = new CategoryScorer();
-        ArrayList<Integer> list = categoryScorer.findCategoriesForTransaction();
+        ArrayList<Category> list = categoryScorer.findCategoriesForTransaction();
 
 //        return Categories.getCategoryById(categoryScorer.category);
 //        return Categories.getCategoryById(111);
         String[] strings = new String[list.size()];
         for (int i = 0; i < strings.length - 1 ; i++ ){
-            strings[i] = Categories.getCategoryById(list.get(i));
+            strings[i] = "id platby je " + list.get(i).getIdPayment() + " id kategorie je " + list.get(i).getIdCategory() + " což je " + Categories.getCategoryById(list.get(i).getIdCategory());
         }
         return strings;
     }
