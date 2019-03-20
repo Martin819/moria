@@ -18,7 +18,7 @@ public class IncomingTransactionsController {
 
 
     // jen pro testovací účely
-    @GetMapping(path = "/items", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @GetMapping(path = "/plsCategorize", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public String[] sendItems() {
 
         CategoryScorer categoryScorer = new CategoryScorer();

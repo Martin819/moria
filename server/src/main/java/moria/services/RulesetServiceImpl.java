@@ -14,7 +14,7 @@ public class RulesetServiceImpl implements RulesetService {
     @Autowired
     private RulesetRepository rulesetRepository;
 
-    // Retuns Ruleset by given ID
+    // Returns Ruleset by given ID
     @Override
     public Ruleset findRulesetById(int id) {
         return rulesetRepository.findById(id);

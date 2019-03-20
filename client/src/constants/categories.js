@@ -1,17 +1,3 @@
-export const IncomingTransactionCategories = Object.freeze({
-    I_SALARY_OR_WAGE: {id: 'I_SALARY_OR_WAGE', text: 'Salary or wage'},
-    I_PENSION: {id: 'I_PENSION', text: 'Pension'},
-    I_SOCIAL_ASSISTANCE: {id: 'I_SOCIAL_ASSISTANCE', text: 'Welfare'},
-    I_BUSINESS: {id: 'I_BUSINESS', text: 'Business'},
-    I_GAMBLING: {id: 'I_GAMBLING', text: 'Gambling'},
-    I_RENT: {id: 'I_RENT', text: 'Rent'},
-    I_LOANS: {id: 'I_LOANS', text: 'Loans'},
-    I_POCKET_MONEY: {id: 'I_POCKET_MONEY', text: 'Pocket money'},
-    I_GIFTS: {id: 'I_GIFTS', text: 'Gifts'},
-    I_OTHER: {id: 'I_OTHER', text: 'Other'},
-    I_UNCATEGORIZED: {id: 'I_UNCATEGORIZED', text: 'Uncategorized'}
-});
-
 export const OutgoingTransactionCategories = Object.freeze({
     FOOD: {id: 'FOOD', text: 'Food'},
     ALCOHOL: {id: 'ALCOHOL', text: 'Alcohol'},
@@ -35,7 +21,20 @@ export const OutgoingTransactionCategories = Object.freeze({
     GIFTS: {id: 'GIFTS', text: 'Gifts'},
     OTHER: {id: 'OTHER', text: 'Other'},
     UNCATEGORIZED: {id: 'UNCATEGORIZED', text: 'Uncategorized'}
+});
 
+export const IncomingTransactionCategories = Object.freeze({
+    I_SALARY_OR_WAGE: {id: 'I_SALARY_OR_WAGE', text: 'Salary / wage'},
+    I_PENSION: {id: 'I_PENSION', text: 'Pension'},
+    I_SOCIAL_ASSISTANCE: {id: 'I_SOCIAL_ASSISTANCE', text: 'Welfare'},
+    I_BUSINESS: {id: 'I_BUSINESS', text: 'Business'},
+    I_GAMBLING: {id: 'I_GAMBLING', text: 'Gambling'},
+    I_RENT: {id: 'I_RENT', text: 'Rent'},
+    I_LOANS: {id: 'I_LOANS', text: 'Loans'},
+    I_POCKET_MONEY: {id: 'I_POCKET_MONEY', text: 'Pocket money'},
+    I_GIFTS: {id: 'I_GIFTS', text: 'Gifts'},
+    I_OTHER: {id: 'I_OTHER', text: 'Other'},
+    I_UNCATEGORIZED: {id: 'I_UNCATEGORIZED', text: 'Uncategorized'}
 });
 
 export const TransactionCategories = Object.freeze({

@@ -52,7 +52,7 @@ public class CategoryScorer {
             if (transaction.getAdditionalInfoCard() != null ) if (checkNullForScoreCard(rule.getCardNumberValue(), transaction.getAdditionalInfoCard().getCardNumber())){
                 score += scoreCardNumber(rule.getCardNumberValue(), transaction.getAdditionalInfoCard().getCardNumber());
             }
-            if (transaction.getAdditionalInfoDomestic() != null ) if (checkNullForConstantAndVarialbe(rule.getSpecificSymbolValue(), transaction.getAdditionalInfoDomestic().getSpecificSymbol())){
+            if (transaction.getAdditionalInfoDomestic() != null ) if (checkNullForConstantAndVariable(rule.getSpecificSymbolValue(), transaction.getAdditionalInfoDomestic().getSpecificSymbol())){
                 score += scoreConstantAndVariable(rule.getSpecificSymbolValue(), transaction.getAdditionalInfoDomestic().getSpecificSymbol());
             }
 
@@ -73,7 +73,7 @@ public class CategoryScorer {
         return score;
     }
 
-    private boolean checkNullForConstantAndVarialbe(String specificSymbolValue, String specificSymbol) {
+    private boolean checkNullForConstantAndVariable(String specificSymbolValue, String specificSymbol) {
         return (specificSymbol != null && specificSymbolValue != null);
     }
 
