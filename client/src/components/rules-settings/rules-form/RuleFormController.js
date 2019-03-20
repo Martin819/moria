@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Form } from 'reactstrap';
-import RuleFormBody from './RuleFormBody';
+import RuleFormBodyCommon from './RuleFormBodyCommon';
 import { TransactionValueOperators, TransactionDirections, TransactionTypes } from '../../../constants/transactions';
 import { IncomingTransactionCategories } from '../../../constants/categories';
 
@@ -8,18 +8,25 @@ class RuleFormController extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      name: '',
-      category: IncomingTransactionCategories.I_SALARY_OR_WAGE.id,
-      transactionType: TransactionTypes.PAYMENT_HOME.id,
-      transactionDirection: TransactionDirections.INCOMING.id,
+      ruleName: '',
       partyName: '',
+      categoryId: IncomingTransactionCategories.I_SALARY_OR_WAGE.id,
+      direction: TransactionDirections.INCOMING.id,
+      transactionType: TransactionTypes.PAYMENT_HOME.id,
+      valueFrom: '',
+      valueTo: '',
       partyAccountPrefix: '',
       partyAccountNumber: '',
       partyBankCode: '',
-      compare: TransactionValueOperators.LESS_THAN.id,
-      valueFrom: '',
-      valueTo: '',
-      description: ''
+      payerMessage: '',
+      payeeMessage: '',
+      constantSymbol: '',
+      variableSymbol: '',
+      specificSymbol: '',
+      bookingTimeFrom: '',
+      bookingTimeTo: '',
+      cardNumber: '',
+      compare: TransactionValueOperators.LESS_THAN.id
     };
   }
 
@@ -27,18 +34,25 @@ class RuleFormController extends React.Component {
     const { editedRule } = this.props;
     if (editedRule !== null) {
       this.setState({
-        name: editedRule.name,
-        category: editedRule.category,
-        transactionType: editedRule.transactionType,
-        transactionDirection: editedRule.transactionDirection,
+        ruleName: editedRule.ruleName,
         partyName: editedRule.partyName,
+        categoryId: editedRule.categoryId,
+        direction: editedRule.direction,
+        transactionType: editedRule.transactionType,
+        valueFrom: editedRule.valueFrom.toString() || '',
+        valueTo: editedRule.valueTo.toString() || '',
         partyAccountPrefix: editedRule.partyAccountPrefix,
         partyAccountNumber: editedRule.partyAccountNumber,
         partyBankCode: editedRule.partyBankCode,
-        compare: editedRule.compare,
-        valueFrom: editedRule.valueFrom.toString() || '',
-        valueTo: editedRule.valueTo.toString() || '',
-        description: editedRule.description
+        payerMessage: editedRule.payerMessage,
+        payeeMessage: editedRule.payeeMessage,
+        constantSymbol: editedRule.constantSymbol,
+        variableSymbol: editedRule.variableSymbol,
+        specificSymbol: editedRule.specificSymbol,
+        bookingTimeFrom: editedRule.bookingTimeFrom,
+        bookingTimeTo: editedRule.bookingTimeTo,
+        cardNumber: editedRule.cardNumber,
+        compare: editedRule.compare
       });
     }
   }
@@ -53,6 +67,27 @@ class RuleFormController extends React.Component {
     this.setState({ [event.target.name]: event.target.value });
   };
 
+  handleTimePickerChange = (name, value) => {
+    if (value === null) {
+      this.setState({ bookingTimeFrom: '', bookingTimeTo: '' });
+      return;
+    }
+    const formattedValue = value.format('HH:mm');
+    if (name === TIME_FROM) {
+      if (this.state.bookingTimeTo === '') {
+        this.setState({ bookingTimeFrom: formattedValue, bookingTimeTo: '23:59' });
+      } else {
+        this.setState({ bookingTimeFrom: formattedValue });
+      }
+    } else {
+      if (this.state.bookingTimeFrom === '') {
+        this.setState({ bookingTimeFrom: '00:00', bookingTimeTo: formattedValue });
+      } else {
+        this.setState({ bookingTimeTo: formattedValue });
+      }
+    }
+  };
+
   render() {
     return (
       <div>
@@ -65,7 +100,11 @@ class RuleFormController extends React.Component {
           <Form onSubmit={this.handleSubmit}>
             <ModalHeader toggle={this.props.toggleModal}>Rule setup</ModalHeader>
             <ModalBody>
-              <RuleFormBody handleChange={this.handleChange} {...this.state} />
+              <RuleFormBodyCommon
+                handleChange={this.handleChange}
+                handleTimePickerChange={this.handleTimePickerChange}
+                {...this.state}
+              />
             </ModalBody>
             <ModalFooter>
               <Button color="primary" type="submit">
@@ -81,5 +120,8 @@ class RuleFormController extends React.Component {
     );
   }
 }
+
+const TIME_FROM = 'timeFrom';
+const TIME_TO = 'timeTo';
 
 export default RuleFormController;
