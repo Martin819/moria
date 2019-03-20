@@ -5,6 +5,7 @@ import lombok.*;
 import javax.persistence.*;
 
 @Data
+@AllArgsConstructor
 @Embeddable
 public class TransactionPartyAccount {
 
