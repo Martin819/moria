@@ -21,7 +21,7 @@ public class TransactionsToDtoMapper {
         List<TransactionDto> transactionDtos = new ArrayList<>();
         for (Transaction transaction : transactions ) {
             TransactionDto dto = modelMapper.map(transaction, TransactionDto.class);
-            dto.setCategory(Categories.getCategoryById(transaction.getCategoryId()));
+            dto.setCategoryId(transaction.getCategoryId());
             String partyDescription = determinePartyDescription(transaction);
             dto.setPartyDescription(partyDescription);
             transactionDtos.add(dto);

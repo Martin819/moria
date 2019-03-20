@@ -44,6 +44,6 @@ public class TransactionDto {
     private String  transactionValueCurrency;
     private Date valueDate;
     private String transactionType;
-    private String category;
+    private int categoryId;
 
 }
