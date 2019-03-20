@@ -2,9 +2,11 @@ package moria.model.rules;
 
 import lombok.Data;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import java.math.BigDecimal;
-import java.util.Date;
 
 @Data
 @Entity(name = "rulesets")
@@ -13,33 +15,29 @@ public class Ruleset {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    // VALUE
-    private BigDecimal valueFromValue;
-    private BigDecimal valueToValue;
-    private String direction;
-    // PARTY ACCOUNT
-    private String partyPrefixValue;
-    private String partyAccountNumberValue;
-    private String partyBankCodeValue;
-    private String partyDescriptionValue;
-    // DATE
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date bookingDateFromValue;
+    private String ruleName;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date bookingDateToValue;
-    // DESCRIPTIONS
-    private String transactionType;
-    private String userDescriptionValue;
-    private String payerMessageValue;
-    private String payeeMessageValue;
-    // SYMBOLS
-    private String constantSymbolValue;
-    private String variableSymbolValue;
-    private String specificSymbolValue;
-    // CARDS
-    private String merchantNameValue;
-    private String cardNumberValue;
-    //CATEGORY ID
+    // COMMON
+    private String partyName;
     private int categoryId;
+    private String direction;
+    private String transactionType;
+    private BigDecimal valueFrom;
+    private BigDecimal valueTo;
+
+    // BANK TRANSFER
+    private String partyAccountPrefix;
+    private String partyAccountNumber;
+    private String partyBankCode;
+    private String payerMessage;
+    private String payeeMessage;
+    private String constantSymbol;
+    private String variableSymbol;
+    private String specificSymbol;
+
+    // CARDS
+    private String bookingTimeFrom;
+    private String bookingTimeTo;
+    private String cardNumber;
+
 }

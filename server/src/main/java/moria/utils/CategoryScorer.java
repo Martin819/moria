@@ -12,6 +12,7 @@ import org.joda.time.Duration;
 import org.joda.time.Interval;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -29,10 +30,10 @@ public class CategoryScorer {
     private int category;
 
     /**
-     * Evalute category based on provided Transaction
+     * Evalute categoryId based on provided Transaction
      *
      * @param transaction provided transaction for evaluation
-     * @return ID of category from Enum or 0 - algorithm cant find proper category
+     * @return ID of categoryId from Enum or 0 - algorithm cant find proper categoryId
      */
 
     public int scoreCategories(Transaction transaction) {
@@ -43,25 +44,25 @@ public class CategoryScorer {
         TreeMap<Double, Integer> categories = new TreeMap<>();
         for (Ruleset rule : ruleSet) {
             double score = 0;
-            if (checkNullForScoreParty(rule.getDirection(), rule.getPartyPrefixValue(), rule.getPartyAccountNumberValue(), rule.getPartyBankCodeValue(), rule.getPartyDescriptionValue())) {
-                score += scorePartyAccount(rule.getDirection(), rule.getPartyPrefixValue(), rule.getPartyAccountNumberValue(), rule.getPartyBankCodeValue(), rule.getPartyDescriptionValue());
+            if (checkNullForScoreParty(rule.getDirection(), rule.getPartyAccountPrefix(), rule.getPartyAccountNumber(), rule.getPartyBankCode(), rule.getPartyName())) {
+                score += scorePartyAccount(rule.getDirection(), rule.getPartyAccountPrefix(), rule.getPartyAccountNumber(), rule.getPartyBankCode(), rule.getPartyName());
             }
 
-            if (rule.getBookingDateFromValue() != null && rule.getBookingDateToValue() != null)
-                score += scoreTransactionDate(rule.getBookingDateFromValue(), rule.getBookingDateToValue());
-            if (rule.getValueFromValue() != null && rule.getValueToValue() != null)
-                score += scoreTransactionValue(rule.getValueFromValue(), rule.getValueToValue());
+            if (rule.getBookingTimeFrom() != null && rule.getBookingTimeTo() != null)
+                score += scoreTransactionDate(LocalDate.parse(rule.getBookingTimeFrom()), LocalDate.parse(rule.getBookingTimeTo()));
+            if (rule.getValueFrom() != null && rule.getValueTo() != null)
+                score += scoreTransactionValue(rule.getValueFrom(), rule.getValueTo());
             if (transaction.getDirection().equals("INCOMING"))
-                score += scoreTransactionMessage(rule.getPayerMessageValue(), transaction.getPayerMessage());
+                score += scoreTransactionMessage(rule.getPayerMessage(), transaction.getPayerMessage());
             if (transaction.getDirection().equals("OUTGOING"))
-                score += scoreTransactionMessage(rule.getPayeeMessageValue(), transaction.getPayeeMessage());
+                score += scoreTransactionMessage(rule.getPayeeMessage(), transaction.getPayeeMessage());
             if (transaction.getAdditionalInfoCard() != null)
-                if (checkNullForScoreCard(rule.getCardNumberValue(), transaction.getAdditionalInfoCard().getCardNumber())) {
-                    score += scoreCardNumber(rule.getCardNumberValue(), transaction.getAdditionalInfoCard().getCardNumber());
+                if (checkNullForScoreCard(rule.getCardNumber(), transaction.getAdditionalInfoCard().getCardNumber())) {
+                    score += scoreCardNumber(rule.getCardNumber(), transaction.getAdditionalInfoCard().getCardNumber());
                 }
             if (transaction.getAdditionalInfoDomestic() != null)
-                if (checkNullForConstantAndVariable(rule.getSpecificSymbolValue(), transaction.getAdditionalInfoDomestic().getSpecificSymbol())) {
-                    score += scoreConstantAndVariable(rule.getSpecificSymbolValue(), transaction.getAdditionalInfoDomestic().getSpecificSymbol());
+                if (checkNullForConstantAndVariable(rule.getSpecificSymbol(), transaction.getAdditionalInfoDomestic().getSpecificSymbol())) {
+                    score += scoreConstantAndVariable(rule.getSpecificSymbol(), transaction.getAdditionalInfoDomestic().getSpecificSymbol());
                 }
             if (rule.getTransactionType() != null && transaction.getTransactionType() != null) {
                 score += scoreTransactionType(rule.getTransactionType(), transaction.getTransactionType());
@@ -85,22 +86,20 @@ public class CategoryScorer {
 
     private double findCoefficientBasedOnNumberOfParameters(Ruleset rule) {
         double notNull = 0;
-        if (rule.getValueFromValue() != null) notNull++;
-        if (rule.getValueToValue() != null) notNull++;
-        if (rule.getPartyPrefixValue() != null) notNull++;
-        if (rule.getPartyAccountNumberValue() != null) notNull++;
-        if (rule.getPartyBankCodeValue() != null) notNull++;
-        if (rule.getPartyDescriptionValue() != null) notNull++;
-        if (rule.getBookingDateFromValue() != null) notNull++;
-        if (rule.getBookingDateToValue() != null) notNull++;
+        if (rule.getValueFrom() != null) notNull++;
+        if (rule.getValueTo() != null) notNull++;
+        if (rule.getPartyAccountPrefix() != null) notNull++;
+        if (rule.getPartyAccountNumber() != null) notNull++;
+        if (rule.getPartyBankCode() != null) notNull++;
+        if (rule.getPartyName() != null) notNull++;
+        if (rule.getBookingTimeFrom() != null) notNull++;
+        if (rule.getBookingTimeTo() != null) notNull++;
         if (rule.getTransactionType() != null) notNull++;
-        if (rule.getUserDescriptionValue() != null) notNull++;
-        if (rule.getPayerMessageValue() != null) notNull++;
-        if (rule.getPayeeMessageValue() != null) notNull++;
-        if (rule.getMerchantNameValue() != null) notNull++;
-        if (rule.getCardNumberValue() != null) notNull++;
+        if (rule.getPayerMessage() != null) notNull++;
+        if (rule.getPayeeMessage() != null) notNull++;
+        if (rule.getCardNumber() != null) notNull++;
 
-        notNull = 13 / notNull;
+        notNull =Ruleset.class.getDeclaredFields().length / notNull;
 
         return notNull;
     }
@@ -190,35 +189,36 @@ public class CategoryScorer {
         return score;
     }
 
-    private double scoreTransactionDate(Date bookingDateFromValue, Date bookingDateToValue) {
+    private double scoreTransactionDate(LocalDate bookingDateFromValue, LocalDate bookingDateToValue) {
+        //TODO PŘEDĚLA TO NA LOCALDATE - VLÁĎA
         double score = 0;
-        Interval interval = new Interval(bookingDateFromValue.getTime(), bookingDateToValue.getTime());
-        Duration duration = interval.toDuration();
-
-        //kdyz je to v nějaký konkretni čas
-        if (duration.toStandardMinutes().getMinutes() < 60) {
-            Interval differenceBettweenRuleAndTransaction = new Interval(bookingDateFromValue.getTime(), transaction.getBookingDate().getTime());
-            Duration durationBettweenRuleAndTransaction = differenceBettweenRuleAndTransaction.toDuration();
-            if (durationBettweenRuleAndTransaction.toStandardMinutes().getMinutes() < 60) {
-                score++;
-            }
-            //když je to do nějakého času
-        } else if (bookingDateToValue == null) {
-            if (transaction.getBookingDate().after(bookingDateFromValue)) {
-                score++;
-            }
-            //když je to do nějakého času
-        } else if (bookingDateFromValue == null) {
-            if (transaction.getBookingDate().before(bookingDateToValue)) {
-                score++;
-            }
-            //když je to v rozmezi nějakého času
-        } else if (duration.toStandardMinutes().getMinutes() > 60) {
-            Date bookingDate = transaction.getBookingDate();
-            if (bookingDate.after(bookingDateFromValue) && bookingDate.before(bookingDateToValue)) {
-                score++;
-            }
-        }
+//        Interval interval = new Interval(bookingDateFromValue.get(), bookingDateToValue.getTime());
+//        Duration duration = interval.toDuration();
+//
+//        //kdyz je to v nějaký konkretni čas
+//        if (duration.toStandardMinutes().getMinutes() < 60) {
+//            Interval differenceBettweenRuleAndTransaction = new Interval(bookingDateFromValue.getTime(), transaction.getBookingDate().getTime());
+//            Duration durationBettweenRuleAndTransaction = differenceBettweenRuleAndTransaction.toDuration();
+//            if (durationBettweenRuleAndTransaction.toStandardMinutes().getMinutes() < 60) {
+//                score++;
+//            }
+//            //když je to do nějakého času
+//        } else if (bookingDateToValue == null) {
+//            if (transaction.getBookingDate().after(bookingDateFromValue)) {
+//                score++;
+//            }
+//            //když je to do nějakého času
+//        } else if (bookingDateFromValue == null) {
+//            if (transaction.getBookingDate().before(bookingDateToValue)) {
+//                score++;
+//            }
+//            //když je to v rozmezi nějakého času
+//        } else if (duration.toStandardMinutes().getMinutes() > 60) {
+//            Date bookingDate = transaction.getBookingDate();
+//            if (bookingDate.after(bookingDateFromValue) && bookingDate.before(bookingDateToValue)) {
+//                score++;
+//            }
+//        }
         return score;
     }
 
@@ -262,10 +262,12 @@ public class CategoryScorer {
         TransactionService transactionService = getTransactionService();
         List<Transaction> transactionList = transactionService.findAllTransactions();
         for (Transaction transaction : transactionList) {
-            category = scoreCategories(transaction);
-            transactionService.setCategoryIdForTransactionById(transaction.getId(), category);
-            Category cat = new Category(category, transaction.getId());
-            list.add(cat);
+            if (transaction.getCategoryId() != null){
+                category = scoreCategories(transaction);
+                transactionService.setCategoryIdForTransactionById(transaction.getId(), category);
+                Category cat = new Category(category, transaction.getId());
+                list.add(cat);
+            }
         }
         return list;
     }

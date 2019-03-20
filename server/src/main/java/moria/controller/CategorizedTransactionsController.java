@@ -33,8 +33,8 @@ public class CategorizedTransactionsController {
     }
 
     /**
-     * Change category of given transaction
-     * @param categoryToUpdateDto - contains transaction id and category name
+     * Change categoryId of given transaction
+     * @param categoryToUpdateDto - contains transaction id and categoryId name
      * @return
      */
     @PutMapping(value = "/transactions/update")
