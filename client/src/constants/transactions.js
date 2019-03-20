@@ -11,7 +11,7 @@ export const TransactionValueOperators = Object.freeze({
 
 export const TransactionTypes = Object.freeze({
   PAYMENT_HOME: { id: 'PAYMENT_HOME', text: 'Payment home' },
-  PAYMENT_ABROAD: { id: 'PAYMENT_ABROAD', text: 'Payment abroad' },
+  MORTGAGE: { id: 'MORTGAGE', text: 'Mortgage' },
   CARD: { id: 'CARD', text: 'Card payment' },
   CASH: { id: 'CASH', text: 'Cash payment' }
 });

@@ -55,6 +55,7 @@ class RuleFormBodyCommon extends React.Component {
                 type="select"
                 name="transactionType"
                 id="transactionType"
+                value={this.props.transactionType}
                 onChange={e => this.props.handleChange(e)}
                 bsSize="sm"
               >
@@ -74,7 +75,7 @@ class RuleFormBodyCommon extends React.Component {
                 name="direction"
                 id="direction"
                 bsSize="sm"
-                value={this.props.transactionDirection}
+                value={this.props.direction}
                 onChange={e => this.props.handleChange(e)}
               >
                 {Object.values(TransactionDirections).map(direction => (
@@ -86,7 +87,6 @@ class RuleFormBodyCommon extends React.Component {
             </FormGroup>
           </Col>
         </Row>
-
         <FormGroup row>
           <Label for="partyName" sm={2}>
             Party name
@@ -102,7 +102,6 @@ class RuleFormBodyCommon extends React.Component {
             />
           </Col>
         </FormGroup>
-
         <FormGroup row>
           <Label for="amount" sm={2}>
             Amount (CZK)
