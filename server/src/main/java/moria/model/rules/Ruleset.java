@@ -35,12 +35,9 @@ public class Ruleset {
     private String payeeMessageValue;
     // SYMBOLS
     private String constantSymbolValue;
-    private String variableSymbolFromValue;
-    private String variableSymbolFromOperator;
-    private String variableSymbolToValue;
+    private String variableSymbolValue;
     private String specificSymbolValue;
     // CARDS
-    private String mccValue;
     private String merchantNameValue;
     private String cardNumberValue;
     //CATEGORY ID

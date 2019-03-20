@@ -23,8 +23,6 @@ public class IncomingTransactionsController {
         CategoryScorer categoryScorer = new CategoryScorer();
         ArrayList<Category> list = categoryScorer.findCategoriesForTransaction();
 
-//        return Categories.getCategoryById(categoryScorer.category);
-//        return Categories.getCategoryById(111);
         String[] strings = new String[list.size()];
         for (int i = 0; i < strings.length - 1 ; i++ ){
             strings[i] = "id platby je " + list.get(i).getIdPayment() + " id kategorie je " + list.get(i).getIdCategory() + " což je " + Categories.getCategoryById(list.get(i).getIdCategory());

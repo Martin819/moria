@@ -60,16 +60,41 @@ public class CategoryScorer {
                 score += scoreTransactionType(rule.getTransactionType(), transaction.getTransactionType());
             }
 
-
-//            String categoryName = rule.getUserDescriptionValue();
+            //počítá počet vyplněných pravidel a poté je jejich převrácenou hodnotou celého počtu násobí skore (pro zvýhodnění malého počtu vyplněných položek v rulesetu)
+            double coefficient = findCoefficientBasedOnNumberOfParameters(rule);
+            score = score * coefficient;
             categories.put(score, rule.getCategoryId());
         }
 
         if (categories.lastKey() == 0) {
             return 0;
         } else {
-            return categories.firstEntry().getValue();
+            return categories.lastEntry().getValue();
         }
+    }
+
+    private double findCoefficientBasedOnNumberOfParameters(Ruleset rule) {
+        double notNull = 0;
+        if (rule.getValueFromValue() != null) notNull++;
+        if (rule.getValueToValue() != null) notNull++;
+        if (rule.getPartyPrefixValue() != null) notNull++;
+        if (rule.getPartyAccountNumberValue() != null) notNull++;
+        if (rule.getPartyBankCodeValue() != null) notNull++;
+        if (rule.getPartyDescriptionValue() != null) notNull++;
+        if (rule.getBookingDateFromValue() != null) notNull++;
+        if (rule.getBookingDateToValue() != null) notNull++;
+        if (rule.getTransactionType() != null) notNull++;
+        if (rule.getUserDescriptionValue() != null) notNull++;
+        if (rule.getPayerMessageValue() != null) notNull++;
+        if (rule.getPayeeMessageValue() != null) notNull++;
+        if (rule.getMerchantNameValue() != null) notNull++;
+        if (rule.getCardNumberValue() != null) notNull++;
+
+        notNull = 13 / notNull;
+
+        return notNull;
+
+
     }
 
     private double scoreTransactionType(String ruleTransactionType, String transactionType) {
@@ -155,33 +180,6 @@ public class CategoryScorer {
                 score++;
             }
         }
-
-//        switch (valueFromOperator) {
-//            case "=":
-//                int resolution = valueFromValue.compareTo(transaction.getValue().getAmount());
-//                if (resolution == 0) {
-//                    score++;
-//                }
-//                break;
-//            case "<":
-//                resolution = valueFromValue.compareTo(transaction.getValue().getAmount());
-//                if (resolution == 1) {
-//                    score++;
-//                }
-//                break;
-//            case ">":
-//                resolution = valueFromValue.compareTo(transaction.getValue().getAmount());
-//                if (resolution == 2) {
-//                    score++;
-//                }
-//                break;
-//            case "BETWEEN":
-//                BigDecimal transactionValue = transaction.getValue().getAmount();
-//                if (valueFromValue.compareTo(transactionValue) < 0 && transactionValue.compareTo(valueToValue) < 0) {
-//                    score++;
-//                }
-//                break;
-//        }
         return score;
     }
 
