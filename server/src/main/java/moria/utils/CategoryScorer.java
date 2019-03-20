@@ -250,13 +250,9 @@ public class CategoryScorer {
         TransactionService transactionService = getTransactionService();
         List<Transaction> transactionList = transactionService.findAllTransactions();
         for (Transaction transaction : transactionList) {
-            if (transaction.getCategoryId() == null) {
-                category = scoreCategories(transaction);
-                if (category != 0) {
-                    transactionService.setCategoryIdForTransactionById(transaction.getId(), category);
-                    list.add(category);
-                }
-            }
+            category = scoreCategories(transaction);
+            transactionService.setCategoryIdForTransactionById(transaction.getId(), category);
+            list.add(category);
         }
         return list;
     }

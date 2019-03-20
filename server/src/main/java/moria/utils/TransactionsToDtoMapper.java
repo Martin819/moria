@@ -20,10 +20,8 @@ public class TransactionsToDtoMapper {
         List<TransactionDto> transactionDtos = new ArrayList<>();
         for (Transaction transaction : transactions ) {
             TransactionDto dto = modelMapper.map(transaction, TransactionDto.class);
-            if (transaction.getCategoryId() != null) {
-                dto.setCategory(Categories.getCategoryById(transaction.getCategoryId()));
-                transactionDtos.add(dto);
-            }
+            dto.setCategory(Categories.getCategoryById(transaction.getCategoryId()));
+            transactionDtos.add(dto);
         }
         return transactionDtos;
     }
