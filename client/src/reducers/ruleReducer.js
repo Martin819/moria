@@ -12,7 +12,7 @@ export default function(state = initialState, action) {
     case GET_RULES: {
       return {
         ...state,
-        rules: action.payload,
+        rules: action.payload.data,
         loading: false
       };
     }

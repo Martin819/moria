@@ -1,14 +1,17 @@
 import { GET_RULES, TOGGLE_RULE_MODAL, RULES_LOADING, RULE_ADD, RULE_EDIT, RULE_SUBMIT } from './types';
-import { rulesData } from '../utils/exampleResponse';
+import axios from 'axios';
 
-export const getRules = () => dispatch => {
+export const getRules = () => async dispatch => {
   dispatch(setItemsLoading());
-  setTimeout(() => {
+  try {
+    const response = await axios.get('/rules/getAll');
     dispatch({
       type: GET_RULES,
-      payload: rulesData
+      payload: response
     });
-  }, 1000);
+  } catch (error) {
+    console.error(error);
+  }
 };
 
 export const handleRuleAdd = () => {

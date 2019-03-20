@@ -11,6 +11,7 @@ import { rulesData } from '../../../utils/exampleResponse';
 import EnhancedTableHead from './EnhancedTableHead';
 import EnhancedTableToolbar from './EnhancedTableToolbar';
 import { Spinner } from 'reactstrap';
+import { TransactionCategories } from '../../../constants/categories';
 
 class RulesTable extends Component {
   state = {
@@ -124,16 +125,16 @@ class RulesTable extends Component {
                           <Checkbox checked={isSelected} onClick={event => this.handleCheckboxClick(event, n.id)} />
                         </TableCell>
                         <TableCell component="th" scope="row" padding="none">
-                          {n.name}
+                          {n.ruleName}
                         </TableCell>
                         <TableCell align="left" padding="none">
-                          {n.category}
+                          {Object.values(TransactionCategories).find(cat => cat.id == n.categoryId).text}
                         </TableCell>
                         <TableCell align="left" padding="none">
                           {n.partyName}
                         </TableCell>
                         <TableCell align="left" padding="none">
-                          {n.compare} {n.amount} {n.direction}
+                          {n.valueFrom} {n.valueTo}
                         </TableCell>
                       </TableRow>
                     );
