@@ -13,10 +13,10 @@ export const computeStatistics = () =>
     [getTransactionsByDirection],
     transactions => {
       return _.chain(transactions)
-        .groupBy('category')
-        .map((t, category) => {
+        .groupBy(t => t.categoryId)
+        .map((t, categoryId) => {
           return {
-            name: TransactionCategories[category].text,
+            name: Object.values(TransactionCategories).find(cat => cat.id == categoryId).text,
             value: _.sumBy(t, 'transactionValueAmount')
           };
         })

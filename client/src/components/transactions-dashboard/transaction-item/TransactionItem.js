@@ -44,10 +44,10 @@ class TransactionItem extends Component {
       transactionValueCurrency,
       valueDate,
       transactionType,
-      category
+      categoryId
     } = this.props;
 
-    const categoryEnum = Object.values(TransactionCategories).find(cat => cat.id === category);
+    const categoryEnum = Object.values(TransactionCategories).find(cat => cat.id === categoryId);
     const categoryText = categoryEnum === undefined ? 'Unknown' : categoryEnum.text;
     const transactionTypeEnum = Object.values(TransactionTypes).find(type => type.id === transactionType);
     const transactionTypeText = transactionTypeEnum === undefined ? 'Unknown' : transactionTypeEnum.text;
@@ -101,7 +101,7 @@ class TransactionItem extends Component {
                                   color="primary"
                                   type="submit"
                                   className="ml-md-2"
-                                  disabled={category === this.state.categoryId}
+                                  disabled={categoryId === this.state.categoryId}
                                   size="sm"
                                   onClick={this.handleTransactionCategorySubmit}
                                 >
@@ -138,7 +138,7 @@ class TransactionItem extends Component {
               </Grid>
             </Grid>
           </ExpansionPanelSummary>
-          <TransactionItemPanelDetail message={payeeMessage} category={category} />
+          <TransactionItemPanelDetail message={payeeMessage} category={categoryId} />
         </ExpansionPanel>
       </Grow>
     );
