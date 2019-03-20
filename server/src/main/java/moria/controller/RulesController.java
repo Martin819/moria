@@ -43,7 +43,7 @@ public class RulesController {
 
     /**
      * Remove rule
-     * @param id - id of rule to remove
+     * @param ids - id of rule to remove
      */
     @PostMapping (path = "rules/remove")
     public ResponseEntity<Void> removeRule(@RequestBody List<Integer> ids) {
