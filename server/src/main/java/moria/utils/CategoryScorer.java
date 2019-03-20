@@ -2,7 +2,7 @@ package moria.utils;
 
 import me.xdrop.fuzzywuzzy.FuzzySearch;
 import moria.SpringContext;
-import moria.mockData.Category;
+import moria.dto.Category;
 import moria.model.rules.Ruleset;
 import moria.model.transactions.Transaction;
 import moria.model.transactions.TransactionPartyAccount;

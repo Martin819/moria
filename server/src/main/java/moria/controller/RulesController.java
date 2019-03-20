@@ -1,25 +1,33 @@
 package moria.controller;
 
-import moria.dto.Rule;
+import moria.model.rules.Ruleset;
+import moria.services.RulesetService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 
 @RestController
 public class RulesController {
 
+    private final RulesetService rulesetService;
+
+    @Autowired
+    public RulesController(RulesetService rulesetService) {
+        this.rulesetService = rulesetService;
+    }
 
     /**
      * Get all rules from database
-     * @return
+     * @return all rulesets
      */
-    @GetMapping(value = "/getRules")
-    public List<Rule> getAllRules() {
-        //TODO Bezdy Joe - load from database
-        return loadAllRules();
+    @GetMapping(value = "rules/getAll")
+    public ResponseEntity<List<Ruleset>> getAllRules() {
+        List<Ruleset> rulesets = rulesetService.findAllRulesets();
+        return new ResponseEntity<>(rulesets, HttpStatus.OK);
     }
 
     /**
@@ -27,39 +35,31 @@ public class RulesController {
      * @param rule - rule to create
      * @return
      */
-    @PostMapping(path = "/createRule")
-    public Rule createRule(@RequestBody Rule rule) {
-        //TODO Bezdy Joe - save to db
-        return null;
-
+    @PostMapping(path = "rules/create")
+    public ResponseEntity<Void> createRule(@RequestBody Ruleset rule) {
+        rulesetService.saveRuleset(rule);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     /**
      * Remove rule
-     * @param rule - rule to remove
+     * @param id - id of rule to remove
      */
-    @DeleteMapping (path = "/removeRule")
-    public void removeRule(@RequestBody Rule rule) {
-        //TODO Bezdy Joe - remove from db
+    @PostMapping (path = "rules/remove")
+    public ResponseEntity<Void> removeRule(@RequestBody List<Integer> ids) {
+        rulesetService.deleteByIdIn(ids);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
-
-    // jen for test - bude nahrazeno volanim z db
-    private List<Rule> loadAllRules() {
-       List<Rule> allRules = new ArrayList<>();
-
-        //dummy data for Rules
-        HashMap<String, String> dummyRule = new HashMap<>();
-        dummyRule.put("payer", "Decathlon");
-        dummyRule.put("transferMoney", "500");
-        dummyRule.put("compare", ">");
-        dummyRule.put("incomingPayment", "false");
-        Date date = new Date();
-        dummyRule.put("dateOfPayment", String.valueOf(date));
-        dummyRule.put("description", "nakup funkcniho obleceni Decathlon");
-        Rule rule = new Rule("Sport", "věci na běhání", dummyRule);
-        allRules.add(rule);
-        return allRules;
+    /**
+     * Update rule
+     * @param rule - rule to update
+     * @return
+     */
+    @PutMapping (path = "rules/update")
+    public ResponseEntity<Void> updateRule(@RequestBody Ruleset rule) {
+        rulesetService.saveRuleset(rule);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 }

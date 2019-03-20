@@ -11,6 +11,7 @@ import java.util.HashMap;
 @NoArgsConstructor @AllArgsConstructor
 public class Category {
 
-    @Getter @Setter
-    private HashMap<String, ArrayList<String>> categories;
+
+    @Getter @Setter private int idCategory;
+    @Getter @Setter private int idPayment;
 }

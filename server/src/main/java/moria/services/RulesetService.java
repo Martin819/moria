@@ -15,4 +15,6 @@ public interface RulesetService {
     void saveRuleset(Ruleset ruleset);
 
     void deleteById(int id);
+
+    void deleteByIdIn(List<Integer> ids);
 }
