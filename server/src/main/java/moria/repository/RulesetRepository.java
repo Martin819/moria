@@ -14,4 +14,6 @@ public interface RulesetRepository extends JpaRepository<Ruleset, Integer> {
     List<Ruleset> findAll();
 
     void deleteById(int id);
+
+    void deleteByIdIn(List<Integer> ids);
 }

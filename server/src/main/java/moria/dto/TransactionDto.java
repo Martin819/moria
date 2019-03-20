@@ -8,6 +8,8 @@ import java.util.Date;
 @Data
 public class TransactionDto {
 
+    private int id;
+
     //... PLATBA KARTOU ..//
 
     private String direction;

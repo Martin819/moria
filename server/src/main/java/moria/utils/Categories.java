@@ -35,7 +35,9 @@ public enum Categories {
     I_LOANS(17),
     I_POCKET_MONEY(18),
     I_GIFTS(19),
-    I_OTHER(20);
+    I_OTHER(20),
+
+    UNCATEGORIZED(0);
 
     private final int value;
 

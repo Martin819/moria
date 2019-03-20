@@ -3,25 +3,39 @@ import _ from 'lodash';
 import { TransactionCategories } from '../constants/categories';
 import { TransactionDirections } from '../constants/transactions';
 
-const getTransactions = state => state.transactions.transactions;
+const getTransactionsByDirection = (state, direction) =>
+  state.transactions.transactions.filter(t => t.direction === direction);
 
-export const computeStatistics = createSelector(
-  [getTransactions],
-  transactions => {
-    return _.chain(transactions)
-      .groupBy('category')
-      .map((t, category) => {
-        return {
-          name: TransactionCategories[category].text,
-          value: _.sumBy(t, 'transactionValueAmount')
-        };
-      })
-      .value();
-  }
-);
+const getAllTransactions = state => state.transactions.transactions;
+
+export const computeStatistics = () =>
+  createSelector(
+    [getTransactionsByDirection],
+    transactions => {
+      return _.chain(transactions)
+        .groupBy('category')
+        .map((t, category) => {
+          return {
+            name: TransactionCategories[category].text,
+            value: _.sumBy(t, 'transactionValueAmount')
+          };
+        })
+        .value();
+    }
+  );
+
+export const sumTransactions = () =>
+  createSelector(
+    [getTransactionsByDirection],
+    transactions => {
+      return _.chain(transactions)
+        .sumBy('transactionValueAmount')
+        .value();
+    }
+  );
 
 export const computeAccountBalance = createSelector(
-  [getTransactions],
+  [getAllTransactions],
   transactions => {
     const incomingTransactions = transactions.filter(t => t.direction === TransactionDirections.INCOMING.id);
     const gains = _.chain(incomingTransactions)

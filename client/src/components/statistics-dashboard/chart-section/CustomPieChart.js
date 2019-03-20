@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { PieChart, Pie, Cell, Legend } from 'recharts';
-import { COLORS } from '../../constants/colors';
+import { COLORS } from '../../../constants/colors';
 import { isEqual } from 'lodash';
 
 const graphColors = COLORS;

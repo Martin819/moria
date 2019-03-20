@@ -2,6 +2,7 @@ package moria.utils;
 
 import me.xdrop.fuzzywuzzy.FuzzySearch;
 import moria.SpringContext;
+import moria.dto.Category;
 import moria.model.rules.Ruleset;
 import moria.model.transactions.Transaction;
 import moria.model.transactions.TransactionPartyAccount;
@@ -43,8 +44,8 @@ public class CategoryScorer {
                 score += scorePartyAccount(rule.getDirection(), rule.getPartyPrefixValue(), rule.getPartyAccountNumberValue(), rule.getPartyBankCodeValue(), rule.getPartyDescriptionValue());
             }
 
-            score += scoreTransactionDate(rule.getBookingDateFromValue(), rule.getBookingDateToValue());
-            score += scoreTransactionValue(rule.getValueFromValue(), rule.getValueToValue());
+            if (rule.getBookingDateFromValue() != null && rule.getBookingDateToValue() != null) score += scoreTransactionDate(rule.getBookingDateFromValue(), rule.getBookingDateToValue());
+            if (rule.getValueFromValue() != null && rule.getValueToValue() != null) score += scoreTransactionValue(rule.getValueFromValue(), rule.getValueToValue());
             if (transaction.getDirection().equals("INCOMING"))
                 score += scoreTransactionMessage(rule.getPayerMessageValue(), transaction.getPayerMessage());
             if (transaction.getDirection().equals("OUTGOING"))
@@ -52,19 +53,59 @@ public class CategoryScorer {
             if (transaction.getAdditionalInfoCard() != null ) if (checkNullForScoreCard(rule.getCardNumberValue(), transaction.getAdditionalInfoCard().getCardNumber())){
                 score += scoreCardNumber(rule.getCardNumberValue(), transaction.getAdditionalInfoCard().getCardNumber());
             }
-            if (transaction.getAdditionalInfoDomestic() != null ) if (checkNullForConstantAndVarialbe(rule.getSpecificSymbolValue(), transaction.getAdditionalInfoDomestic().getSpecificSymbol())){
+            if (transaction.getAdditionalInfoDomestic() != null ) if (checkNullForConstantAndVariable(rule.getSpecificSymbolValue(), transaction.getAdditionalInfoDomestic().getSpecificSymbol())){
                 score += scoreConstantAndVariable(rule.getSpecificSymbolValue(), transaction.getAdditionalInfoDomestic().getSpecificSymbol());
             }
+            if (rule.getTransactionType() != null && transaction.getTransactionType() != null){
+                score += scoreTransactionType(rule.getTransactionType(), transaction.getTransactionType());
+            }
 
-//            String categoryName = rule.getUserDescriptionValue();
+            //počítá počet vyplněných pravidel a poté je jejich převrácenou hodnotou celého počtu násobí skore (pro zvýhodnění malého počtu vyplněných položek v rulesetu)
+            double coefficient = findCoefficientBasedOnNumberOfParameters(rule);
+            score = score * coefficient;
             categories.put(score, rule.getCategoryId());
         }
 
-        if (categories.firstEntry().getKey() == 0) {
+        if (categories.lastKey() == 0) {
             return 0;
         } else {
-            return categories.firstEntry().getValue();
+            return categories.lastEntry().getValue();
         }
+    }
+
+    private double findCoefficientBasedOnNumberOfParameters(Ruleset rule) {
+        double notNull = 0;
+        if (rule.getValueFromValue() != null) notNull++;
+        if (rule.getValueToValue() != null) notNull++;
+        if (rule.getPartyPrefixValue() != null) notNull++;
+        if (rule.getPartyAccountNumberValue() != null) notNull++;
+        if (rule.getPartyBankCodeValue() != null) notNull++;
+        if (rule.getPartyDescriptionValue() != null) notNull++;
+        if (rule.getBookingDateFromValue() != null) notNull++;
+        if (rule.getBookingDateToValue() != null) notNull++;
+        if (rule.getTransactionType() != null) notNull++;
+        if (rule.getUserDescriptionValue() != null) notNull++;
+        if (rule.getPayerMessageValue() != null) notNull++;
+        if (rule.getPayeeMessageValue() != null) notNull++;
+        if (rule.getMerchantNameValue() != null) notNull++;
+        if (rule.getCardNumberValue() != null) notNull++;
+
+        notNull = 13 / notNull;
+
+        return notNull;
+
+
+    }
+
+    private double scoreTransactionType(String ruleTransactionType, String transactionType) {
+        double score = 0;
+        if (transactionType.contains(ruleTransactionType)){
+            score += 2;
+        } else if (FuzzySearch.partialRatio(ruleTransactionType, transactionType) > 50) {
+            score++;
+        }
+
+        return score;
     }
 
     private double scoreConstantAndVariable(String specificSymbolValue, String specificSymbol) {
@@ -73,7 +114,7 @@ public class CategoryScorer {
         return score;
     }
 
-    private boolean checkNullForConstantAndVarialbe(String specificSymbolValue, String specificSymbol) {
+    private boolean checkNullForConstantAndVariable(String specificSymbolValue, String specificSymbol) {
         return (specificSymbol != null && specificSymbolValue != null);
     }
 
@@ -139,33 +180,6 @@ public class CategoryScorer {
                 score++;
             }
         }
-
-//        switch (valueFromOperator) {
-//            case "=":
-//                int resolution = valueFromValue.compareTo(transaction.getValue().getAmount());
-//                if (resolution == 0) {
-//                    score++;
-//                }
-//                break;
-//            case "<":
-//                resolution = valueFromValue.compareTo(transaction.getValue().getAmount());
-//                if (resolution == 1) {
-//                    score++;
-//                }
-//                break;
-//            case ">":
-//                resolution = valueFromValue.compareTo(transaction.getValue().getAmount());
-//                if (resolution == 2) {
-//                    score++;
-//                }
-//                break;
-//            case "BETWEEN":
-//                BigDecimal transactionValue = transaction.getValue().getAmount();
-//                if (valueFromValue.compareTo(transactionValue) < 0 && transactionValue.compareTo(valueToValue) < 0) {
-//                    score++;
-//                }
-//                break;
-//        }
         return score;
     }
 
@@ -247,18 +261,15 @@ public class CategoryScorer {
         category = max;
     }
 
-    public ArrayList<Integer> findCategoriesForTransaction() {
-        ArrayList<Integer> list = new ArrayList<>();
+    public ArrayList<Category> findCategoriesForTransaction() {
+        ArrayList<Category> list = new ArrayList<>();
         TransactionService transactionService = getTransactionService();
         List<Transaction> transactionList = transactionService.findAllTransactions();
         for (Transaction transaction : transactionList) {
-            if (transaction.getCategoryId() == null) {
-                category = scoreCategories(transaction);
-                if (category != 0) {
-                    transactionService.setCategoryIdForTransactionById(transaction.getId(), category);
-                    list.add(category);
-                }
-            }
+            category = scoreCategories(transaction);
+            transactionService.setCategoryIdForTransactionById(transaction.getId(), category);
+            Category cat = new Category(category, transaction.getId());
+            list.add(cat);
         }
         return list;
     }
