@@ -15,7 +15,6 @@ import java.util.ArrayList;
 @RestController
 public class IncomingTransactionsController {
 
-
     // jen pro testovací účely
     @GetMapping(path = "/plsCategorize", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public String[] sendItems() {
@@ -24,7 +23,7 @@ public class IncomingTransactionsController {
         ArrayList<Category> list = categoryScorer.findCategoriesForTransaction();
 
         String[] strings = new String[list.size()];
-        for (int i = 0; i < strings.length - 1 ; i++ ){
+        for (int i = 0; i < strings.length ; i++ ){
             strings[i] = "id platby je " + list.get(i).getIdPayment() + " id kategorie je " + list.get(i).getIdCategory() + " což je " + Categories.getCategoryById(list.get(i).getIdCategory());
         }
         return strings;
@@ -34,14 +33,6 @@ public class IncomingTransactionsController {
     @GetMapping(path = "/fuzzy", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public String fuzzyTest() {
 
-        return String.valueOf(FuzzySearch.partialRatio("Decathlon", "DECATHLON-XTRS254354, děkujeme za nakup"));
+        return String.valueOf(FuzzySearch.partialRatio("0", ""));
     }
-
-   /* @PostMapping(path = "/incomingPayment")
-    public void incomingPayment() {
-
-
-    }*/
-
-
 }

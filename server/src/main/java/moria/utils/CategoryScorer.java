@@ -19,11 +19,14 @@ import java.util.TreeMap;
 
 public class CategoryScorer {
 
+    private static final double DIRECTION_SCORE = 1.75;
+    private static final int threshold = 75;
     private List<Ruleset> ruleSet;
     private Transaction transaction;
 
+
     //for test purpose only
-    public int category;
+    private int category;
 
     /**
      * Evalute category based on provided Transaction
@@ -40,25 +43,32 @@ public class CategoryScorer {
         TreeMap<Double, Integer> categories = new TreeMap<>();
         for (Ruleset rule : ruleSet) {
             double score = 0;
-            if (checkNullForScoreParty(rule.getDirection(), rule.getPartyPrefixValue(), rule.getPartyAccountNumberValue(), rule.getPartyBankCodeValue(), rule.getPartyDescriptionValue())){
+            if (checkNullForScoreParty(rule.getDirection(), rule.getPartyPrefixValue(), rule.getPartyAccountNumberValue(), rule.getPartyBankCodeValue(), rule.getPartyDescriptionValue())) {
                 score += scorePartyAccount(rule.getDirection(), rule.getPartyPrefixValue(), rule.getPartyAccountNumberValue(), rule.getPartyBankCodeValue(), rule.getPartyDescriptionValue());
             }
 
-            if (rule.getBookingDateFromValue() != null && rule.getBookingDateToValue() != null) score += scoreTransactionDate(rule.getBookingDateFromValue(), rule.getBookingDateToValue());
-            if (rule.getValueFromValue() != null && rule.getValueToValue() != null) score += scoreTransactionValue(rule.getValueFromValue(), rule.getValueToValue());
+            if (rule.getBookingDateFromValue() != null && rule.getBookingDateToValue() != null)
+                score += scoreTransactionDate(rule.getBookingDateFromValue(), rule.getBookingDateToValue());
+            if (rule.getValueFromValue() != null && rule.getValueToValue() != null)
+                score += scoreTransactionValue(rule.getValueFromValue(), rule.getValueToValue());
             if (transaction.getDirection().equals("INCOMING"))
                 score += scoreTransactionMessage(rule.getPayerMessageValue(), transaction.getPayerMessage());
             if (transaction.getDirection().equals("OUTGOING"))
                 score += scoreTransactionMessage(rule.getPayeeMessageValue(), transaction.getPayeeMessage());
-            if (transaction.getAdditionalInfoCard() != null ) if (checkNullForScoreCard(rule.getCardNumberValue(), transaction.getAdditionalInfoCard().getCardNumber())){
-                score += scoreCardNumber(rule.getCardNumberValue(), transaction.getAdditionalInfoCard().getCardNumber());
-            }
-            if (transaction.getAdditionalInfoDomestic() != null ) if (checkNullForConstantAndVariable(rule.getSpecificSymbolValue(), transaction.getAdditionalInfoDomestic().getSpecificSymbol())){
-                score += scoreConstantAndVariable(rule.getSpecificSymbolValue(), transaction.getAdditionalInfoDomestic().getSpecificSymbol());
-            }
-            if (rule.getTransactionType() != null && transaction.getTransactionType() != null){
+            if (transaction.getAdditionalInfoCard() != null)
+                if (checkNullForScoreCard(rule.getCardNumberValue(), transaction.getAdditionalInfoCard().getCardNumber())) {
+                    score += scoreCardNumber(rule.getCardNumberValue(), transaction.getAdditionalInfoCard().getCardNumber());
+                }
+            if (transaction.getAdditionalInfoDomestic() != null)
+                if (checkNullForConstantAndVariable(rule.getSpecificSymbolValue(), transaction.getAdditionalInfoDomestic().getSpecificSymbol())) {
+                    score += scoreConstantAndVariable(rule.getSpecificSymbolValue(), transaction.getAdditionalInfoDomestic().getSpecificSymbol());
+                }
+            if (rule.getTransactionType() != null && transaction.getTransactionType() != null) {
                 score += scoreTransactionType(rule.getTransactionType(), transaction.getTransactionType());
             }
+
+            //podminka kvuli vybrani kategorie na zakladě incomming/outgoing
+            if (score == DIRECTION_SCORE) score = 0;
 
             //počítá počet vyplněných pravidel a poté je jejich převrácenou hodnotou celého počtu násobí skore (pro zvýhodnění malého počtu vyplněných položek v rulesetu)
             double coefficient = findCoefficientBasedOnNumberOfParameters(rule);
@@ -93,15 +103,13 @@ public class CategoryScorer {
         notNull = 13 / notNull;
 
         return notNull;
-
-
     }
 
     private double scoreTransactionType(String ruleTransactionType, String transactionType) {
         double score = 0;
-        if (transactionType.contains(ruleTransactionType)){
+        if (transactionType.contains(ruleTransactionType)) {
             score += 2;
-        } else if (FuzzySearch.partialRatio(ruleTransactionType, transactionType) > 50) {
+        } else if (FuzzySearch.partialRatio(ruleTransactionType, transactionType) > threshold) {
             score++;
         }
 
@@ -134,20 +142,19 @@ public class CategoryScorer {
 
     private double scoreCardNumber(String cardNumberValue, String cardNumber) {
         double score = 0;
-         if (cardNumberValue.contains(cardNumber)) score += 2;
+        if (cardNumberValue.contains(cardNumber)) score += 2;
         return score;
     }
 
     private double scoreTransactionMessage(String rulePayeeMessage, String transactionPayeeMessage) {
         double score = 0;
         if (rulePayeeMessage != null && transactionPayeeMessage != null) {
-            if (transactionPayeeMessage.contains(rulePayeeMessage)) {
+            if (transactionPayeeMessage.contains(rulePayeeMessage) && !rulePayeeMessage.isEmpty()) {
                 score++;
-            } else if (FuzzySearch.partialRatio(rulePayeeMessage, transactionPayeeMessage) > 50) {
+            } else if (FuzzySearch.partialRatio(rulePayeeMessage, transactionPayeeMessage) > threshold) {
                 score++;
             }
         }
-
         return score;
     }
 
@@ -164,7 +171,7 @@ public class CategoryScorer {
         }
         //pokud je to v rozmezi
         else if (resolution < 0) {
-            if (transactionValue.compareTo(valueFromValue) < 0 && transactionValue.compareTo(valueToValue) < 0) {
+            if (valueFromValue.compareTo(transactionValue) < 0 && transactionValue.compareTo(valueToValue) < 0) {
                 score++;
             }
         }
@@ -220,7 +227,7 @@ public class CategoryScorer {
         TransactionPartyAccount transactionPartyAccount = transaction.getPartyAccount();
 
         if (transaction != null && direction != null)
-            if (transaction.getDirection().equals(direction)) score += 2;
+            if (transaction.getDirection().equals(direction)) score += DIRECTION_SCORE;
 
         if (transactionPartyAccount.getPrefix().contains(partyPrefixValue)) score += 2;
         if (transactionPartyAccount.getAccountNumber().contains(partyAccountNumberValue)) score += 2;
@@ -246,19 +253,8 @@ public class CategoryScorer {
     }
 
     public CategoryScorer() {
-
         //for test purpose only
-        int max = 0;
-        TransactionService transactionService = getTransactionService();
-        Transaction transaction2 = transactionService.findTransactionById(1);
-        Transaction transactionaa = transactionService.findTransactionById(1);
-        transactionService.setCategoryIdForTransactionById(1,11);
-        List<Transaction> transactionList = transactionService.findAllTransactions();
-        for (Transaction transaction : transactionList) {
-            category = scoreCategories(transaction);
-            if (category > max) max = category;
-        }
-        category = max;
+
     }
 
     public ArrayList<Category> findCategoriesForTransaction() {
