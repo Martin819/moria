@@ -1,22 +1,15 @@
 import React, { Component } from 'react';
-import { withStyles } from '@material-ui/core/styles';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TablePagination from '@material-ui/core/TablePagination';
-import TableRow from '@material-ui/core/TableRow';
-import Paper from '@material-ui/core/Paper';
-import Checkbox from '@material-ui/core/Checkbox';
-import { rulesData } from '../../../utils/exampleResponse';
 import EnhancedTableHead from './EnhancedTableHead';
 import EnhancedTableToolbar from './EnhancedTableToolbar';
+import { withStyles, Table, TableBody, TableCell, TablePagination, TableRow, Paper } from '@material-ui/core';
+import { Checkbox, Grow } from '@material-ui/core';
 import { Spinner } from 'reactstrap';
 import { TransactionCategories } from '../../../constants/categories';
 
 class RulesTable extends Component {
   state = {
     order: 'asc',
-    orderBy: 'name',
+    orderBy: 'ruleName',
     selected: [],
     page: 0,
     rowsPerPage: 5
@@ -109,34 +102,42 @@ class RulesTable extends Component {
               <TableBody>
                 {stableSort(rules, getSorting(order, orderBy))
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .map(n => {
-                    const isSelected = this.isSelected(n.id);
+                  .map(rule => {
+                    const isSelected = this.isSelected(rule.id);
                     return (
-                      <TableRow
-                        hover
-                        onClick={event => this.handleRowClick(event, n.id)}
-                        role="checkbox"
-                        aria-checked={isSelected}
-                        tabIndex={-1}
-                        key={n.id}
-                        selected={isSelected}
-                      >
-                        <TableCell padding="checkbox">
-                          <Checkbox checked={isSelected} onClick={event => this.handleCheckboxClick(event, n.id)} />
-                        </TableCell>
-                        <TableCell component="th" scope="row" padding="none">
-                          {n.ruleName}
-                        </TableCell>
-                        <TableCell align="left" padding="none">
-                          {Object.values(TransactionCategories).find(cat => cat.id == n.categoryId).text}
-                        </TableCell>
-                        <TableCell align="left" padding="none">
-                          {n.partyName}
-                        </TableCell>
-                        <TableCell align="left" padding="none">
-                          {n.valueFrom} {n.valueTo}
-                        </TableCell>
-                      </TableRow>
+                      <Grow key={rule.id} in={true} timeout={500}>
+                        <TableRow
+                          hover
+                          onClick={event => this.handleRowClick(event, rule.id)}
+                          role="checkbox"
+                          aria-checked={isSelected}
+                          tabIndex={-1}
+                          selected={isSelected}
+                        >
+                          <TableCell component="th" scope="row" padding="default">
+                            {rule.ruleName}
+                          </TableCell>
+                          <TableCell align="left" padding="default">
+                            {Object.values(TransactionCategories).find(cat => cat.id == rule.categoryId).text}
+                          </TableCell>
+                          <TableCell align="left" padding="default">
+                            {rule.partyName}
+                          </TableCell>
+                          <TableCell align="left" padding="default">
+                            {rule.direction}
+                          </TableCell>
+                          <TableCell align="left" padding="default">
+                            {rule.transactionType}
+                          </TableCell>
+
+                          <TableCell align="right" padding="default">
+                            <Checkbox
+                              checked={isSelected}
+                              onClick={event => this.handleCheckboxClick(event, rule.id)}
+                            />
+                          </TableCell>
+                        </TableRow>
+                      </Grow>
                     );
                   })}
                 {emptyRows > 0 && (

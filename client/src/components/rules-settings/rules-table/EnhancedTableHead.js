@@ -1,17 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import TableSortLabel from '@material-ui/core/TableSortLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-import Tooltip from '@material-ui/core/Tooltip';
+import { TableCell, TableHead, TableRow, TableSortLabel, Checkbox, Tooltip } from '@material-ui/core';
 
 const tableColumnHeaders = [
-  { id: 'name', numeric: false, disablePadding: true, label: 'Rule name' },
-  { id: 'category', numeric: false, disablePadding: true, label: 'Category' },
-  { id: 'partyName', numeric: false, disablePadding: true, label: 'Party name' },
-  { id: 'amount', numeric: false, disablePadding: true, label: 'Amount' }
+  { id: 'ruleName', numeric: false, disablePadding: false, label: 'Rule name' },
+  { id: 'categoryId', numeric: false, disablePadding: false, label: 'Category' },
+  { id: 'partyName', numeric: false, disablePadding: false, label: 'Party name' },
+  { id: 'direction', numeric: false, disablePadding: false, label: 'Direction' },
+  { id: 'transactionType', numeric: false, disablePadding: false, label: 'Transaction type' }
 ];
 
 class EnhancedTableHead extends React.Component {
@@ -25,13 +21,6 @@ class EnhancedTableHead extends React.Component {
     return (
       <TableHead>
         <TableRow>
-          <TableCell padding="checkbox">
-            <Checkbox
-              indeterminate={numSelected > 0 && numSelected < rowCount}
-              checked={numSelected === rowCount}
-              onChange={onSelectAllClick}
-            />
-          </TableCell>
           {tableColumnHeaders.map(
             row => (
               <TableCell
@@ -53,6 +42,13 @@ class EnhancedTableHead extends React.Component {
             ),
             this
           )}
+          <TableCell align="right" padding="default">
+            <Checkbox
+              indeterminate={numSelected > 0 && numSelected < rowCount}
+              checked={numSelected === rowCount}
+              onChange={onSelectAllClick}
+            />
+          </TableCell>
         </TableRow>
       </TableHead>
     );
