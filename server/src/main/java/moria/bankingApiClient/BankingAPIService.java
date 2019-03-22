@@ -24,9 +24,9 @@ public class BankingAPIService implements BankingAPIConfiguration {
         service = retrofit.create(BankingAPIInterface.class);
     }
 
-     public List<Transaction> findTransactionsByDate() throws IOException {
+     public List<Transaction> findTransactionsByDate(int accountId, String dateFrom, String dateTo) throws IOException {
 
-        Call<List<Transaction>> retrofitCall = service.findTransactionsByDate();
+        Call<List<Transaction>> retrofitCall = service.findTransactionsByDate(accountId, dateFrom, dateTo);
         Response<List<Transaction>> response = retrofitCall.execute();
 
         if (!response.isSuccessful()) {
@@ -36,9 +36,9 @@ public class BankingAPIService implements BankingAPIConfiguration {
         return response.body();
      }
 
-     public Transaction createTransaction(Transaction t) throws IOException {
+     public Transaction createTransaction(int accountId, Transaction t) throws IOException {
 
-        Call<Transaction> retrofitCall = service.createTransaction(t);
+        Call<Transaction> retrofitCall = service.createTransaction(accountId, t);
         Response<Transaction> response = retrofitCall.execute();
 
          if (!response.isSuccessful()) {
