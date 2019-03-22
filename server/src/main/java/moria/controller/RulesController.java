@@ -24,7 +24,7 @@ public class RulesController {
      * Get all rules from database
      * @return all rulesets
      */
-    @GetMapping(value = "rules/getAll")
+    @GetMapping(value = "rules")
     public ResponseEntity<List<Ruleset>> getAllRules() {
         List<Ruleset> rulesets = rulesetService.findAllRulesets();
         return new ResponseEntity<>(rulesets, HttpStatus.OK);
@@ -35,10 +35,10 @@ public class RulesController {
      * @param rule - rule to create
      * @return
      */
-    @PostMapping(path = "rules/create")
-    public ResponseEntity<Void> createRule(@RequestBody Ruleset rule) {
-        rulesetService.saveRuleset(rule);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+    @PostMapping(path = "rules")
+    public ResponseEntity<Ruleset> createRule(@RequestBody Ruleset rule) {
+        Ruleset ruleset = rulesetService.saveRuleset(rule);
+        return new ResponseEntity<>(ruleset, HttpStatus.CREATED);
     }
 
     /**
@@ -56,10 +56,10 @@ public class RulesController {
      * @param rule - rule to update
      * @return
      */
-    @PutMapping (path = "rules/update")
-    public ResponseEntity<Void> updateRule(@RequestBody Ruleset rule) {
-        rulesetService.saveRuleset(rule);
-        return new ResponseEntity<>(HttpStatus.OK);
+    @PutMapping (path = "rules")
+    public ResponseEntity<Ruleset> updateRule(@RequestBody Ruleset rule) {
+        Ruleset ruleset = rulesetService.saveRuleset(rule);
+        return new ResponseEntity<>(ruleset, HttpStatus.OK);
     }
 
 }

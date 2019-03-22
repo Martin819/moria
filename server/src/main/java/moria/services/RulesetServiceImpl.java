@@ -29,8 +29,8 @@ public class RulesetServiceImpl implements RulesetService {
 
     // Saves given Ruleset to the DB
     @Override
-    public void saveRuleset(Ruleset ruleset) {
-        rulesetRepository.save(ruleset);
+    public Ruleset saveRuleset(Ruleset ruleset) {
+        return rulesetRepository.save(ruleset);
     }
 
     // Deletes Ruleset with given ID

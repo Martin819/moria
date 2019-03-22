@@ -12,7 +12,7 @@ public interface RulesetService {
 
     List<Ruleset> findAllRulesets();
 
-    void saveRuleset(Ruleset ruleset);
+    Ruleset saveRuleset(Ruleset ruleset);
 
     void deleteById(int id);
 
