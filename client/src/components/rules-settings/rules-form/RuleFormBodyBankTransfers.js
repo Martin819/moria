@@ -75,8 +75,8 @@ const RuleFormBodyBankTransfers = props => {
             <Input
               name="constantSymbol"
               id="constantSymbol"
-              placeholder="Rule name"
-              onChange={e => this.props.handleChange(e)}
+              placeholder="Constant symbol"
+              onChange={e => handleChange(e)}
               value={constantSymbol}
               bsSize="sm"
             />
@@ -88,9 +88,10 @@ const RuleFormBodyBankTransfers = props => {
             <Input
               name="variableSymbol"
               id="variableSymbol"
+              placeholder="Variable symbol"
               bsSize="sm"
               value={variableSymbol}
-              onChange={e => this.props.handleChange(e)}
+              onChange={e => handleChange(e)}
             />
           </FormGroup>
         </Col>
@@ -100,9 +101,10 @@ const RuleFormBodyBankTransfers = props => {
             <Input
               name="specificSymbol"
               id="specificSymbol"
+              placeholder="Specific symbol"
               bsSize="sm"
               value={specificSymbol}
-              onChange={e => this.props.handleChange(e)}
+              onChange={e => handleChange(e)}
             />
           </FormGroup>
         </Col>
@@ -118,7 +120,7 @@ const RuleFormBodyBankTransfers = props => {
             placeholder="Payer message includes"
             value={payerMessage}
             bsSize="sm"
-            onChange={e => this.props.handleChange(e)}
+            onChange={e => handleChange(e)}
           />
         </Col>
       </FormGroup>
@@ -133,7 +135,7 @@ const RuleFormBodyBankTransfers = props => {
             placeholder="Payee message includes"
             value={payeeMessage}
             bsSize="sm"
-            onChange={e => this.props.handleChange(e)}
+            onChange={e => handleChange(e)}
           />
         </Col>
       </FormGroup>
