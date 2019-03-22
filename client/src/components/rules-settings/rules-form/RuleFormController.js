@@ -2,12 +2,17 @@ import React from 'react';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Form } from 'reactstrap';
 import RuleFormBodyCommon from './RuleFormBodyCommon';
 import { TransactionValueOperators, TransactionDirections, TransactionTypes } from '../../../constants/transactions';
-import { IncomingTransactionCategories } from '../../../constants/categories';
+import {
+  IncomingTransactionCategories,
+  OutgoingTransactionCategories,
+  TransactionCategories
+} from '../../../constants/categories';
 
 class RuleFormController extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      id: '',
       ruleName: '',
       partyName: '',
       categoryId: IncomingTransactionCategories.I_SALARY_OR_WAGE.id,
@@ -33,38 +38,84 @@ class RuleFormController extends React.Component {
   componentDidMount() {
     const { editedRule } = this.props;
     if (editedRule !== null) {
+      var compare;
+      if (editedRule.valueFrom === null) {
+        compare = TransactionValueOperators.LESS_THAN.id;
+      } else if (editedRule.valueTo === null) {
+        compare = TransactionValueOperators.MORE_THAN.id;
+      } else {
+        compare = TransactionValueOperators.BETWEEN.id;
+      }
+
       this.setState({
-        ruleName: editedRule.ruleName,
-        partyName: editedRule.partyName,
-        categoryId: editedRule.categoryId,
-        direction: editedRule.direction,
-        transactionType: editedRule.transactionType,
-        valueFrom: editedRule.valueFrom,
-        valueTo: editedRule.valueTo,
+        id: editedRule.id,
+        ruleName: editedRule.ruleName || '',
+        partyName: editedRule.partyName || '',
+        categoryId: editedRule.categoryId || '',
+        direction: editedRule.direction || '',
+        transactionType: editedRule.transactionType || '',
+        valueFrom: editedRule.valueFrom || '',
+        valueTo: editedRule.valueTo || '',
         partyAccountPrefix: editedRule.partyAccountPrefix || '',
         partyAccountNumber: editedRule.partyAccountNumber || '',
         partyBankCode: editedRule.partyBankCode || '',
-        payerMessage: editedRule.payerMessage,
-        payeeMessage: editedRule.payeeMessage,
-        constantSymbol: editedRule.constantSymbol,
-        variableSymbol: editedRule.variableSymbol,
-        specificSymbol: editedRule.specificSymbol,
-        bookingTimeFrom: editedRule.bookingTimeFrom,
-        bookingTimeTo: editedRule.bookingTimeTo,
-        cardNumber: editedRule.cardNumber,
-        compare: editedRule.compare
+        payerMessage: editedRule.payerMessage || '',
+        payeeMessage: editedRule.payeeMessage || '',
+        constantSymbol: editedRule.constantSymbol || '',
+        variableSymbol: editedRule.variableSymbol || '',
+        specificSymbol: editedRule.specificSymbol || '',
+        bookingTimeFrom: editedRule.bookingTimeFrom || '',
+        bookingTimeTo: editedRule.bookingTimeTo || '',
+        cardNumber: editedRule.cardNumber || '',
+        compare: compare
       });
     }
   }
 
   handleSubmit = event => {
     event.preventDefault();
-    this.props.toggleModal();
-    this.props.handleRuleSubmit({ ...this.state });
+    const newRule = this.validateForm({ ...this.state });
+    const { editedRule } = this.props;
+    if (editedRule !== null) {
+      this.props.handleRuleSubmitUpdate(newRule);
+    } else {
+      this.props.handleRuleSubmitCreate(newRule);
+    }
+  };
+
+  validateForm = newRule => {
+    if (newRule.transactionType === TransactionTypes.CARD.id) {
+      bankTransferFields.forEach(field => (newRule[field] = ''));
+    } else {
+      cardFields.forEach(field => (newRule[field] = ''));
+    }
+
+    if (newRule.compare === TransactionValueOperators.LESS_THAN.id) {
+      newRule['valueFrom'] = '';
+    } else if (newRule.compare === TransactionValueOperators.MORE_THAN.id) {
+      newRule['valueTo'] = '';
+    }
+
+    delete newRule.compare;
+    return newRule;
   };
 
   handleChange = event => {
-    this.setState({ [event.target.name]: event.target.value });
+    if (event.target.name === 'direction') {
+      if (event.target.value === TransactionDirections.INCOMING.id) {
+        this.setState({
+          [event.target.name]: event.target.value,
+          categoryId: IncomingTransactionCategories.I_SALARY_OR_WAGE.id
+        });
+        return;
+      } else {
+        this.setState({ [event.target.name]: event.target.value, categoryId: OutgoingTransactionCategories.FOOD.id });
+        return;
+      }
+    } else {
+      this.setState({ [event.target.name]: event.target.value });
+      return;
+    }
   };
 
   handleTimePickerChange = (name, value) => {
@@ -123,5 +174,16 @@ class RuleFormController extends React.Component {
 
 const TIME_FROM = 'timeFrom';
 const TIME_TO = 'timeTo';
+const cardFields = ['bookingTimeFrom', 'bookingTimeTo', 'cardNumber'];
+const bankTransferFields = [
+  'partyAccountNumber',
+  'partyAccountPrefix',
+  'partyBankCode',
+  'payerMessage',
+  'payeeMessage',
+  'constantSymbol',
+  'variableSymbol',
+  'specificSymbol'
+];
 
 export default RuleFormController;

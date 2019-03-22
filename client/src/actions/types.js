@@ -10,7 +10,8 @@ export const TOGGLE_RULE_MODAL = 'TOGGLE_RULE_MODAL';
 export const RULES_LOADING = 'RULES_LOADING';
 export const RULE_ADD = 'RULE_ADD';
 export const RULE_EDIT = 'RULE_EDIT';
-export const RULE_SUBMIT = 'RULE_SUBMIT';
+export const RULE_SUBMIT_CREATE = 'RULE_SUBMIT_CREATE';
+export const RULE_SUBMIT_UPDATE = 'RULE_SUBMIT_UPDATE';
 
 // Statistics
 export const GET_CHART_DATA = 'GET_CHART_DATA';

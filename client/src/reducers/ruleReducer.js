@@ -1,4 +1,12 @@
-import { GET_RULES, RULES_LOADING, TOGGLE_RULE_MODAL, RULE_ADD, RULE_EDIT, RULE_SUBMIT } from '../actions/types';
+import {
+  GET_RULES,
+  RULES_LOADING,
+  TOGGLE_RULE_MODAL,
+  RULE_ADD,
+  RULE_EDIT,
+  RULE_SUBMIT_CREATE,
+  RULE_SUBMIT_UPDATE
+} from '../actions/types';
 
 const initialState = {
   rules: [],
@@ -42,9 +50,17 @@ export default function(state = initialState, action) {
         isModalOpened: !state.isModalOpened
       };
     }
-    case RULE_SUBMIT: {
+    case RULE_SUBMIT_CREATE: {
       return {
         ...state,
+        rules: [...state.rules, action.payload],
+        isModalOpened: !state.isModalOpened
+      };
+    }
+    case RULE_SUBMIT_UPDATE: {
+      return {
+        ...state,
+        rules: state.rules.map(rule => (rule.id === action.payload.id ? action.payload : rule)),
         isModalOpened: !state.isModalOpened
       };
     }
