@@ -17,16 +17,16 @@ public class BankingAPIService implements BankingAPIConfiguration {
 
     public BankingAPIService() {
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(API_BASE_URL)
+                .baseUrl(API_BASE_URL + API_VERSION)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
         service = retrofit.create(BankingAPIInterface.class);
     }
 
-     public List<Transaction> findTransactionsByDate(int accountId, String dateFrom, String dateTo) throws IOException {
+     public List<Transaction> findTransactionsByDate(String dateFrom, String dateTo) throws IOException {
 
-        Call<List<Transaction>> retrofitCall = service.findTransactionsByDate(accountId, dateFrom, dateTo);
+        Call<List<Transaction>> retrofitCall = service.findTransactionsByDate(ACCOUNT_ID, dateFrom, dateTo);
         Response<List<Transaction>> response = retrofitCall.execute();
 
         if (!response.isSuccessful()) {
@@ -36,9 +36,9 @@ public class BankingAPIService implements BankingAPIConfiguration {
         return response.body();
      }
 
-     public Transaction createTransaction(int accountId, Transaction t) throws IOException {
+     public Transaction createTransaction(Transaction t) throws IOException {
 
-        Call<Transaction> retrofitCall = service.createTransaction(accountId, t);
+        Call<Transaction> retrofitCall = service.createTransaction(ACCOUNT_ID, t, CONTENT_TYPE);
         Response<Transaction> response = retrofitCall.execute();
 
          if (!response.isSuccessful()) {
