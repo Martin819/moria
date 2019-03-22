@@ -5,6 +5,7 @@ import { withStyles, Table, TableBody, TableCell, TablePagination, TableRow, Pap
 import { Checkbox, Grow } from '@material-ui/core';
 import { Spinner } from 'reactstrap';
 import { TransactionCategories } from '../../../constants/categories';
+import { TransactionDirections, TransactionTypes } from '../../../constants/transactions';
 
 class RulesTable extends Component {
   state = {
@@ -104,6 +105,12 @@ class RulesTable extends Component {
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map(rule => {
                     const isSelected = this.isSelected(rule.id);
+                    const direction = Object.values(TransactionDirections).find(
+                      direction => direction.id === rule.direction
+                    ).text;
+                    const transactionType = Object.values(TransactionTypes).find(
+                      type => type.id === rule.transactionType
+                    ).text;
                     return (
                       <Grow key={rule.id} in={true} timeout={500}>
                         <TableRow
@@ -124,12 +131,11 @@ class RulesTable extends Component {
                             {rule.partyName}
                           </TableCell>
                           <TableCell align="left" padding="default">
-                            {rule.direction}
+                            {direction}
                           </TableCell>
                           <TableCell align="left" padding="default">
-                            {rule.transactionType}
+                            {transactionType}
                           </TableCell>
-
                           <TableCell align="right" padding="default">
                             <Checkbox
                               checked={isSelected}
