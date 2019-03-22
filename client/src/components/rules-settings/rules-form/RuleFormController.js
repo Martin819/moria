@@ -86,8 +86,12 @@ class RuleFormController extends React.Component {
 
   nullEmptyValues = rule => {
     Object.entries(rule).forEach(entry => {
-      if (entry[1] === '') {
-        rule[entry[0]] = null;
+      const key = entry[0];
+      const value = entry[1];
+      if (typeof value === 'string' || value instanceof String) {
+        if (value.trim() === '') {
+          rule[key] = null;
+        }
       }
     });
   };
