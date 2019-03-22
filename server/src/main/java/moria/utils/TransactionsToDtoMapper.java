@@ -51,8 +51,7 @@ public class TransactionsToDtoMapper {
         String ap = a.getPrefix().replaceFirst("^0+(?!$)", "");
         String an = a.getAccountNumber().replaceFirst("^0+(?!$)", "");
         String abc = a.getBankCode().replaceFirst("^0+(?!$)", "");
-        String result = ap + "-" + an + "/" + abc;
-        return result;
+        return ap + "-" + an + "/" + abc;
     }
 
     public String getNormalizedAccountNumber (String prefix, String number, String bankCode) {
