@@ -75,12 +75,21 @@ class RuleFormController extends React.Component {
   handleSubmit = event => {
     event.preventDefault();
     const newRule = this.validateForm({ ...this.state });
+    this.nullEmptyValues(newRule);
     const { editedRule } = this.props;
-    if (editedRule !== null) {
+    if (editedRule !== undefined && editedRule !== null) {
       this.props.handleRuleSubmitUpdate(newRule);
     } else {
       this.props.handleRuleSubmitCreate(newRule);
     }
+  };
+
+  nullEmptyValues = rule => {
+    Object.entries(rule).forEach(entry => {
+      if (entry[1] === '') {
+        rule[entry[0]] = null;
+      }
+    });
   };
 
   validateForm = newRule => {
