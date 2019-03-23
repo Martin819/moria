@@ -81,6 +81,11 @@ public class CategoryScorer {
         }
     }
 
+    /**
+     * check if parameters of ruleset are null
+     * @param rule from Ruleset used in database
+     * @return reverted value of not null parameters
+     */
     private double findCoefficientBasedOnNumberOfParameters(Ruleset rule) {
         double notNull = 0;
         if (rule.getValueFrom() != null) notNull++;
@@ -223,6 +228,7 @@ public class CategoryScorer {
         // vytáhnutí pravidel z databáze
         RulesetService rulesetService = getRulesetService();
         ruleSet = rulesetService.findAllRulesets();
+
     }
 
     public CategoryScorer() {
