@@ -52,6 +52,7 @@ const RuleFormBodyCardPayments = props => {
             name="cardNumber"
             id="cardNumber"
             placeholder="Card number"
+            maxLength="19"
             value={props.cardNumber}
             bsSize="sm"
             onChange={e => props.handleChange(e)}

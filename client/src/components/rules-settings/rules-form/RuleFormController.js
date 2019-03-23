@@ -38,7 +38,7 @@ class RuleFormController extends React.Component {
   componentDidMount() {
     const { editedRule } = this.props;
     if (editedRule !== null) {
-      var compare;
+      let compare;
       if (editedRule.valueFrom === null) {
         compare = TransactionValueOperators.LESS_THAN.id;
       } else if (editedRule.valueTo === null) {
@@ -120,14 +120,24 @@ class RuleFormController extends React.Component {
           [event.target.name]: event.target.value,
           categoryId: IncomingTransactionCategories.I_SALARY_OR_WAGE.id
         });
-        return;
       } else {
         this.setState({ [event.target.name]: event.target.value, categoryId: OutgoingTransactionCategories.FOOD.id });
-        return;
       }
+    } else if (event.target.name === 'cardNumber') {
+      this.handleCreditCardInputChange(event);
     } else {
       this.setState({ [event.target.name]: event.target.value });
-      return;
+    }
+  };
+
+  handleCreditCardInputChange = event => {
+    let value = event.target.value;
+    let lastNumberPart = value.slice(value.lastIndexOf('-') + 1);
+    if (lastNumberPart.length === 5) value = value.slice(0, value.length - 1) + '-' + value.slice(value.length - 1);
+    if (value.lastIndexOf('-') === value.length - 1) value = value.slice(0, value.length - 1);
+    lastNumberPart = value.slice(value.lastIndexOf('-') + 1);
+    if (/^$|\d{1,4}$/.test(lastNumberPart)) {
+      this.setState({ [event.target.name]: value });
     }
   };
 
