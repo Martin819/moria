@@ -1,5 +1,11 @@
 package moria.utils;
 
+import java.math.BigDecimal;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.TreeMap;
 import me.xdrop.fuzzywuzzy.FuzzySearch;
 import moria.SpringContext;
 import moria.dto.Category;
@@ -8,15 +14,6 @@ import moria.model.transactions.Transaction;
 import moria.model.transactions.TransactionPartyAccount;
 import moria.services.RulesetService;
 import moria.services.TransactionService;
-import org.joda.time.Duration;
-import org.joda.time.Interval;
-
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.TreeMap;
 
 public class CategoryScorer {
 
@@ -49,7 +46,7 @@ public class CategoryScorer {
             }
 
             if (rule.getBookingTimeFrom() != null && rule.getBookingTimeTo() != null)
-                score += scoreTransactionDate(LocalDate.parse(rule.getBookingTimeFrom()), LocalDate.parse(rule.getBookingTimeTo()));
+                score += scoreTransactionDate(LocalTime.parse(rule.getBookingTimeFrom()), LocalTime.parse(rule.getBookingTimeTo()));
             if (rule.getValueFrom() != null && rule.getValueTo() != null)
                 score += scoreTransactionValue(rule.getValueFrom(), rule.getValueTo());
             if (transaction.getDirection().equals("INCOMING"))
@@ -189,36 +186,12 @@ public class CategoryScorer {
         return score;
     }
 
-    private double scoreTransactionDate(LocalDate bookingDateFromValue, LocalDate bookingDateToValue) {
-        //TODO PŘEDĚLA TO NA LOCALDATE - VLÁĎA
+    private double scoreTransactionDate(LocalTime bookingDateFromValue, LocalTime bookingDateToValue) {
         double score = 0;
-//        Interval interval = new Interval(bookingDateFromValue.get(), bookingDateToValue.getTime());
-//        Duration duration = interval.toDuration();
-//
-//        //kdyz je to v nějaký konkretni čas
-//        if (duration.toStandardMinutes().getMinutes() < 60) {
-//            Interval differenceBettweenRuleAndTransaction = new Interval(bookingDateFromValue.getTime(), transaction.getBookingDate().getTime());
-//            Duration durationBettweenRuleAndTransaction = differenceBettweenRuleAndTransaction.toDuration();
-//            if (durationBettweenRuleAndTransaction.toStandardMinutes().getMinutes() < 60) {
-//                score++;
-//            }
-//            //když je to do nějakého času
-//        } else if (bookingDateToValue == null) {
-//            if (transaction.getBookingDate().after(bookingDateFromValue)) {
-//                score++;
-//            }
-//            //když je to do nějakého času
-//        } else if (bookingDateFromValue == null) {
-//            if (transaction.getBookingDate().before(bookingDateToValue)) {
-//                score++;
-//            }
-//            //když je to v rozmezi nějakého času
-//        } else if (duration.toStandardMinutes().getMinutes() > 60) {
-//            Date bookingDate = transaction.getBookingDate();
-//            if (bookingDate.after(bookingDateFromValue) && bookingDate.before(bookingDateToValue)) {
-//                score++;
-//            }
-//        }
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dateTimeFormatter.M.yyyy[' '][H:mm[:ss]][X]");
+        LocalTime transactionTime = LocalTime.parse(transaction.getBookingDate().toLocaleString(), dateTimeFormatter);
+
+        if (transactionTime.isBefore(bookingDateToValue) && transactionTime.isAfter(bookingDateFromValue)) score++;
         return score;
     }
 
