@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { computeStatistics } from '../../selectors/transactionSelectors';
+import { computeStatistics } from '../../selectors/statisticsSelector';
 import StatisticsTable from '../../components/statistics-dashboard/tabular-section/StatisticsTable';
 
 class TableContainer extends Component {

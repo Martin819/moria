@@ -19,7 +19,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = (dispatch, ownProps) => {
-  return { handleFilterChange: event => dispatch(setTransactionFilter(event.target.value)) };
+  return { handleFilterChange: (filterId, filterType) => dispatch(setTransactionFilter(filterId, filterType)) };
 };
 
 export default connect(

@@ -10,7 +10,7 @@ const TransactionFilter = props => {
         name="transactionFilter"
         id="transactionFilter"
         value={props.selectedFilter}
-        onChange={e => props.handleFilterChange(e)}
+        onChange={e => props.handleFilterChange(e.target.value, props.filterType)}
       >
         {props.filterOptions.map(fo => {
           return (

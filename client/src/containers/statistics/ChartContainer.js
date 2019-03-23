@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { computeStatistics, sumTransactions } from '../../selectors/transactionSelectors';
+import { computeStatistics, sumTransactions } from '../../selectors/statisticsSelector';
 import CustomPieChart from '../../components/statistics-dashboard/chart-section/CustomPieChart';
 
 class ChartContainer extends Component {

@@ -16,10 +16,10 @@ export const getData = () => async (dispatch, getState) => {
   }
 };
 
-export const setTransactionFilter = filterId => {
+export const setTransactionFilter = (filterId, filterType) => {
   return {
     type: SET_FILTER,
-    payload: filterId
+    payload: { filterId: filterId, filterType: filterType }
   };
 };
 
