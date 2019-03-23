@@ -5,7 +5,8 @@ import {
   RULE_ADD,
   RULE_EDIT,
   RULE_SUBMIT_CREATE,
-  RULE_SUBMIT_UPDATE
+  RULE_SUBMIT_UPDATE,
+  RULES_DELETE
 } from './types';
 import axios from 'axios';
 
@@ -64,6 +65,23 @@ export const handleRuleSubmitUpdate = editedRule => dispatch => {
       dispatch({
         type: RULE_SUBMIT_UPDATE,
         payload: response.data
+      });
+    })
+    .catch(error => {
+      console.log(error);
+    });
+};
+export const handleRulesDelete = ruleIds => dispatch => {
+  axios({
+    method: 'post',
+    url: 'rules/remove',
+    data: ruleIds
+  })
+    .then(response => {
+      console.log(response);
+      dispatch({
+        type: RULES_DELETE,
+        payload: ruleIds
       });
     })
     .catch(error => {

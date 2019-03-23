@@ -61,7 +61,10 @@ class RulesTable extends Component {
     this.setState({ rowsPerPage: event.target.value });
   };
 
-  handleDelete = () => {};
+  handleDelete = () => {
+    this.props.handleRulesDelete(this.state.selected);
+    this.setState({ selected: [] });
+  };
 
   handleAdd = () => {
     this.props.handleRuleAdd();

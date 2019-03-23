@@ -6,7 +6,8 @@ import {
   handleRuleSubmitCreate,
   handleRuleSubmitUpdate,
   handleRuleAdd,
-  handleRuleEdit
+  handleRuleEdit,
+  handleRulesDelete
 } from '../../actions/ruleActions';
 import RulesTable from '../../components/rules-settings/rules-table/RulesTable';
 import RuleFormController from '../../components/rules-settings/rules-form/RuleFormController';
@@ -15,7 +16,6 @@ import { bindActionCreators } from 'redux';
 class RulesAreaContainer extends Component {
   componentDidMount() {
     this.props.getRules();
-    console.log(this.props);
   }
 
   render() {
@@ -27,6 +27,7 @@ class RulesAreaContainer extends Component {
           toggleModal={this.props.toggleModal}
           handleRuleAdd={this.props.handleRuleAdd}
           handleRuleEdit={ruleId => this.props.handleRuleEdit(ruleId)}
+          handleRulesDelete={this.props.handleRulesDelete}
         />
         {this.props.isModalOpened && (
           <RuleFormController
@@ -51,7 +52,15 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return bindActionCreators(
-    { getRules, toggleModal, handleRuleSubmitCreate, handleRuleSubmitUpdate, handleRuleAdd, handleRuleEdit },
+    {
+      getRules,
+      toggleModal,
+      handleRuleSubmitCreate,
+      handleRuleSubmitUpdate,
+      handleRulesDelete,
+      handleRuleAdd,
+      handleRuleEdit
+    },
     dispatch
   );
 };

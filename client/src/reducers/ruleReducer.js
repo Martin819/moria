@@ -5,7 +5,8 @@ import {
   RULE_ADD,
   RULE_EDIT,
   RULE_SUBMIT_CREATE,
-  RULE_SUBMIT_UPDATE
+  RULE_SUBMIT_UPDATE,
+  RULES_DELETE
 } from '../actions/types';
 
 const initialState = {
@@ -62,6 +63,12 @@ export default function(state = initialState, action) {
         ...state,
         rules: state.rules.map(rule => (rule.id === action.payload.id ? action.payload : rule)),
         isModalOpened: !state.isModalOpened
+      };
+    }
+    case RULES_DELETE: {
+      return {
+        ...state,
+        rules: state.rules.filter(rule => !action.payload.includes(rule.id))
       };
     }
     default:

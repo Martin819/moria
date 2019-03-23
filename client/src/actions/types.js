@@ -12,6 +12,7 @@ export const RULE_ADD = 'RULE_ADD';
 export const RULE_EDIT = 'RULE_EDIT';
 export const RULE_SUBMIT_CREATE = 'RULE_SUBMIT_CREATE';
 export const RULE_SUBMIT_UPDATE = 'RULE_SUBMIT_UPDATE';
+export const RULES_DELETE = 'RULES_DELETE';
 
 // Statistics
 export const GET_CHART_DATA = 'GET_CHART_DATA';
