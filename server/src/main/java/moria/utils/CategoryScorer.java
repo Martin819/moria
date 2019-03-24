@@ -34,8 +34,8 @@ public class CategoryScorer {
    */
 
   public int scoreCategories(Transaction transaction) {
-    if (ruleSet == null){
-        loadAllRules();
+    if (ruleSet == null) {
+      loadAllRules();
     }
 
     this.transaction = transaction;
@@ -44,54 +44,80 @@ public class CategoryScorer {
     TreeMap<Double, Integer> categories = new TreeMap<>();
     for (Ruleset rule : ruleSet) {
       double score = 0;
-      if (checkNullForScoreParty(rule.getDirection(), rule.getPartyAccountPrefix(), rule.getPartyAccountNumber(), rule.getPartyBankCode(), rule.getPartyName())) {
-        score += scorePartyAccount(rule.getDirection(), rule.getPartyAccountPrefix(), rule.getPartyAccountNumber(), rule.getPartyBankCode(), rule.getPartyName());
-      } else if (rule != null) {
-        score += scorePartyAccountNumberOnly(rule.getPartyAccountNumber(), rule.getPartyBankCode(), rule.getPartyName());
-      }
-
-      if (rule.getBookingTimeFrom() != null && rule.getBookingTimeTo() != null) {
-        score += scoreTransactionDate(LocalTime.parse(rule.getBookingTimeFrom()), LocalTime.parse(rule.getBookingTimeTo()));
-      }
-      if (rule.getValueFrom() != null && rule.getValueTo() != null) {
-        score += scoreTransactionValue(rule.getValueFrom(), rule.getValueTo());
-      }
+      boolean isRuleDirecetionCorrect = true;
       if (transaction.getDirection().equals("INCOMING")) {
-        score += scoreTransactionMessage(rule.getPayerMessage(), transaction.getPayerMessage());
+        if (rule.getDirection().equals("OUTGOING")) {
+          isRuleDirecetionCorrect = false;
+        }
+        if (isRuleDirecetionCorrect) {
+          score += scoreTransactionMessage(rule.getPayeeMessage(), transaction.getPayeeMessage());
+        }
       }
       if (transaction.getDirection().equals("OUTGOING")) {
-        score += scoreTransactionMessage(rule.getPayeeMessage(), transaction.getPayeeMessage());
-      }
-      if (transaction.getAdditionalInfoCard() != null) {
-        if (checkNullForScoreCard(rule.getCardNumber(), transaction.getAdditionalInfoCard().getCardNumber())) {
-          score += scoreCardNumber(rule.getCardNumber(), transaction.getAdditionalInfoCard().getCardNumber());
+        if (rule.getDirection().equals("INCOMING")) {
+          isRuleDirecetionCorrect = false;
         }
-      }
-      if (transaction.getAdditionalInfoDomestic() != null) {
-        if (checkNullForConstantAndVariable(rule.getSpecificSymbol(), transaction.getAdditionalInfoDomestic().getSpecificSymbol())) {
-          score += scoreConstantAndVariable(rule.getSpecificSymbol(), transaction.getAdditionalInfoDomestic().getSpecificSymbol());
+        if (isRuleDirecetionCorrect) {
+          score += scoreTransactionMessage(rule.getPayerMessage(), transaction.getPayerMessage());
         }
-      }
-      if (rule.getTransactionType() != null && transaction.getTransactionType() != null) {
-        score += scoreTransactionType(rule.getTransactionType(), transaction.getTransactionType());
-      }
 
-      //podminka kvuli vybrani kategorie na zakladě incomming/outgoing
-      if (score == DIRECTION_SCORE) {
-        score = 0;
       }
+      if (isRuleDirecetionCorrect) {
+        if (checkNullForScoreParty(rule.getDirection(), rule.getPartyAccountPrefix(), rule.getPartyAccountNumber(), rule.getPartyBankCode(), rule.getPartyName())) {
+          score += scorePartyAccount(rule.getDirection(), rule.getPartyAccountPrefix(), rule.getPartyAccountNumber(), rule.getPartyBankCode(), rule.getPartyName());
+        } else {
+          score += scorePartyAccountNumberOnly(rule.getPartyAccountNumber(), rule.getPartyBankCode(), rule.getPartyName());
+        }
 
-      //počítá počet vyplněných pravidel a poté je jejich převrácenou hodnotou celého počtu násobí skore (pro zvýhodnění malého počtu vyplněných položek v rulesetu)
-      double coefficient = findCoefficientBasedOnNumberOfParameters(rule);
-      score = score * coefficient;
-      categories.put(score, rule.getCategoryId());
+        if (rule.getBookingTimeFrom() != null && rule.getBookingTimeTo() != null) {
+          score += scoreTransactionDate(LocalTime.parse(rule.getBookingTimeFrom()), LocalTime.parse(rule.getBookingTimeTo()));
+        }
+        if (rule.getValueFrom() != null && rule.getValueTo() != null) {
+          score += scoreTransactionValue(rule.getValueFrom(), rule.getValueTo());
+        }
+
+        if (transaction.getAdditionalInfoCard() != null) {
+          if (checkNullForScoreCard(rule.getCardNumber(), transaction.getAdditionalInfoCard().getCardNumber())) {
+            score += scoreCardNumber(rule.getCardNumber(), transaction.getAdditionalInfoCard().getCardNumber());
+          }
+        }
+        if (transaction.getAdditionalInfoDomestic() != null) {
+          if (checkNullForConstantAndVariable(rule.getSpecificSymbol(), transaction.getAdditionalInfoDomestic().getSpecificSymbol())) {
+            score += scoreConstantAndVariable(rule.getSpecificSymbol(), transaction.getAdditionalInfoDomestic().getSpecificSymbol());
+          }
+          if (checkNullForConstantAndVariable(rule.getVariableSymbol(), transaction.getAdditionalInfoDomestic().getVariableSymbol())) {
+            score += scoreConstantAndVariable(rule.getVariableSymbol(), transaction.getAdditionalInfoDomestic().getVariableSymbol());
+          }
+          if (checkNullForConstantAndVariable(rule.getConstantSymbol(), transaction.getAdditionalInfoDomestic().getConstantSymbol())) {
+            score += scoreConstantAndVariable(rule.getConstantSymbol(), transaction.getAdditionalInfoDomestic().getConstantSymbol());
+          }
+        }
+        if (rule.getTransactionType() != null && transaction.getTransactionType() != null) {
+          score += scoreTransactionType(rule.getTransactionType(), transaction.getTransactionType());
+        }
+
+        //podminka kvuli vybrani kategorie na zakladě incomming/outgoing
+        if (score == DIRECTION_SCORE) {
+          score = 0;
+        }
+
+        //počítá počet vyplněných pravidel a poté je jejich převrácenou hodnotou celého počtu násobí skore (pro zvýhodnění malého počtu vyplněných položek v rulesetu)
+        double coefficient = findCoefficientBasedOnNumberOfParameters(rule);
+        score = score * coefficient;
+        categories.put(score, rule.getCategoryId());
+      }
     }
 
-    if (categories.lastKey() == 0 || categories.isEmpty()) {
-      return 0;
+    if (!categories.isEmpty()) {
+      if (categories.lastKey() == 0 || categories.isEmpty()) {
+        return 0;
+      } else {
+        return categories.lastEntry().getValue();
+      }
     } else {
-      return categories.lastEntry().getValue();
+      return 0;
     }
+
   }
 
   private double scorePartyAccountNumberOnly(String partyAccountNumber, String partyBankCode, String partyName) {

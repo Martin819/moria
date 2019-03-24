@@ -54,12 +54,17 @@ public class CategoryScorerTest {
         String.valueOf(LocalTime.of(8, 0)), "777333666"));
 
     myRulesets.add(TestUtils.createTestRulesetFull(3, "Pravidlo 2", "Cinestar", 124, "OUTGOING", "CARD", new BigDecimal(70), new BigDecimal(200),
+        null, null, "0810", "Cinestar s.r.o", null, null, null, null, String.valueOf(LocalTime.of(19, 0)),
+        String.valueOf(LocalTime.of(23, 0)), "777333666"));
+
+    //testuje, ze algoritmus pozna, ze se jedna o transakci, ktera neni ve stejnem smeru
+    myRulesets.add(TestUtils.createTestRulesetFull(3, "Pravidlo 3", "Cinestar", 124, "INCOMING", "CARD", new BigDecimal(70), new BigDecimal(200),
         null, null, "0810", null, "Cinestar s.r.o", null, null, null, String.valueOf(LocalTime.of(19, 0)),
         String.valueOf(LocalTime.of(23, 0)), "777333666"));
 
     TransactionValue transactionValue = TestUtils.createTransactionValue(new BigDecimal(150), "czk");
     transactionList.add(TestUtils.createTransaction(1, 25, transactionValue, new TransactionPartyAccount(), "Spring, Cinestar", "OUTGOING", "CARD",
-        TestUtils.parseDate(8, 30, 0), TestUtils.parseDate(20, 30, 0), null, null, "dekujeme za navstevu kina Cinestar",
+        TestUtils.parseDate(8, 30, 0), TestUtils.parseDate(20, 30, 0), null, "dekujeme za navstevu kina Cinestar", null,
         null, null, null, null, null, new TransactionAdditionalInfoCard()));
 
     myRulesets.forEach(rulesetService::saveRuleset);
