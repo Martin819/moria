@@ -122,43 +122,23 @@ public class CategoryScorer {
    * @return reverted value of not null parameters
    */
   private double findCoefficientBasedOnNumberOfParameters(Ruleset rule) {
-    double notNull = 0;
-    if (rule.getValueFrom() != null) {
-      notNull++;
-    }
-    if (rule.getValueTo() != null) {
-      notNull++;
-    }
-    if (rule.getPartyAccountPrefix() != null) {
-      notNull++;
-    }
-    if (rule.getPartyAccountNumber() != null) {
-      notNull++;
-    }
-    if (rule.getPartyBankCode() != null) {
-      notNull++;
-    }
-    if (rule.getPartyName() != null) {
-      notNull++;
-    }
-    if (rule.getBookingTimeFrom() != null) {
-      notNull++;
-    }
-    if (rule.getBookingTimeTo() != null) {
-      notNull++;
-    }
-    if (rule.getTransactionType() != null) {
-      notNull++;
-    }
-    if (rule.getPayerMessage() != null) {
-      notNull++;
-    }
-    if (rule.getPayeeMessage() != null) {
-      notNull++;
-    }
-    if (rule.getCardNumber() != null) {
-      notNull++;
-    }
+    double notNull = 2; //id a direction je tam vzdy
+
+    if (rule.getValueFrom() != null) notNull++;
+    if (rule.getValueTo() != null) notNull++;
+    if (rule.getPartyAccountPrefix() != null) notNull++;
+    if (rule.getPartyAccountNumber() != null) notNull++;
+    if (rule.getPartyBankCode() != null) notNull++;
+    if (rule.getPartyName() != null) notNull++;
+    if (rule.getBookingTimeFrom() != null) notNull++;
+    if (rule.getBookingTimeTo() != null) notNull++;
+    if (rule.getTransactionType() != null) notNull++;
+    if (rule.getPayerMessage() != null) notNull++;
+    if (rule.getPayeeMessage() != null) notNull++;
+    if (rule.getConstantSymbol() != null) notNull++;
+    if (rule.getVariableSymbol() != null) notNull++;
+    if (rule.getSpecificSymbol() != null) notNull++;
+    if (rule.getCardNumber() != null) notNull++;
 
     notNull = Ruleset.class.getDeclaredFields().length / notNull;
 
