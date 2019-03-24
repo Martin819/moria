@@ -97,8 +97,21 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public List<Transaction> saveTransactionList(List<Transaction> list) {
-        return transactionRepository.saveAll(list);
+    public void saveTransactionList(List<Transaction> list) {
+        transactionRepository.saveAll(list);
     }
+
+    @Override
+    public void saveNewTransaction(Transaction transaction) {
+        if (!(getNumberOfTransactionsById(transaction.getId()) > 0)) {
+            transactionRepository.save(transaction);
+        }
+    }
+
+    @Override
+    public int getNumberOfTransactionsById(String transactionId) {
+        return transactionRepository.getNumberOfTransactionsById(transactionId);
+    }
+
 
 }

@@ -35,6 +35,10 @@ public interface TransactionService {
 
     void saveTransaction(Transaction transaction);
 
-    List<Transaction> saveTransactionList(List<Transaction> list);
+    void saveTransactionList(List<Transaction> list);
+
+    void saveNewTransaction(Transaction transaction);
+
+    int getNumberOfTransactionsById(String transactionId);
 
 }

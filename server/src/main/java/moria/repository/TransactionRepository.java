@@ -31,4 +31,7 @@ public interface TransactionRepository extends JpaRepository<Transaction, Intege
     @Transactional
     @Query("update transactions t set t.categoryId = ?2 where t.id = ?1")
     void setCategoryIdForTransactionById(String transactionId, int categoryId);
+
+    @Query("SELECT COUNT(id) FROM transactions t WHERE t.id = ?1")
+    int getNumberOfTransactionsById(String transactionId);
 }
