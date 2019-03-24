@@ -45,6 +45,7 @@ class TestUtils {
     ruleset.setId(id);
     ruleset.setRuleName(ruleName);
     ruleset.setPartyName(partyName);
+    ruleset.setCategoryId(categoryId);
     ruleset.setDirection(direction);
     ruleset.setTransactionType(transactionType);
     ruleset.setValueFrom(valueFrom);

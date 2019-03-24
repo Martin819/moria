@@ -193,10 +193,12 @@ public class CategoryScorer {
 
     private double scoreTransactionDate(LocalTime bookingDateFromValue, LocalTime bookingDateToValue) {
         double score = 0;
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dateTimeFormatter.M.yyyy[' '][H:mm[:ss]][X]");
-        LocalTime transactionTime = LocalTime.parse(transaction.getBookingDate().toLocaleString(), dateTimeFormatter);
+        org.joda.time.LocalTime transactionTime = org.joda.time.LocalTime.fromDateFields(transaction.getBookingDate());
+        org.joda.time.LocalTime bookingDateFromValueYoda = new org.joda.time.LocalTime(bookingDateFromValue.getHour(), bookingDateFromValue.getMinute(), bookingDateFromValue.getSecond());
+        org.joda.time.LocalTime bookingDateToValueYoda= new org.joda.time.LocalTime(bookingDateToValue.getHour(), bookingDateToValue.getMinute(), bookingDateToValue.getSecond());
 
-        if (transactionTime.isBefore(bookingDateToValue) && transactionTime.isAfter(bookingDateFromValue)) score++;
+
+        if (transactionTime.isBefore(bookingDateFromValueYoda) && transactionTime.isAfter(bookingDateToValueYoda)) score++;
         return score;
     }
 

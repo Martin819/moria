@@ -79,36 +79,21 @@ public class CategoryScorerTest {
     // jen tu testuju, ze se opravdu vratilo myRulesets
     Assert.assertEquals(myRulesets, rulesetService.findAllRulesets());
 
+  }
+
+  @Test
+  public void testProperCategory() {
+
     //TODO - Vláďa
     //priklad, jak bys mohl udelat test obecne na cely CategoryScorer
     //vytvoris testovaci ruleset pres TestUtils
     //vytvoris testovaci transakci pres TestUtils
     //zavolas metodu scoreCategories
     // assertujes, ze id kategorie, kterou ti vrati scoreCategories je ta, kterou ocekavas
-  }
-
-  @Test
-  public void testProperCategory() {
-
-
     categoryScorer.setListRuleset(myRulesets);
     int categoryID = categoryScorer.scoreCategories(transactionList.get(0));
 
-    Assert.assertEquals(categoryID, 124);
-
-  }
-
-  @Test
-  public void testSettingCategory() {
-
-    CategoryScorer categoryScorer = new CategoryScorer();
-    categoryScorer.setListRuleset(myRulesets);
-    int categoryID = categoryScorer.scoreCategories(transactionList.get(0));
-
-    transactionService.setCategoryIdForTransactionById(transactionList.get(0).getId(), categoryID);
-    Transaction transaction = transactionService.findTransactionById(transactionList.get(0).getId());
-
-    Assert.assertEquals(transaction.getCategoryId(), Integer.valueOf(categoryID));
+    Assert.assertEquals(124, categoryID);
 
   }
 

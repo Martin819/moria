@@ -86,6 +86,11 @@
 			<artifactId>fuzzywuzzy</artifactId>
 			<version>1.2.0</version>
 		</dependency>
+		<dependency>
+			<groupId>joda-time</groupId>
+			<artifactId>joda-time</artifactId>
+			<version>2.10.1</version>
+		</dependency>
 	</dependencies>
 
 
@@ -103,5 +108,7 @@
 			</resource>
 		</resources>
 	</build>
+
+
 
 </project>

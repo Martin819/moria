@@ -1,7 +1,6 @@
 package moria.controller;
 
 import java.io.IOException;
-import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import me.xdrop.fuzzywuzzy.FuzzySearch;
@@ -10,6 +9,7 @@ import moria.dto.Category;
 import moria.model.transactions.Transaction;
 import moria.utils.Categories;
 import moria.utils.CategoryScorer;
+import org.joda.time.LocalTime;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -48,9 +48,13 @@ public class IncomingTransactionsController {
     public String timeTest() {
 
         Date date = new Date();
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dateTimeFormatter.M.yyyy[' '][H:mm[:ss]][X]");
-        LocalTime transactionTime = LocalTime.parse(date.toLocaleString(), dateTimeFormatter);
-        return String.valueOf(transactionTime.getHour());
+        LocalTime localTime = LocalTime.fromDateFields(date);
+
+        java.time.LocalTime localTimeJava = java.time.LocalTime.of(21, 30, 59, 11001);
+
+//        return localTime.toString();
+        LocalTime proper = new LocalTime(localTime.getHourOfDay(), localTime.getMinuteOfHour(), localTime.getSecondOfMinute());
+        return proper.toString();
     }
 
     @GetMapping(path = "/fetchTransactions")
