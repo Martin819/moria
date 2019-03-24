@@ -7,6 +7,7 @@ import me.xdrop.fuzzywuzzy.FuzzySearch;
 import moria.bankingApiClient.BankingAPIService;
 import moria.dto.Category;
 import moria.model.transactions.Transaction;
+import moria.services.TransactionServiceImpl;
 import moria.utils.Categories;
 import moria.utils.CategoryScorer;
 import org.joda.time.LocalTime;
@@ -59,10 +60,22 @@ public class IncomingTransactionsController {
     }
 
     @GetMapping(path = "/fetchTransactions")
-    public String fetchTransactions() throws IOException {
+    public List<Transaction> fetchTransactions() throws IOException {
         BankingAPIService service = new BankingAPIService();
         List<Transaction> transactions = service.findTransactionsByDate("1990-01-01", "2020-12-31");
-        return transactions.toString();
+        return transactions;
+    }
+
+    @GetMapping(path = "/saveTransactions")
+    public boolean saveTransactions() throws IOException {
+        BankingAPIService APIservice = new BankingAPIService();
+        TransactionServiceImpl traService = new TransactionServiceImpl();
+        List<Transaction> transactions = APIservice.findTransactionsByDate("1990-01-01", "2020-12-31");
+//        for (Transaction t:transactions) {
+//            traService.saveTransaction(t);
+//        }
+        traService.saveTransactionList(transactions);
+        return true;
     }
 
 }

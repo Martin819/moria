@@ -32,4 +32,8 @@ public interface TransactionService {
     List<Transaction> findAllAbroadTransactions();
 
     void setCategoryIdForTransactionById(int transactionId, int categoryId);
+
+    Transaction saveTransaction(Transaction transaction);
+
+    List<Transaction> saveTransactionList(List<Transaction> list);
 }

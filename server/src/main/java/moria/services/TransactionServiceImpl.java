@@ -87,4 +87,14 @@ public class TransactionServiceImpl implements TransactionService {
         transactionRepository.setCategoryIdForTransactionById(transactionId, categoryId);
     }
 
+    @Override
+    public Transaction saveTransaction(Transaction t) {
+        return transactionRepository.save((Transaction) t);
+    }
+
+    @Override
+    public List<Transaction> saveTransactionList(List<Transaction> list) {
+        return transactionRepository.saveAll(list);
+    }
+
 }
