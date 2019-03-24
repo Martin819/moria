@@ -44,6 +44,7 @@ public class IncomingTransactionsController {
         return String.valueOf(FuzzySearch.partialRatio("0", ""));
     }
 
+  // jen pro testovací účely
     @GetMapping(path = "/time", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public String timeTest() {
 

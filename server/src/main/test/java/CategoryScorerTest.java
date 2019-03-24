@@ -50,16 +50,16 @@ public class CategoryScorerTest {
     myRulesets = new ArrayList<>();
     transactionList = new ArrayList<>();
     myRulesets.add(TestUtils.createTestRulesetFull(2, "Pravidlo 1", "Billa", 111, "OUTGOING", "CARD", new BigDecimal(50), new BigDecimal(2000),
-        null, null, null, "thanks for your payment", null, null, null, null, String.valueOf(LocalTime.of(5, 0)),
+        null, null, null, null, "thanks for your payment", null, null, null, String.valueOf(LocalTime.of(5, 0)),
         String.valueOf(LocalTime.of(8, 0)), "777333666"));
 
     myRulesets.add(TestUtils.createTestRulesetFull(3, "Pravidlo 2", "Cinestar", 124, "OUTGOING", "CARD", new BigDecimal(70), new BigDecimal(200),
-        null, null, "0810", "Cinestar s.r.o", null, null, null, null, String.valueOf(LocalTime.of(19, 0)),
+        null, null, "0810", null, "Cinestar s.r.o", null, null, null, String.valueOf(LocalTime.of(19, 0)),
         String.valueOf(LocalTime.of(23, 0)), "777333666"));
 
     TransactionValue transactionValue = TestUtils.createTransactionValue(new BigDecimal(150), "czk");
     transactionList.add(TestUtils.createTransaction(1, 25, transactionValue, new TransactionPartyAccount(), "Spring, Cinestar", "OUTGOING", "CARD",
-        TestUtils.parseDate(8, 30, 0), TestUtils.parseDate(20, 30, 0), null, "dekujeme za navstevu kina Cinestar", null,
+        TestUtils.parseDate(8, 30, 0), TestUtils.parseDate(20, 30, 0), null, null, "dekujeme za navstevu kina Cinestar",
         null, null, null, null, null, new TransactionAdditionalInfoCard()));
 
     myRulesets.forEach(rulesetService::saveRuleset);
