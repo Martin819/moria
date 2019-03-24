@@ -8,6 +8,7 @@ import java.math.BigDecimal;
 
 @Data
 @Embeddable
+@AllArgsConstructor
 public class TransactionAdditionalInfoForeign implements Serializable {
 
     @Embedded

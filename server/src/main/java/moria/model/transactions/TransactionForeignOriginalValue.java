@@ -8,6 +8,7 @@ import java.math.BigDecimal;
 
 @Data
 @Embeddable
+@AllArgsConstructor
 public class TransactionForeignOriginalValue implements Serializable {
 
     @Column(name = "foreignAmount")

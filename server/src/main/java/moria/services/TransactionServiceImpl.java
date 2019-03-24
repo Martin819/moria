@@ -2,6 +2,8 @@ package moria.services;
 
 import moria.model.transactions.Transaction;
 import moria.repository.TransactionRepository;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -88,8 +90,10 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public Transaction saveTransaction(Transaction t) {
-        return transactionRepository.save((Transaction) t);
+    public void saveTransaction(Transaction t) {
+        System.out.println(t.toString());
+
+        transactionRepository.save(t);
     }
 
     @Override

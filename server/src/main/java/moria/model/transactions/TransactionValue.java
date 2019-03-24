@@ -7,6 +7,7 @@ import java.math.BigDecimal;
 
 @Data
 @Embeddable
+@AllArgsConstructor
 public class TransactionValue {
 
     private BigDecimal amount;

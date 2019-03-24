@@ -1,5 +1,6 @@
 package moria.model.transactions;
 
+import com.google.gson.annotations.SerializedName;
 import lombok.*;
 
 import javax.persistence.*;
@@ -10,10 +11,13 @@ import java.util.Date;
 @Data
 @SuppressWarnings("DefaultAnnotationParam")
 @Entity(name = "transactions")
+@AllArgsConstructor
 public class Transaction implements Serializable {
 
     @Id
     private int id;
+    @SerializedName("_id")
+    private String apiId;
     @Column(nullable = true)
     private int accountId;
     @Embedded
@@ -41,4 +45,8 @@ public class Transaction implements Serializable {
     private TransactionAdditionalInfoForeign additionalInfoForeign;
     @Embedded
     private TransactionAdditionalInfoCard additionalInfoCard;
+
+
+
 }
+

@@ -10,6 +10,7 @@ import moria.model.transactions.Transaction;
 import moria.services.TransactionServiceImpl;
 import moria.utils.Categories;
 import moria.utils.CategoryScorer;
+import moria.utils.utils;
 import org.joda.time.LocalTime;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -71,10 +72,13 @@ public class IncomingTransactionsController {
         BankingAPIService APIservice = new BankingAPIService();
         TransactionServiceImpl traService = new TransactionServiceImpl();
         List<Transaction> transactions = APIservice.findTransactionsByDate("1990-01-01", "2020-12-31");
-//        for (Transaction t:transactions) {
-//            traService.saveTransaction(t);
-//        }
-        traService.saveTransactionList(transactions);
+        for (Transaction t:transactions) {
+            System.out.println(t.toString());
+            Transaction tra = utils.verifyTransactionForNullValues(t);
+            System.out.println(tra.toString());
+            traService.saveTransaction(tra);
+        }
+//        traService.saveTransactionList(transactions);
         return true;
     }
 

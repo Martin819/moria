@@ -33,7 +33,7 @@ public interface TransactionService {
 
     void setCategoryIdForTransactionById(int transactionId, int categoryId);
 
-    Transaction saveTransaction(Transaction transaction);
+    void saveTransaction(Transaction transaction);
 
     List<Transaction> saveTransactionList(List<Transaction> list);
 }
