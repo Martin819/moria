@@ -1,10 +1,13 @@
 package moria.controller;
 
+import java.io.IOException;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import me.xdrop.fuzzywuzzy.FuzzySearch;
+import moria.bankingApiClient.BankingAPIService;
 import moria.dto.Category;
+import moria.model.transactions.Transaction;
 import moria.utils.Categories;
 import moria.utils.CategoryScorer;
 import org.springframework.http.MediaType;
@@ -14,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import retrofit2.Retrofit;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 @RestController
@@ -47,6 +51,13 @@ public class IncomingTransactionsController {
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dateTimeFormatter.M.yyyy[' '][H:mm[:ss]][X]");
         LocalTime transactionTime = LocalTime.parse(date.toLocaleString(), dateTimeFormatter);
         return String.valueOf(transactionTime.getHour());
+    }
+
+    @GetMapping(path = "/fetchTransactions")
+    public String fetchTransactions() throws IOException {
+        BankingAPIService service = new BankingAPIService();
+        List<Transaction> transactions = service.findTransactionsByDate("1990-01-01", "2020-12-31");
+        return transactions.toString();
     }
 
 }
