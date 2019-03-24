@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { getData, handleTransactionCategorySubmit } from '../../actions/transactionActions';
+import { getData, handleTransactionCategoryUpdate } from '../../actions/transactionActions';
 import TransactionList from '../../components/transactions-dashboard/transaction-list/TransactionList';
 import AccountBalanceInfo from '../../components/transactions-dashboard/account-balance-info/AccountBalanceInfo';
 import { bindActionCreators } from 'redux';
@@ -34,7 +34,7 @@ const makeMapStateToProps = () => {
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => {
-  return bindActionCreators({ getData, handleTransactionCategorySubmit }, dispatch);
+  return bindActionCreators({ getData, handleTransactionCategoryUpdate }, dispatch);
 };
 
 export default connect(

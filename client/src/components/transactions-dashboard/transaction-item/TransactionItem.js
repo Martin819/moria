@@ -2,28 +2,32 @@ import React, { Fragment, Component } from 'react';
 import moment from 'moment';
 import { withStyles, ExpansionPanel, ExpansionPanelSummary, Typography, Grid, Grow } from '@material-ui/core/';
 import { Button, Form, FormGroup, Col, Row, Label, Input } from 'reactstrap';
-import { OutgoingTransactionCategories, TransactionCategories } from '../../../constants/categories';
+import {
+  OutgoingTransactionCategories,
+  TransactionCategories,
+  IncomingTransactionCategories
+} from '../../../constants/categories';
 import { Badge } from 'reactstrap';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import TransactionItemPanelDetail from './TransactionItemPanelDetail';
-import { TransactionTypes } from '../../../constants/transactions';
+import { TransactionTypes, TransactionDirections } from '../../../constants/transactions';
 
 class TransactionItem extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      categoryId: props.category
+      categoryId: props.categoryId
     };
   }
 
   handleCategoryChange = event => {
-    this.setState({ categoryId: event.target.value });
+    this.setState({ categoryId: parseInt(event.target.value) });
   };
 
-  handleTransactionCategorySubmit = event => {
+  handleTransactionCategoryUpdate = event => {
     event.stopPropagation();
     event.preventDefault();
-    this.props.handleTransactionCategorySubmit(this.props.id, this.state.categoryId);
+    this.props.handleTransactionCategoryUpdate(this.props.id, this.state.categoryId);
   };
 
   render() {
@@ -51,7 +55,8 @@ class TransactionItem extends Component {
     const categoryText = categoryEnum === undefined ? 'Unknown' : categoryEnum.text;
     const transactionTypeEnum = Object.values(TransactionTypes).find(type => type.id === transactionType);
     const transactionTypeText = transactionTypeEnum === undefined ? 'Unknown' : transactionTypeEnum.text;
-
+    const transactionCategories =
+      direction === TransactionDirections.INCOMING.id ? IncomingTransactionCategories : OutgoingTransactionCategories;
     return (
       <Grow in={true} timeout={500 + 100 * index}>
         <ExpansionPanel>
@@ -89,7 +94,7 @@ class TransactionItem extends Component {
                                   value={this.state.categoryId}
                                   bsSize="sm"
                                 >
-                                  {Object.values(OutgoingTransactionCategories).map(c => (
+                                  {Object.values(transactionCategories).map(c => (
                                     <option key={c.id} value={c.id}>
                                       {c.text}
                                     </option>
@@ -103,7 +108,7 @@ class TransactionItem extends Component {
                                   className="ml-md-2"
                                   disabled={categoryId === this.state.categoryId}
                                   size="sm"
-                                  onClick={this.handleTransactionCategorySubmit}
+                                  onClick={this.handleTransactionCategoryUpdate}
                                 >
                                   Save
                                 </Button>

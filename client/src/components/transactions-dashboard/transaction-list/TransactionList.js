@@ -27,7 +27,7 @@ class TransactionsList extends Component {
 
   render() {
     const { activePage, itemsCountPerPage } = this.state;
-    const { classes, transactions, isLoading, handleTransactionCategorySubmit } = this.props;
+    const { classes, transactions, isLoading, handleTransactionCategoryUpdate } = this.props;
     const transactionItems = transactions
       .slice((activePage - 1) * itemsCountPerPage, activePage * itemsCountPerPage)
       .map((transaction, index) => {
@@ -36,7 +36,7 @@ class TransactionsList extends Component {
             key={transaction.id}
             index={index}
             {...transaction}
-            handleTransactionCategorySubmit={handleTransactionCategorySubmit}
+            handleTransactionCategoryUpdate={handleTransactionCategoryUpdate}
           />
         );
       });

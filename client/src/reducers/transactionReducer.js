@@ -1,4 +1,4 @@
-import { GET_TRANSACTIONS, TRANSACTIONS_LOADING, SET_FILTER } from '../actions/types';
+import { GET_TRANSACTIONS, TRANSACTIONS_LOADING, SET_FILTER, UPDATE_TRANSACTION_CATEGORY } from '../actions/types';
 import {
   FILTER_TIME_PERIOD,
   FILTER_DIRECTION,
@@ -41,6 +41,19 @@ export default function(state = initialState, action) {
           ...state.filters,
           [action.payload.filterType]: action.payload.filterId
         },
+        visibleTransactions: [...state.transactions]
+      };
+    }
+    case UPDATE_TRANSACTION_CATEGORY: {
+      return {
+        ...state,
+        transactions: state.transactions.map(t => {
+          if (t.id === action.payload.transactionId) {
+            t.categoryId = action.payload.newCategoryId;
+            return t;
+          }
+          return t;
+        }),
         visibleTransactions: [...state.transactions]
       };
     }
