@@ -8,6 +8,7 @@ import java.io.Serializable;
 @Data
 @Embeddable
 @AllArgsConstructor
+@NoArgsConstructor
 public class TransactionAdditionalInfoDomestic implements Serializable {
 
     private String constantSymbol;

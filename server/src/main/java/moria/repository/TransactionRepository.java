@@ -30,5 +30,5 @@ public interface TransactionRepository extends JpaRepository<Transaction, Intege
     @Modifying
     @Transactional
     @Query("update transactions t set t.categoryId = ?2 where t.id = ?1")
-    void setCategoryIdForTransactionById(int transactionId, int categoryId);
+    void setCategoryIdForTransactionById(String transactionId, int categoryId);
 }

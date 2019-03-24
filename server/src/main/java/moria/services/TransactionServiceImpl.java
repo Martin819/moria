@@ -5,6 +5,7 @@ import moria.repository.TransactionRepository;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -85,15 +86,14 @@ public class TransactionServiceImpl implements TransactionService {
 
     // Sets categoryId to given ID for a Transaction identified by its ID
     @Override
-    public void setCategoryIdForTransactionById(int transactionId, int categoryId) {
+    public void setCategoryIdForTransactionById(String transactionId, int categoryId) {
         transactionRepository.setCategoryIdForTransactionById(transactionId, categoryId);
     }
 
     @Override
-    public void saveTransaction(Transaction t) {
-        System.out.println(t.toString());
-
-        transactionRepository.save(t);
+    @Modifying
+    public void saveTransaction(Transaction transaction) {
+        transactionRepository.save(transaction);
     }
 
     @Override

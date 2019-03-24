@@ -12,12 +12,12 @@ import java.util.Date;
 @SuppressWarnings("DefaultAnnotationParam")
 @Entity(name = "transactions")
 @AllArgsConstructor
+@NoArgsConstructor
 public class Transaction implements Serializable {
 
     @Id
-    private int id;
     @SerializedName("_id")
-    private String apiId;
+    private String id;
     @Column(nullable = true)
     private int accountId;
     @Embedded

@@ -13,5 +13,5 @@ public class Category {
 
 
     @Getter @Setter private int idCategory;
-    @Getter @Setter private int idPayment;
+    @Getter @Setter private String idPayment;
 }

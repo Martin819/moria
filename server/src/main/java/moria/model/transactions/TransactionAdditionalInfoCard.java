@@ -8,6 +8,7 @@ import java.io.Serializable;
 @Data
 @Embeddable
 @AllArgsConstructor
+@NoArgsConstructor
 public class TransactionAdditionalInfoCard implements Serializable {
 
     private String mcc;

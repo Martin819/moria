@@ -1,6 +1,7 @@
 package moria.controller;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import me.xdrop.fuzzywuzzy.FuzzySearch;
@@ -12,6 +13,7 @@ import moria.utils.Categories;
 import moria.utils.CategoryScorer;
 import moria.utils.utils;
 import org.joda.time.LocalTime;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,6 +26,12 @@ import java.util.List;
 
 @RestController
 public class IncomingTransactionsController {
+
+    @Autowired
+    BankingAPIService APIservice;
+
+    @Autowired
+    TransactionServiceImpl traService;
 
     // jen pro testovací účely
     @GetMapping(path = "/plsCategorize", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
@@ -69,16 +77,11 @@ public class IncomingTransactionsController {
 
     @GetMapping(path = "/saveTransactions")
     public boolean saveTransactions() throws IOException {
-        BankingAPIService APIservice = new BankingAPIService();
-        TransactionServiceImpl traService = new TransactionServiceImpl();
         List<Transaction> transactions = APIservice.findTransactionsByDate("1990-01-01", "2020-12-31");
         for (Transaction t:transactions) {
-            System.out.println(t.toString());
             Transaction tra = utils.verifyTransactionForNullValues(t);
-            System.out.println(tra.toString());
             traService.saveTransaction(tra);
         }
-//        traService.saveTransactionList(transactions);
         return true;
     }
 
