@@ -1,5 +1,8 @@
 package moria.controller;
 
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import me.xdrop.fuzzywuzzy.FuzzySearch;
 import moria.dto.Category;
 import moria.utils.Categories;
@@ -36,4 +39,14 @@ public class IncomingTransactionsController {
 
         return String.valueOf(FuzzySearch.partialRatio("0", ""));
     }
+
+    @GetMapping(path = "/time", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public String timeTest() {
+
+        Date date = new Date();
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dateTimeFormatter.M.yyyy[' '][H:mm[:ss]][X]");
+        LocalTime transactionTime = LocalTime.parse(date.toLocaleString(), dateTimeFormatter);
+        return String.valueOf(transactionTime.getHour());
+    }
+
 }

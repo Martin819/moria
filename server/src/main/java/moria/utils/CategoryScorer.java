@@ -34,7 +34,7 @@ public class CategoryScorer {
      */
 
     public int scoreCategories(Transaction transaction) {
-        loadAllRules();
+        if (ruleSet.isEmpty())loadAllRules();
         this.transaction = transaction;
 
         //sem se budou hodnotit skore pravdepodobnosti, kam to ma spadnout - nejdřív zkopíruju názvy kategorií do HashMapy
@@ -74,7 +74,7 @@ public class CategoryScorer {
             categories.put(score, rule.getCategoryId());
         }
 
-        if (categories.lastKey() == 0) {
+        if (categories.lastKey() == 0 || categories.isEmpty()) {
             return 0;
         } else {
             return categories.lastEntry().getValue();
@@ -249,5 +249,9 @@ public class CategoryScorer {
             }
         }
         return list;
+    }
+
+    public void setListRuleset (List<Ruleset> ruleSetList){
+        ruleSet = ruleSetList;
     }
 }
