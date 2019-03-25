@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import { Label, Input } from 'reactstrap';
 
-const TransactionFilter = props => {
+const FilterSelect = props => {
   return (
     <Fragment>
       <Label for="transactionFilter">{props.label}</Label>
@@ -24,4 +24,4 @@ const TransactionFilter = props => {
   );
 };
 
-export default TransactionFilter;
+export default FilterSelect;

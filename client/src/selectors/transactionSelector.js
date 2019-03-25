@@ -34,7 +34,7 @@ export const filterTransactions = () =>
     }
   );
 
-const filterByTimePeriod = (transactions, activeFilter) => {
+export const filterByTimePeriod = (transactions, activeFilter) => {
   switch (activeFilter) {
     case TimePeriodFilters.ALL_TIME.id: {
       return [...transactions];

@@ -2,16 +2,34 @@ import { createSelector } from 'reselect';
 import _ from 'lodash';
 import { TransactionCategories } from '../constants/categories';
 import { TransactionDirections } from '../constants/transactions';
+import { filterByTimePeriod } from './transactionSelector';
+import { FILTER_TIME_PERIOD } from '../constants/transactionListFilters';
 
 const getTransactionsByDirection = (state, direction) =>
   state.transactions.transactions.filter(t => t.direction === direction);
-
 const getAllTransactions = state => state.transactions.transactions;
+const getAllFilters = state => state.statistics.filters;
+
+const filterTransactions = (transactions, filters) => {
+  Object.entries(filters).forEach(filter => {
+    const key = filter[0];
+    const value = filter[1];
+    switch (key) {
+      case FILTER_TIME_PERIOD.id: {
+        transactions = filterByTimePeriod(transactions, value);
+        break;
+      }
+      default:
+    }
+  });
+  return transactions;
+};
 
 export const computeStatistics = () =>
   createSelector(
-    [getTransactionsByDirection],
-    transactions => {
+    [getTransactionsByDirection, getAllFilters],
+    (transactions, filters) => {
+      transactions = filterTransactions(transactions, filters);
       return _.chain(transactions)
         .groupBy(t => t.categoryId)
         .map((t, categoryId) => {

@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import ChartContainer from '../../containers/statistics/ChartContainer';
-import TransactionFilterContainer from '../../containers/transactions/TransactionFilterContainer';
+import StatisticsFilterContainer from '../../containers/statistics/StatisticsFilterContainer';
 import TableContainer from '../../containers/statistics/TableContainer';
 import { Grid, withStyles } from '@material-ui/core';
 import { Spinner } from 'reactstrap';
@@ -13,7 +13,7 @@ const StatisticsDashboard = props => {
       <Grid container direction="column">
         <Grid container direction="column" alignItems="center">
           <Grid item xs={12} style={{ minWidth: 200 }}>
-            <TransactionFilterContainer />
+            <StatisticsFilterContainer />
           </Grid>
         </Grid>
         <Grid container direction="row" justify="space-evenly" className="mt-4">

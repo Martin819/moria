@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import TransactionFilter from './TransactionFilter';
+import FilterSelect from './FilterSelect';
 import { Grid } from '@material-ui/core/';
 import {
   FILTER_TIME_PERIOD,
@@ -20,7 +20,7 @@ const TransactionFilterArea = props => {
     <Fragment>
       <Grid container spacing={16}>
         <Grid item md={6} xs={12}>
-          <TransactionFilter
+          <FilterSelect
             label={FILTER_TIME_PERIOD.text}
             filterType={FILTER_TIME_PERIOD.id}
             selectedFilter={selectedTimePeriodFilter !== undefined ? selectedTimePeriodFilter.id : ''}
@@ -29,7 +29,7 @@ const TransactionFilterArea = props => {
           />
         </Grid>
         <Grid item md={6} xs={12}>
-          <TransactionFilter
+          <FilterSelect
             label={FILTER_DIRECTION.text}
             filterType={FILTER_DIRECTION.id}
             selectedFilter={selectedDirectionFilter !== undefined ? selectedDirectionFilter.id : ''}
