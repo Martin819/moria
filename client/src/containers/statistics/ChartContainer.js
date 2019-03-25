@@ -8,7 +8,11 @@ class ChartContainer extends Component {
   render() {
     return this.props.chartData.length > 0 ? (
       <CustomPieChart chartData={this.props.chartData} transactionSum={this.props.transactionSum} />
-    ) : null;
+    ) : (
+      <div className="text-center">
+        <h2>There is no data for this filter option period</h2>
+      </div>
+    );
   }
 }
 
@@ -17,10 +21,10 @@ ChartContainer.propTypes = {
 };
 
 const makeMapStateToProps = () => {
-  const getData = computeStatistics();
+  const computeStats = computeStatistics();
   const sum = sumTransactions();
   const mapStateToProps = (state, ownProps) => ({
-    chartData: getData(state, ownProps.direction),
+    chartData: computeStats(state, ownProps.direction),
     transactionSum: sum(state, ownProps.direction),
     isLoading: state.transactions.loading
   });

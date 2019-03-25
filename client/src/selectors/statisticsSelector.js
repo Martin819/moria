@@ -1,5 +1,6 @@
 import { createSelector } from 'reselect';
 import _ from 'lodash';
+import moment from 'moment';
 import { TransactionCategories } from '../constants/categories';
 import { TransactionDirections } from '../constants/transactions';
 import { filterByTimePeriod } from './transactionSelector';
@@ -41,6 +42,35 @@ export const computeStatistics = () =>
         .value();
     }
   );
+
+export const computeBarchartData = createSelector(
+  [getAllTransactions],
+  transactions => {
+    const incomingTransactions = transactions.filter(t => t.direction === TransactionDirections.INCOMING.id);
+    const outgoingTransactions = transactions.filter(t => t.direction === TransactionDirections.OUTGOING.id);
+    let now = moment();
+    let data = [];
+    for (let i = 0; i < 11; i++) {
+      const currentMonth = now.month();
+      const currentYear = now.year();
+      const monthlyIncomingTransactions = incomingTransactions.filter(
+        t => moment(t.valueDate).month() === currentMonth && moment(t.valueDate).year() === currentYear
+      );
+      const monthlyOutgoingTransactions = outgoingTransactions.filter(
+        t => moment(t.valueDate).month() === currentMonth && moment(t.valueDate).year() === currentYear
+      );
+
+      const monthlyIncome = _.sumBy(monthlyIncomingTransactions, 'transactionValueAmount');
+      const monthlyExpense = _.sumBy(monthlyOutgoingTransactions, 'transactionValueAmount');
+      data = [
+        { name: `${now.format('MMM')} '${now.format('YY')}`, Income: monthlyIncome, Expense: monthlyExpense },
+        ...data
+      ];
+      now.subtract(1, 'M');
+    }
+    return data;
+  }
+);
 
 export const sumTransactions = () =>
   createSelector(
