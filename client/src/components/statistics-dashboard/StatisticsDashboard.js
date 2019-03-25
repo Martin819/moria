@@ -2,8 +2,8 @@ import React, { Fragment } from 'react';
 import TableContainer from '../../containers/statistics/TableContainer';
 import { Grid, withStyles } from '@material-ui/core';
 import { TransactionDirections } from '../../constants/transactions';
-import PieChartArea from './chart-section/PieChartArea';
 import CustomBarChart from './chart-section/CustomBarChart';
+import CategoryOverviewAreaContainer from '../../containers/statistics/CategoryOverviewAreaContainer';
 
 const StatisticsDashboard = props => {
   return (
@@ -16,10 +16,11 @@ const StatisticsDashboard = props => {
             <CustomBarChart barChartData={props.barChartData} />
           ) : null}
         </Grid>
+        <Grid item xs={12} justify="center" className="mt-4">
+          <CategoryOverviewAreaContainer />
+        </Grid>
 
-        <PieChartArea isLoading={props.isLoading} />
-
-        <Grid container direction="row" justify="space-evenly" className="mt-4">
+        <Grid container direction="row" justify="space-evenly" className="mt-5">
           <Grid item lg={6} xs={12} className="p-2">
             <TableContainer direction={TransactionDirections.INCOMING.id} />
           </Grid>

@@ -15,11 +15,9 @@ class StatisticsTable extends React.Component {
         <tbody>
           {this.props.tableData.map((entry, index) => {
             return (
-              <Grow in={true} timeout={500 + 150 * index}>
-                <tr key={`Tr_${index}`}>
-                  <td key={`Td_${index}_1`} scope="row">
-                    {entry.name}
-                  </td>
+              <Grow key={index} in={true} timeout={500 + 150 * index}>
+                <tr>
+                  <td scope="row">{entry.name}</td>
                   <td key={`Td_${index}_2`} className="text-right">
                     {entry.value.toLocaleString('cs-cz', {
                       style: 'currency',

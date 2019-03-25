@@ -74,8 +74,9 @@ export const computeBarchartData = createSelector(
 
 export const sumTransactions = () =>
   createSelector(
-    [getTransactionsByDirection],
-    transactions => {
+    [getTransactionsByDirection, getAllFilters],
+    (transactions, filters) => {
+      transactions = filterTransactions(transactions, filters);
       return _.chain(transactions)
         .sumBy('transactionValueAmount')
         .value();
