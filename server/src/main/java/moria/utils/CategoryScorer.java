@@ -333,8 +333,4 @@ public class CategoryScorer {
     }
     return list;
   }
-
-  public void setListRuleset(List<Ruleset> ruleSetList) {
-    ruleSet = ruleSetList;
-  }
 }

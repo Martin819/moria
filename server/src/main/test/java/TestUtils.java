@@ -1,12 +1,7 @@
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
-import javax.persistence.Column;
-import javax.persistence.Embedded;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import moria.model.rules.Ruleset;
 
 import java.math.BigDecimal;
@@ -64,7 +59,7 @@ class TestUtils {
     return ruleset;
   }
 
-  static Transaction createTransaction(int id, int accountId, TransactionValue value, TransactionPartyAccount partyAccount, String partyDescription, String direction,
+  static Transaction createTransaction(String id, int accountId, TransactionValue value, TransactionPartyAccount partyAccount, String partyDescription, String direction,
       String transactionType, Date valueDate, Date bookingDate, String userDescription, String payerMessage, String payeeMessage, Integer categoryId,
       BigDecimal transactionFee, Boolean transactionFeeCanceled, TransactionAdditionalInfoDomestic additionalInfoDomestic,
       TransactionAdditionalInfoForeign additionalInfoForeign, TransactionAdditionalInfoCard additionalInfoCard) {
