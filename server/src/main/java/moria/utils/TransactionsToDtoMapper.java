@@ -52,14 +52,14 @@ public class TransactionsToDtoMapper {
     }
 
     public String getNormalizedAccountNumber(TransactionPartyAccount a) {
-        String ap = a.getPrefix().replaceFirst("^0+(?!$)", "");
-        String an = a.getAccountNumber().replaceFirst("^0+(?!$)", "");
-        String abc = a.getBankCode().replaceFirst("^0+(?!$)", "");
-        return ap + "-" + an + "/" + abc;
+        return getNormalizedAccountNumber(a.getPrefix(), a.getAccountNumber(), a.getBankCode());
     }
 
     public String getNormalizedAccountNumber (String prefix, String number, String bankCode) {
-        return getNormalizedAccountNumber(new TransactionPartyAccount(prefix, number, bankCode));
+        prefix = prefix.replaceFirst("^0+(?!$)", "");
+        number = number.replaceFirst("^0+(?!$)", "");
+        bankCode = bankCode.replaceFirst("^0+(?!$)", "");
+        return prefix + "-" + number + "/" + bankCode;
     }
 
 }
