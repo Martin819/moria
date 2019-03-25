@@ -35,12 +35,16 @@ public class TransactionsToDtoMapper {
             result = t.getPartyDescription();
         } else {
             if (t.getTransactionType().equals("CARD")) {
-                result = t.getAdditionalInfoCard().getMerchantName();
+                if (t.getAdditionalInfoCard().getMerchantName() != null && !t.getAdditionalInfoCard().getMerchantName().trim().equals("")) {
+                    result = t.getAdditionalInfoCard().getMerchantName();
+                }
             } else {
                 if (t.getUserDescription() != null && !t.getUserDescription().trim().equals("")) {
                     result = t.getUserDescription();
                 } else {
-                    result = getNormalizedAccountNumber(t.getPartyAccount());
+                    if (t.getPartyAccount().getAccountNumber() != null && !t.getPartyAccount().getAccountNumber().trim().equals("")) {
+                        result = getNormalizedAccountNumber(t.getPartyAccount());
+                    }
                 }
             }
         }
