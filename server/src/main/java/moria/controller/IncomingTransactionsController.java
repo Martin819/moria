@@ -16,6 +16,7 @@ import org.joda.time.LocalTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 import retrofit2.Retrofit;
@@ -70,14 +71,23 @@ public class IncomingTransactionsController {
 
     @GetMapping(path = "/fetchTransactions")
     public List<Transaction> fetchTransactions() throws IOException {
-        BankingAPIService service = new BankingAPIService();
-        List<Transaction> transactions = service.findTransactionsByDate("1990-01-01", "2020-12-31");
+        List<Transaction> transactions = APIservice.findTransactionsByDate("1990-01-01", "2020-12-31");
         return transactions;
     }
 
     @GetMapping(path = "/saveTransactions")
     public boolean saveTransactions() throws IOException {
         List<Transaction> transactions = APIservice.findTransactionsByDate("1990-01-01", "2020-12-31");
+        for (Transaction t:transactions) {
+            Transaction tra = utils.verifyTransactionForNullValues(t);
+            traService.saveNewTransaction(tra);
+        }
+        return true;
+    }
+
+    @GetMapping(path="/saveTransactions/{fromDate}/{toDate}")
+    public boolean saveTransactions(@PathVariable String fromDate, @PathVariable String toDate) throws IOException {
+        List<Transaction> transactions = APIservice.findTransactionsByDate(fromDate, toDate);
         for (Transaction t:transactions) {
             Transaction tra = utils.verifyTransactionForNullValues(t);
             traService.saveNewTransaction(tra);
