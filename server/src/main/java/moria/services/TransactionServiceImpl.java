@@ -2,6 +2,7 @@ package moria.services;
 
 import moria.model.transactions.Transaction;
 import moria.repository.TransactionRepository;
+import moria.utils.utils;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -105,6 +106,13 @@ public class TransactionServiceImpl implements TransactionService {
     public void saveNewTransaction(Transaction transaction) {
         if (!(getNumberOfTransactionsById(transaction.getId()) > 0)) {
             transactionRepository.save(transaction);
+        }
+    }
+
+    public void saveNewTransactionList(List<Transaction> list) {
+        for (Transaction t:list) {
+            Transaction tra = utils.verifyTransactionForNullValues(t);
+            saveNewTransaction(tra);
         }
     }
 

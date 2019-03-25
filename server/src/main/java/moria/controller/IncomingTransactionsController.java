@@ -78,20 +78,14 @@ public class IncomingTransactionsController {
     @GetMapping(path = "/saveTransactions")
     public boolean saveTransactions() throws IOException {
         List<Transaction> transactions = APIservice.findTransactionsByDate("1990-01-01", "2020-12-31");
-        for (Transaction t:transactions) {
-            Transaction tra = utils.verifyTransactionForNullValues(t);
-            traService.saveNewTransaction(tra);
-        }
+        traService.saveNewTransactionList(transactions);
         return true;
     }
 
     @GetMapping(path="/saveTransactions/{fromDate}/{toDate}")
     public boolean saveTransactions(@PathVariable String fromDate, @PathVariable String toDate) throws IOException {
         List<Transaction> transactions = APIservice.findTransactionsByDate(fromDate, toDate);
-        for (Transaction t:transactions) {
-            Transaction tra = utils.verifyTransactionForNullValues(t);
-            traService.saveNewTransaction(tra);
-        }
+        traService.saveNewTransactionList(transactions);
         return true;
     }
 
