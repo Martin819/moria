@@ -1,5 +1,7 @@
 # MOIS – Moria – Analýza plateb
 
+Server build: [![Build Status](http://194.182.88.14:8082/buildStatus/icon?job=build-server)](http://194.182.88.14:8082/job/build-server/)
+
 ## Funkční návrh
 - motivace, vize, high level pohled na řešení spolu s Big picture
 - Popis okolí microservice + rozhraní
