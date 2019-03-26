@@ -14,10 +14,10 @@ import java.util.TreeMap;
 
 public class CategoryScorer {
 
-  private static final double DIRECTION_SCORE = 1.75;
-  private static final int threshold = 75;
+  private static final int threshold = 75; //pro fuzzy
   private List<Ruleset> ruleSet;
   private Transaction transaction;
+  private boolean isBankAccountDifferentAndFilled; //pokud je v pravidle vyplněno číslo účtu musí mít transakce stejný číslo - pokud nema, hodi ji na true a hodí skore kategorie na 0
 
   /**
    * Evalute categoryId based on provided Transaction
@@ -37,6 +37,7 @@ public class CategoryScorer {
     TreeMap<Double, Integer> categories = new TreeMap<>();
     for (Ruleset rule : ruleSet) {
       double score = 0;
+      isBankAccountDifferentAndFilled = false;
       boolean isRuleDirecetionCorrect = true;
       if (transaction.getDirection().equals("INCOMING")) {
         if (rule.getDirection().equals("OUTGOING")) {
@@ -56,10 +57,12 @@ public class CategoryScorer {
 
       }
       if (isRuleDirecetionCorrect) {
-        if (checkNullForScoreParty(rule.getDirection(), rule.getPartyAccountPrefix(), rule.getPartyAccountNumber(), rule.getPartyBankCode(), rule.getPartyName())) {
-          score += scorePartyAccount(rule.getDirection(), rule.getPartyAccountPrefix(), rule.getPartyAccountNumber(), rule.getPartyBankCode(), rule.getPartyName());
-        } else {
-          score += scorePartyAccountNumberOnly(rule.getPartyAccountNumber(), rule.getPartyBankCode(), rule.getPartyName());
+        if (checkNullForScoreParty(rule.getPartyAccountPrefix(), rule.getPartyAccountNumber(), rule.getPartyBankCode())) {
+          score += scorePartyAccount(rule.getPartyAccountPrefix(), rule.getPartyAccountNumber(), rule.getPartyBankCode());
+        }
+
+        if (rule.getPartyName() != null){
+            score += scorePartyName(rule.getPartyName());
         }
 
         if (rule.getBookingTimeFrom() != null && rule.getBookingTimeTo() != null) {
@@ -90,7 +93,7 @@ public class CategoryScorer {
         }
 
         //podminka kvuli vybrani kategorie na zakladě incomming/outgoing
-        if (score == DIRECTION_SCORE) {
+        if (isBankAccountDifferentAndFilled) {
           score = 0;
         }
 
@@ -113,7 +116,15 @@ public class CategoryScorer {
 
   }
 
-  private double scorePartyAccountNumberOnly(String partyAccountNumber, String partyBankCode, String partyName) {
+    private double scorePartyName(String partyName) {
+      double score = 0;
+      if (transaction.getPartyDescription() != null){
+        if (partyName.contains(transaction.getPartyDescription())) score++;
+      }
+      return score;
+    }
+
+    private double scorePartyAccountNumberOnly(String partyAccountNumber, String partyBankCode) {
     double score = 0;
     if (partyAccountNumber != null && !partyAccountNumber.isEmpty() && transaction.getPartyAccount() != null && transaction.getPartyAccount().getAccountNumber() != null) {
       if (transaction.getPartyAccount().getAccountNumber().contains(partyAccountNumber)) {
@@ -123,11 +134,6 @@ public class CategoryScorer {
 
     if (partyBankCode != null && transaction.getPartyAccount() != null && transaction.getPartyAccount().getBankCode() != null) {
       if (transaction.getPartyAccount().getBankCode().contains(partyBankCode)) {
-        score++;
-      }
-    }
-    if (partyName != null && transaction.getPartyAccount() != null && transaction.getPartyDescription() != null) {
-      if (transaction.getPartyDescription().contains(partyName)) {
         score++;
       }
     }
@@ -191,13 +197,13 @@ public class CategoryScorer {
     return (cardNumber != null && cardNumberValue != null);
   }
 
-  private boolean checkNullForScoreParty(String direction, String partyPrefixValue, String partyAccountNumberValue, String partyBankCodeValue, String partyDescriptionValue) {
+  private boolean checkNullForScoreParty(String partyPrefixValue, String partyAccountNumberValue, String partyBankCodeValue) {
     TransactionPartyAccount transactionPartyAccount = transaction.getPartyAccount();
 
-    return (transaction != null && direction != null && transactionPartyAccount != null && partyPrefixValue != null && transactionPartyAccount.getPrefix() != null
+    return (transaction != null && transactionPartyAccount != null && partyPrefixValue != null && transactionPartyAccount.getPrefix() != null
         && partyAccountNumberValue != null && transactionPartyAccount.getAccountNumber() != null
         && partyBankCodeValue != null && transactionPartyAccount.getBankCode() != null
-        && partyDescriptionValue != null && transaction != null && transaction.getPartyDescription() != null);
+        && transaction != null);
   }
 
 
@@ -265,27 +271,15 @@ public class CategoryScorer {
     return score;
   }
 
-  private double scorePartyAccount(String direction, String partyPrefixValue, String partyAccountNumberValue, String partyBankCodeValue, String partyDescriptionValue) {
+  private double scorePartyAccount(String partyPrefixValue, String partyAccountNumberValue, String partyBankCodeValue) {
     double score = 0;
     TransactionPartyAccount transactionPartyAccount = transaction.getPartyAccount();
 
-    if (transaction != null && direction != null) {
-      if (transaction.getDirection().equals(direction)) {
-        score += DIRECTION_SCORE;
-      }
-    }
-
-    if (transactionPartyAccount.getPrefix().contains(partyPrefixValue)) {
-      score += 2;
-    }
-    if (transactionPartyAccount.getAccountNumber().contains(partyAccountNumberValue)) {
-      score += 2;
-    }
-    if (transactionPartyAccount.getBankCode().contains(partyBankCodeValue)) {
-      score += 2;
-    }
-    if (partyDescriptionValue.contains(transaction.getPartyDescription())) {
-      score += 2;
+    if (transactionPartyAccount.getPrefix().contains(partyPrefixValue) && transactionPartyAccount.getAccountNumber().contains(partyAccountNumberValue)
+    && transactionPartyAccount.getBankCode().contains(partyBankCodeValue)){
+      score += 100;
+    }else if (!partyAccountNumberValue.isEmpty()){
+       isBankAccountDifferentAndFilled = true;
     }
 
     return score;

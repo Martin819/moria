@@ -71,20 +71,6 @@ public class CategoryScorerTest {
   }
 
   @Test
-  public void testExample() {
-    myRulesets = new ArrayList<>(Arrays.asList(TestUtils.createTestRuleset(1, "INCOMING", 111, "PAYMENT_HOME",
-        new BigDecimal("1000.00"), new BigDecimal("2000.00"))));
-
-    // az budes testovat jakoukoliv logiku, tak si budes muset namockovat data, ktera by jinak realne prisla z databaze
-    // napriklad v pripade, az se v prubehu testu zavola rulesetService.findAllRulesets(), tak se nebude sahat do databaze, ale vrati se myRulesets
-    Mockito.when(rulesetService.findAllRulesets()).thenReturn(myRulesets);
-
-    // jen tu testuju, ze se opravdu vratilo myRulesets
-    Assert.assertEquals(myRulesets, rulesetService.findAllRulesets());
-
-  }
-
-  @Test
   public void testProperCategory() {
 
     //TODO - Vláďa
