@@ -1,7 +1,7 @@
-import React, { Fragment, Component } from 'react';
+import React, { Component } from 'react';
 import moment from 'moment';
 import { withStyles, ExpansionPanel, ExpansionPanelSummary, Typography, Grid, Grow } from '@material-ui/core/';
-import { Button, Form, FormGroup, Col, Row, Label, Input } from 'reactstrap';
+import { Button, Form, FormGroup, Col, Row, Input } from 'reactstrap';
 import {
   OutgoingTransactionCategories,
   TransactionCategories,
@@ -57,6 +57,16 @@ class TransactionItem extends Component {
     const transactionTypeText = transactionTypeEnum === undefined ? 'Unknown' : transactionTypeEnum.text;
     const transactionCategories =
       direction === TransactionDirections.INCOMING.id ? IncomingTransactionCategories : OutgoingTransactionCategories;
+    const detailCardPayments = { 'Party description': partyDescription };
+    const detailTransfers = {
+      'Party description': partyDescription,
+      'Party account': `${transactionPartyAccountPrefix}-${transactionPartyAccountAccountNumber}/${transactionPartyAccountBankCode}`,
+      'Variable symbol': transactionAdditionalInfoDomesticVariableSymbol,
+      'Constant symbol': transactionAdditionalInfoDomesticConstantSymbol,
+      'Payer message': payerMessage,
+      'Payee message': payeeMessage
+    };
+
     return (
       <Grow in={true} timeout={500 + 100 * index}>
         <ExpansionPanel>
@@ -143,7 +153,9 @@ class TransactionItem extends Component {
               </Grid>
             </Grid>
           </ExpansionPanelSummary>
-          <TransactionItemPanelDetail message={payeeMessage} category={categoryId} />
+          <TransactionItemPanelDetail
+            detail={transactionType === TransactionTypes.CARD.id ? detailCardPayments : detailTransfers}
+          />
         </ExpansionPanel>
       </Grow>
     );
