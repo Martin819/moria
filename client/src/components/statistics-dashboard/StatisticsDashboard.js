@@ -11,9 +11,11 @@ const StatisticsDashboard = props => {
       <h1>Statistics</h1>
       <Grid container direction="column">
         <Grid container item xs={12} style={{ minWidth: 200 }} justify="center">
-          <h3>Income / Expense last 12 months</h3>
           {props.barChartData.length > 0 && !props.isLoading ? (
-            <CustomBarChart barChartData={props.barChartData} />
+            <Fragment>
+              <h3>Income / Expense last 12 months</h3>
+              <CustomBarChart barChartData={props.barChartData} />
+            </Fragment>
           ) : null}
         </Grid>
         <Grid item xs={12} justify="center" className="mt-4">
