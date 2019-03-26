@@ -39,6 +39,7 @@ export const computeStatistics = () =>
             value: _.sumBy(t, 'transactionValueAmount')
           };
         })
+        .orderBy('value', 'desc')
         .value();
     }
   );
