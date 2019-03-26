@@ -1,19 +1,16 @@
 package moria.utils;
 
-import java.math.BigDecimal;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.TreeMap;
 import me.xdrop.fuzzywuzzy.FuzzySearch;
 import moria.SpringContext;
-import moria.dto.Category;
 import moria.model.rules.Ruleset;
 import moria.model.transactions.Transaction;
 import moria.model.transactions.TransactionPartyAccount;
 import moria.services.RulesetService;
-import moria.services.TransactionService;
+
+import java.math.BigDecimal;
+import java.time.LocalTime;
+import java.util.List;
+import java.util.TreeMap;
 
 public class CategoryScorer {
 
@@ -21,10 +18,6 @@ public class CategoryScorer {
   private static final int threshold = 75;
   private List<Ruleset> ruleSet;
   private Transaction transaction;
-
-
-  //for test purpose only
-  private int category;
 
   /**
    * Evalute categoryId based on provided Transaction
@@ -302,10 +295,6 @@ public class CategoryScorer {
     return SpringContext.getBean(RulesetService.class);
   }
 
-  private TransactionService getTransactionService() {
-    return SpringContext.getBean(TransactionService.class);
-  }
-
 
   private void loadAllRules() {
     // vytáhnutí pravidel z databáze
@@ -315,22 +304,5 @@ public class CategoryScorer {
   }
 
   public CategoryScorer() {
-    //for test purpose only
-
-  }
-
-  public ArrayList<Category> findCategoriesForTransaction() {
-    ArrayList<Category> list = new ArrayList<>();
-    TransactionService transactionService = getTransactionService();
-    List<Transaction> transactionList = transactionService.findAllTransactions();
-    for (Transaction transaction : transactionList) {
-      if (transaction.getCategoryId() == 0) {
-        category = scoreCategories(transaction);
-        transactionService.setCategoryIdForTransactionById(transaction.getId(), category);
-        Category cat = new Category(category, transaction.getId());
-        list.add(cat);
-      }
-    }
-    return list;
   }
 }

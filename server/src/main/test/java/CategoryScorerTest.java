@@ -38,13 +38,6 @@ public class CategoryScorerTest {
   private RulesetService rulesetService;
 
   @MockBean // vytvori jen mocknutou servisu, ktera nebude sahat do databaze
-  private TransactionService transactionService;
-
-  //uprimne vubec netusim, proc je potreba nainjektovat i toto, ale bez toho ten test padal
-  @MockBean
-  private IncomingTransactionsController incomingTransactionsController;
-
-  @MockBean // vytvori jen mocknutou servisu, ktera nebude sahat do databaze
   private CategoryScorer categoryScorer;
 
   private List<Ruleset> myRulesets;

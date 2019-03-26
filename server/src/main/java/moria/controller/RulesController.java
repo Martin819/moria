@@ -2,6 +2,7 @@ package moria.controller;
 
 import moria.model.rules.Ruleset;
 import moria.services.RulesetService;
+import moria.utils.TransactionCategorizer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -48,6 +49,8 @@ public class RulesController {
     @PostMapping (path = "rules/remove")
     public ResponseEntity<Void> removeRule(@RequestBody List<Integer> ids) {
         rulesetService.deleteByIdIn(ids);
+        TransactionCategorizer transactionCategorizer = new TransactionCategorizer();
+        transactionCategorizer.categorizeAllTransaction();
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

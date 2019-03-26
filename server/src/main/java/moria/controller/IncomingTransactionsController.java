@@ -1,25 +1,23 @@
 package moria.controller;
 
 import java.io.IOException;
-import java.lang.reflect.Field;
-import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import me.xdrop.fuzzywuzzy.FuzzySearch;
 import moria.bankingApiClient.BankingAPIService;
 import moria.dto.Category;
+import moria.dto.TransactionDto;
 import moria.model.transactions.Transaction;
 import moria.services.TransactionServiceImpl;
 import moria.utils.Categories;
-import moria.utils.CategoryScorer;
-import moria.utils.utils;
+import moria.utils.TransactionCategorizer;
 import org.joda.time.LocalTime;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
-import retrofit2.Retrofit;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,8 +36,8 @@ public class IncomingTransactionsController {
     @GetMapping(path = "/plsCategorize", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public String[] sendItems() {
 
-        CategoryScorer categoryScorer = new CategoryScorer();
-        ArrayList<Category> list = categoryScorer.findCategoriesForTransaction();
+        TransactionCategorizer transactionCategorizer = new TransactionCategorizer();
+        ArrayList<Category> list = transactionCategorizer.findCategoriesForAllUncategorizedTransactionWithListing();
 
         String[] strings = new String[list.size()];
         for (int i = 0; i < strings.length ; i++ ){
@@ -55,7 +53,7 @@ public class IncomingTransactionsController {
         return String.valueOf(FuzzySearch.partialRatio("0", ""));
     }
 
-  // jen pro testovací účely
+    // jen pro testovací účely
     @GetMapping(path = "/time", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public String timeTest() {
 
@@ -69,6 +67,14 @@ public class IncomingTransactionsController {
         return proper.toString();
     }
 
+    @GetMapping(value = "/categorize")
+    public ResponseEntity<Void> categorizeTransactionWithoutCategoryID() {
+        TransactionCategorizer transactionCategorizer = new TransactionCategorizer();
+        transactionCategorizer.findCategoriesForAllUncategorizedTransactionWithoutListing();
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+
     @GetMapping(path = "/fetchTransactions")
     public List<Transaction> fetchTransactions() throws IOException {
         List<Transaction> transactions = APIservice.findTransactionsByDate("1990-01-01", "2020-12-31");
@@ -79,6 +85,8 @@ public class IncomingTransactionsController {
     public boolean saveTransactions() throws IOException {
         List<Transaction> transactions = APIservice.findTransactionsByDate("1990-01-01", "2020-12-31");
         traService.saveNewTransactionList(transactions);
+        TransactionCategorizer transactionCategorizer = new TransactionCategorizer();
+        transactionCategorizer.categorizeTransaction(transactions);
         return true;
     }
 
