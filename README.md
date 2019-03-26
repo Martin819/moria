@@ -2,6 +2,8 @@
 
 Server build: [![Build Status](http://194.182.88.14:8082/buildStatus/icon?job=build-server)](http://194.182.88.14:8082/job/build-server/)
 
+Client build: [![Build Status](http://194.182.88.14:8082/buildStatus/icon?job=build-client)](http://194.182.88.14:8082/job/build-client/)
+
 ## Funkční návrh
 - motivace, vize, high level pohled na řešení spolu s Big picture
 - Popis okolí microservice + rozhraní
