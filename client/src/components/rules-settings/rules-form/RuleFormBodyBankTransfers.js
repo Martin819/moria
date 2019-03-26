@@ -1,8 +1,8 @@
 import React, { Fragment } from 'react';
 import { Row, Col, FormGroup, FormFeedback, Label, Input } from 'reactstrap';
 
-const prefixRegex = /^[0-9]{0,6}$/;
-const bankAccountRegex = /^[0-9]{0,10}$/;
+const prefixRegex = /^[0-9]{0,8}$/;
+const bankAccountRegex = /^[0-9]{0,12}$/;
 const bankCodeRegex = /^[0-9]{4}$/;
 
 const RuleFormBodyBankTransfers = props => {
@@ -33,7 +33,7 @@ const RuleFormBodyBankTransfers = props => {
             invalid={!prefixRegex.test(partyAccountPrefix)}
             value={partyAccountPrefix}
             bsSize="sm"
-            maxLength="6"
+            maxLength="8"
             onChange={e => handleChange(e)}
           />
           <FormFeedback>Invalid.</FormFeedback>
@@ -48,7 +48,7 @@ const RuleFormBodyBankTransfers = props => {
             invalid={!bankAccountRegex.test(partyAccountNumber)}
             value={partyAccountNumber}
             bsSize="sm"
-            maxLength="10"
+            maxLength="12"
             onChange={e => handleChange(e)}
           />
           <FormFeedback>Invalid.</FormFeedback>
