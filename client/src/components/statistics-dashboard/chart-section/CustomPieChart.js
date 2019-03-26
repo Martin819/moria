@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { PieChart, Pie, Cell, Legend, ResponsiveContainer } from 'recharts';
-import { COLORS } from '../../../constants/colors';
+import {COLORS_INCOME} from '../../../constants/colors';
 import { isEqual } from 'lodash';
 
-const graphColors = COLORS;
+const graphColors = COLORS_INCOME;
 
 const RADIAN = Math.PI / 180;
 const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent }) => {

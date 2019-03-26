@@ -19,8 +19,8 @@ const CustomBarChart = props => {
               paddingLeft: '10px'
             }}
           />
-          <Bar dataKey="Income" fill="#00ff00" />
-          <Bar dataKey="Expense" fill="#ff0000" />
+          <Bar dataKey="Income" fill="#71ae1e" />
+          <Bar dataKey="Expense" fill="#cc3c29" />
         </BarChart>
       </ResponsiveContainer>
     </div>
