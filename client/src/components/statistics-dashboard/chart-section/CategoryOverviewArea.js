@@ -2,6 +2,7 @@ import React, { Fragment } from 'react';
 import CustomPieChart from './CustomPieChart';
 import StatisticsFilterArea from '../filters/StatisticsFilterArea';
 import { Grid } from '@material-ui/core';
+import { TransactionDirections } from '../../../constants/transactions';
 
 const CategoryOverviewArea = props => {
   const { incomeChartData, expensesChartData, incomeSum, expensesSum, isLoading, filters, handleFilterChange } = props;
@@ -24,7 +25,7 @@ const CategoryOverviewArea = props => {
                   currency: 'CZK'
                 })}
               </h4>
-              <CustomPieChart chartData={incomeChartData} />
+              <CustomPieChart chartData={incomeChartData} direction={TransactionDirections.INCOMING.id} />
             </div>
           ) : (
             <div className="text-center">
@@ -42,7 +43,7 @@ const CategoryOverviewArea = props => {
                   currency: 'CZK'
                 })}
               </h4>
-              <CustomPieChart chartData={expensesChartData} />
+              <CustomPieChart chartData={expensesChartData} direction={TransactionDirections.OUTGOING.id} />
             </div>
           ) : (
             <div className="text-center">
