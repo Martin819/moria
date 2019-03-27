@@ -2,9 +2,9 @@ import React, { Fragment } from 'react';
 import { ExpansionPanelDetails, Grid, Typography } from '@material-ui/core';
 
 const TransactionItemPanelDetail = props => {
-  const { detail } = props;
+  const { detail, accountPreferredColor } = props;
   return (
-    <ExpansionPanelDetails>
+    <ExpansionPanelDetails style={{ borderLeft: `6px solid ${accountPreferredColor}` }}>
       <Grid container direction="column">
         <Grid item>
           <hr />

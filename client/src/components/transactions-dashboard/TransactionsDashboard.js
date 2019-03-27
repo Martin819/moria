@@ -1,11 +1,13 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import TransactionListContainer from '../../containers/transactions/TransactionListContainer';
+import AccountsContainer from '../../containers/transactions/AccountsContainer';
 
 const TransactionsDashboard = () => {
   return (
-    <div>
+    <Fragment>
+      <AccountsContainer />
       <TransactionListContainer />
-    </div>
+    </Fragment>
   );
 };
 

@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { getData, handleTransactionCategoryUpdate } from '../../actions/transactionActions';
 import TransactionList from '../../components/transactions-dashboard/transaction-list/TransactionList';
-import AccountBalanceInfo from '../../components/transactions-dashboard/account-balance-info/AccountBalanceInfo';
 import { bindActionCreators } from 'redux';
 import { computeAccountBalance } from '../../selectors/statisticsSelector';
 import { filterTransactions } from '../../selectors/transactionSelector';
@@ -16,7 +15,7 @@ class TransactionListContainer extends Component {
   render() {
     return (
       <Fragment>
-        <AccountBalanceInfo balance={this.props.accountBalance} />
+        {/* <AccountBalanceInfo balance={this.props.accountBalance} /> */}
         <TransactionList {...this.props} />
       </Fragment>
     );

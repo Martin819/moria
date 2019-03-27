@@ -52,6 +52,7 @@ class TransactionItem extends Component {
     const {
       classes,
       index,
+      accountPreferredColor,
       direction,
       partyDescription,
       transactionPartyAccountPrefix,
@@ -87,7 +88,10 @@ class TransactionItem extends Component {
     return (
       <Grow in={true} timeout={500 + 100 * index}>
         <ExpansionPanel>
-          <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+          <ExpansionPanelSummary
+            expandIcon={<ExpandMoreIcon />}
+            style={{ borderLeft: `6px solid ${accountPreferredColor}` }}
+          >
             <Grid container direction="row" spacing={24}>
               <Grid item>
                 <Typography className={classes.date}>{moment(valueDate).format('DD MMM YYYY')}</Typography>
@@ -237,6 +241,7 @@ class TransactionItem extends Component {
           </ExpansionPanelSummary>
           <TransactionItemPanelDetail
             detail={transactionType === TransactionTypes.CARD.id ? detailCardPayments : detailTransfers}
+            accountPreferredColor={accountPreferredColor}
           />
         </ExpansionPanel>
       </Grow>
