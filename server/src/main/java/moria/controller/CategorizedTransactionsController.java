@@ -33,7 +33,7 @@ public class CategorizedTransactionsController {
     /**
      * Change categoryId of given transaction
      * @param categoryToUpdateDto - contains transaction id and category id
-     * @return
+     * @return ok
      */
     @PutMapping(value = "/transactions/update")
     public ResponseEntity<Void> changeCategory(@RequestBody CategoryToUpdateDto categoryToUpdateDto) {

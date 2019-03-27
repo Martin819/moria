@@ -33,7 +33,7 @@ public class RulesController {
     /**
      * Create new rule
      * @param rule - rule to create
-     * @return
+     * @return HttpStatus.CREATED
      */
     @PostMapping(path = "rules")
     public ResponseEntity<Ruleset> createRule(@RequestBody Ruleset rule) {
@@ -56,7 +56,7 @@ public class RulesController {
     /**
      * Update rule
      * @param rule - rule to update
-     * @return
+     * @return ok
      */
     @PutMapping (path = "rules")
     public ResponseEntity<Ruleset> updateRule(@RequestBody Ruleset rule) {

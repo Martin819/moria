@@ -46,26 +46,6 @@ public class IncomingTransactionsController {
         return strings;
     }
 
-    // jen pro testovací účely
-    @GetMapping(path = "/fuzzy", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public String fuzzyTest() {
-
-        return String.valueOf(FuzzySearch.partialRatio("0", ""));
-    }
-
-    // jen pro testovací účely
-    @GetMapping(path = "/time", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public String timeTest() {
-
-        Date date = new Date();
-        LocalTime localTime = LocalTime.fromDateFields(date);
-
-        java.time.LocalTime localTimeJava = java.time.LocalTime.of(21, 30, 59, 11001);
-
-        LocalTime proper = new LocalTime(localTime.getHourOfDay(), localTime.getMinuteOfHour(), localTime.getSecondOfMinute());
-        return proper.toString();
-    }
-
     @GetMapping(value = "/categorize")
     public ResponseEntity<Void> categorizeTransactionWithoutCategoryID() {
         TransactionCategorizer transactionCategorizer = new TransactionCategorizer();
