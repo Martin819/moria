@@ -1,7 +1,18 @@
 import React, { Component } from 'react';
 import moment from 'moment';
 import { withStyles, ExpansionPanel, ExpansionPanelSummary, Typography, Grid, Grow } from '@material-ui/core/';
-import { Button, Form, FormGroup, Col, Row, Input } from 'reactstrap';
+import {
+  Button,
+  Form,
+  FormGroup,
+  Col,
+  Row,
+  Input,
+  ButtonDropdown,
+  DropdownToggle,
+  DropdownMenu,
+  Label
+} from 'reactstrap';
 import {
   OutgoingTransactionCategories,
   TransactionCategories,
@@ -16,9 +27,16 @@ class TransactionItem extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      categoryId: props.categoryId
+      categoryId: props.categoryId,
+      dropdownOpen: false
     };
   }
+
+  toggleDropdown = () => {
+    this.setState({
+      dropdownOpen: !this.state.dropdownOpen
+    });
+  };
 
   handleCategoryChange = event => {
     this.setState({ categoryId: parseInt(event.target.value) });
@@ -57,9 +75,8 @@ class TransactionItem extends Component {
     const transactionTypeText = transactionTypeEnum === undefined ? 'Unknown' : transactionTypeEnum.text;
     const transactionCategories =
       direction === TransactionDirections.INCOMING.id ? IncomingTransactionCategories : OutgoingTransactionCategories;
-    const detailCardPayments = { 'Party description': partyDescription };
+    const detailCardPayments = { 'Merchant name': transactionAdditionalInfoCardMerchantName };
     const detailTransfers = {
-      'Party description': partyDescription,
       'Party account': `${transactionPartyAccountPrefix}-${transactionPartyAccountAccountNumber}/${transactionPartyAccountBankCode}`,
       'Variable symbol': transactionAdditionalInfoDomesticVariableSymbol,
       'Constant symbol': transactionAdditionalInfoDomesticConstantSymbol,
@@ -79,20 +96,20 @@ class TransactionItem extends Component {
                 <Grid container justify="space-between" alignItems="center">
                   <Grid item xs={9}>
                     <Row>
-                      <Col sm={4}>
+                      <Col xs={4}>
                         <Badge color="warning" pill>
                           {categoryText}
                         </Badge>
-                        <Typography className={classes.heading}>{transactionAdditionalInfoCardMerchantName}</Typography>
+                        <Typography className={classes.heading}>{partyDescription}</Typography>
                         <Typography>
                           <span className={classes.secondaryHeading}>{transactionTypeText}</span>
                         </Typography>
                       </Col>
-                      <Col sm={4}>
-                        <Form>
-                          <FormGroup inline className="mt-3 mr-2">
-                            <Row form>
-                              <Col sm={10} className="p-0">
+                      <Col xs={8}>
+                        <Grid container justify="flex-start" alignItems="center" className="mt-3">
+                          <Grid item>
+                            <Form inline>
+                              <FormGroup>
                                 <Input
                                   type="select"
                                   name="categorySelect"
@@ -101,8 +118,10 @@ class TransactionItem extends Component {
                                   onClick={e => {
                                     e.stopPropagation();
                                   }}
+                                  disabled={transactionType === TransactionTypes.CASH.id}
                                   value={this.state.categoryId}
                                   bsSize="sm"
+                                  style={{ width: 200 }}
                                 >
                                   {Object.values(transactionCategories).map(c => (
                                     <option key={c.id} value={c.id}>
@@ -110,22 +129,85 @@ class TransactionItem extends Component {
                                     </option>
                                   ))}
                                 </Input>
-                              </Col>
-                              <Col sm={2} className="p-0">
+
                                 <Button
                                   color="primary"
                                   type="submit"
                                   className="ml-md-2"
-                                  disabled={categoryId === this.state.categoryId}
+                                  disabled={
+                                    categoryId === this.state.categoryId || transactionType === TransactionTypes.CASH.id
+                                  }
                                   size="sm"
                                   onClick={this.handleTransactionCategoryUpdate}
                                 >
                                   Save
                                 </Button>
-                              </Col>
-                            </Row>
-                          </FormGroup>
-                        </Form>
+                              </FormGroup>
+                            </Form>
+                          </Grid>
+                          <Grid item className="ml-md-2">
+                            {transactionType === TransactionTypes.CASH.id && (
+                              <ButtonDropdown
+                                isOpen={this.state.dropdownOpen}
+                                toggle={this.toggleDropdown}
+                                onClick={e => {
+                                  e.stopPropagation();
+                                }}
+                              >
+                                <DropdownToggle caret size="sm" color="warning">
+                                  Split..
+                                </DropdownToggle>
+                                <DropdownMenu className="p-2" positionFixed>
+                                  <Form>
+                                    <FormGroup>
+                                      <Label for="">Amount</Label>
+                                      <Input
+                                        name=""
+                                        id=""
+                                        placeholder="100.00"
+                                        // value={this.props.valueTo}
+                                        className="text-right"
+                                        // onChange={e => this.props.handleChange(e)}
+                                        bsSize="sm"
+                                        type="number"
+                                        min="0.01"
+                                        step="0.01"
+                                      />
+                                      <Label for="" className="mt-2">
+                                        Into category
+                                      </Label>
+                                      <Input
+                                        type="select"
+                                        name="categorySelect"
+                                        id="categorySelect"
+                                        onChange={e => this.handleCategoryChange(e)}
+                                        value={this.state.categoryId}
+                                        bsSize="sm"
+                                        style={{ width: 200 }}
+                                      >
+                                        {Object.values(transactionCategories).map(c => (
+                                          <option key={c.id} value={c.id}>
+                                            {c.text}
+                                          </option>
+                                        ))}
+                                      </Input>
+                                      <div className="text-right">
+                                        <Button
+                                          color="primary"
+                                          className="mt-2"
+                                          size="sm"
+                                          onClick={this.handleTransactionCategoryUpdate}
+                                        >
+                                          SAVE
+                                        </Button>
+                                      </div>
+                                    </FormGroup>
+                                  </Form>
+                                </DropdownMenu>
+                              </ButtonDropdown>
+                            )}
+                          </Grid>
+                        </Grid>
                       </Col>
                     </Row>
                   </Grid>
