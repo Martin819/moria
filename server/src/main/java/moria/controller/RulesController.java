@@ -5,7 +5,6 @@ import moria.services.RulesetService;
 import moria.utils.TransactionCategorizer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -39,6 +38,8 @@ public class RulesController {
     @PostMapping(path = "rules")
     public ResponseEntity<Ruleset> createRule(@RequestBody Ruleset rule) {
         Ruleset ruleset = rulesetService.saveRuleset(rule);
+        TransactionCategorizer transactionCategorizer = new TransactionCategorizer();
+        transactionCategorizer.findCategoriesForAllTransaction(true);
         return new ResponseEntity<>(ruleset, HttpStatus.CREATED);
     }
 
@@ -49,8 +50,6 @@ public class RulesController {
     @PostMapping (path = "rules/remove")
     public ResponseEntity<Void> removeRule(@RequestBody List<Integer> ids) {
         rulesetService.deleteByIdIn(ids);
-        TransactionCategorizer transactionCategorizer = new TransactionCategorizer();
-        transactionCategorizer.categorizeAllTransaction();
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

@@ -38,6 +38,7 @@ public class CategorizedTransactionsController {
     @PutMapping(value = "/transactions/update")
     public ResponseEntity<Void> changeCategory(@RequestBody CategoryToUpdateDto categoryToUpdateDto) {
         transactionService.setCategoryIdForTransactionById(categoryToUpdateDto.getId(), categoryToUpdateDto.getCategoryId());
+        transactionService.setManuallyUpdateCategory(categoryToUpdateDto.getId());
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

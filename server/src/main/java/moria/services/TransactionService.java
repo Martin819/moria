@@ -33,6 +33,8 @@ public interface TransactionService {
 
     void setCategoryIdForTransactionById(String transactionId, int categoryId);
 
+    void setManuallyUpdateCategory(String transactionId);
+
     void saveTransaction(Transaction transaction);
 
     void saveTransactionList(List<Transaction> list);

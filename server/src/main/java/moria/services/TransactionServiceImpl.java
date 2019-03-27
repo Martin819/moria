@@ -93,6 +93,12 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     @Modifying
+    public void setManuallyUpdateCategory(String transactionId) {
+        transactionRepository.setManuallyUpdateCategoryById(transactionId);
+    }
+
+    @Override
+    @Modifying
     public void saveTransaction(Transaction transaction) {
         transactionRepository.save(transaction);
     }

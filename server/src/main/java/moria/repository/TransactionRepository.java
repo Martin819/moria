@@ -27,10 +27,15 @@ public interface TransactionRepository extends JpaRepository<Transaction, Intege
 
     List<Transaction> findByTransactionTypeIgnoreCase(String transactionType);
 
-    @Modifying
+    @Modifying(clearAutomatically = true)
     @Transactional
     @Query("update transactions t set t.categoryId = ?2 where t.id = ?1")
     void setCategoryIdForTransactionById(String transactionId, int categoryId);
+
+    @Modifying
+    @Transactional
+    @Query("update transactions transaction set transaction.isCategoryManuallyAssigned = TRUE where transaction.id = ?1")
+    void setManuallyUpdateCategoryById(String transactionId);
 
     @Query("SELECT COUNT(id) FROM transactions t WHERE t.id = ?1")
     int getNumberOfTransactionsById(String transactionId);

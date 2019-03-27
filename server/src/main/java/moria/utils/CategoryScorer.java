@@ -27,10 +27,6 @@ public class CategoryScorer {
    */
 
   public int scoreCategories(Transaction transaction) {
-    if (ruleSet == null) {
-      loadAllRules();
-    }
-
     this.transaction = transaction;
 
     //sem se budou hodnotit skore pravdepodobnosti, kam to ma spadnout - nejdřív zkopíruju názvy kategorií do HashMapy
@@ -123,22 +119,6 @@ public class CategoryScorer {
       }
       return score;
     }
-
-    private double scorePartyAccountNumberOnly(String partyAccountNumber, String partyBankCode) {
-    double score = 0;
-    if (partyAccountNumber != null && !partyAccountNumber.isEmpty() && transaction.getPartyAccount() != null && transaction.getPartyAccount().getAccountNumber() != null) {
-      if (transaction.getPartyAccount().getAccountNumber().contains(partyAccountNumber)) {
-        score++;
-      }
-    }
-
-    if (partyBankCode != null && transaction.getPartyAccount() != null && transaction.getPartyAccount().getBankCode() != null) {
-      if (transaction.getPartyAccount().getBankCode().contains(partyBankCode)) {
-        score++;
-      }
-    }
-    return score;
-  }
 
   /**
    * check if parameters of ruleset are null
@@ -285,18 +265,9 @@ public class CategoryScorer {
     return score;
   }
 
-  private RulesetService getRulesetService() {
-    return SpringContext.getBean(RulesetService.class);
-  }
 
 
-  private void loadAllRules() {
-    // vytáhnutí pravidel z databáze
-    RulesetService rulesetService = getRulesetService();
-    ruleSet = rulesetService.findAllRulesets();
-
-  }
-
-  public CategoryScorer() {
+  public CategoryScorer(List<Ruleset> ruleSet) {
+      this.ruleSet = ruleSet;
   }
 }

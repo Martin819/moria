@@ -28,24 +28,18 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.AUTO_CONFIGURED)
-@ContextConfiguration(classes = {ServerApplication.class})
+
 public class CategoryScorerTest {
 
-  @MockBean // vytvori jen mocknutou servisu, ktera nebude sahat do databaze
-  private RulesetService rulesetService;
-
-  @MockBean // vytvori jen mocknutou servisu, ktera nebude sahat do databaze
+  // vytvori jen mocknutou servisu, ktera nebude sahat do databaze
   private CategoryScorer categoryScorer;
 
-  private List<Ruleset> myRulesets;
   private List<Transaction> transactionList;
 
   @Before
   public void init() {
-    myRulesets = new ArrayList<>();
+
+    List<Ruleset> myRulesets = new ArrayList<>();
     transactionList = new ArrayList<>();
     myRulesets.add(TestUtils.createTestRulesetFull(2, "Pravidlo 1", "Billa", 111, "OUTGOING", "CARD", new BigDecimal(50), new BigDecimal(2000),
         null, null, null, null, "thanks for your payment", null, null, null, String.valueOf(LocalTime.of(5, 0)),
@@ -65,25 +59,12 @@ public class CategoryScorerTest {
         TestUtils.parseDate(8, 30, 0), TestUtils.parseDate(20, 30, 0), null, "dekujeme za navstevu kina Cinestar", null,
         null, null, null, null, null, new TransactionAdditionalInfoCard()));
 
-    //tady jsem smazala ukladani do db - v unit testu se s databazi nepracuje, data si mockujes, viz metoda Mockito.when...
-
-    categoryScorer = new CategoryScorer();
+    categoryScorer = new CategoryScorer(myRulesets);
   }
 
   @Test
   public void testProperCategory() {
 
-    //TODO - Vláďa
-    //priklad, jak bys mohl udelat test obecne na cely CategoryScorer
-    //vytvoris testovaci ruleset pres TestUtils
-    //vytvoris testovaci transakci pres TestUtils
-    //zavolas metodu scoreCategories
-    // assertujes, ze id kategorie, kterou ti vrati scoreCategories je ta, kterou ocekavas
-
-    // ta metoda předtim tu byla zbytečná, akorát jsi do CategoryScoreru musel přidat metodu, co je jen pro test...
-    //pro tyto účely je tu právě metoda Mockito.when... ktera ti hlidia okamzik, kdy se v kodu zavola definovana metoda rulesetService.findAllRulesets() a v tu chvili ji ve skutecnosti nezavola (nesaha do db) a rovnou vrati namockovana data (myRulesets)
-    //obecne vsechny zasahy do databaze by meli byt takto osetreny
-    Mockito.when(rulesetService.findAllRulesets()).thenReturn(myRulesets);
     int categoryID = categoryScorer.scoreCategories(transactionList.get(0));
 
     Assert.assertEquals(124, categoryID);

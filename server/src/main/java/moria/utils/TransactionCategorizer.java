@@ -3,6 +3,7 @@ package moria.utils;
 import moria.SpringContext;
 import moria.dto.Category;
 import moria.model.transactions.Transaction;
+import moria.services.RulesetService;
 import moria.services.TransactionService;
 
 import java.util.ArrayList;
@@ -12,48 +13,42 @@ public class TransactionCategorizer {
     private CategoryScorer categoryScorer;
 
     public TransactionCategorizer() {
-        categoryScorer = new CategoryScorer();
+        RulesetService rulesetService = getRulesetService();
+        categoryScorer = new CategoryScorer(rulesetService.findAllRulesets());
     }
 
     private TransactionService getTransactionService() {
         return SpringContext.getBean(TransactionService.class);
     }
 
-    public ArrayList<Category> findCategoriesForAllUncategorizedTransactionWithListing() {
-        ArrayList<Category> list = new ArrayList<>();
-        TransactionService transactionService = getTransactionService();
-        List<Transaction> transactionList = transactionService.findAllTransactions();
-        for (Transaction transaction : transactionList) {
-            if (transaction.getCategoryId() == 0) {
-                int category = categoryScorer.scoreCategories(transaction);
-                transactionService.setCategoryIdForTransactionById(transaction.getId(), category);
-                Category cat = new Category(category, transaction.getId());
-                list.add(cat);
-            }
-        }
-        return list;
+    private RulesetService getRulesetService() {
+        return SpringContext.getBean(RulesetService.class);
     }
 
-    public void findCategoriesForAllUncategorizedTransactionWithoutListing() {
+    //for test purposes only (tahle metoda bude smazana)
+    public ArrayList<Category> getListOfCategorizedTransaction() {
         TransactionService transactionService = getTransactionService();
         List<Transaction> transactionList = transactionService.findAllTransactions();
-        for (Transaction transaction : transactionList) {
-            if (transaction.getCategoryId() == 0) {
-                int category = categoryScorer.scoreCategories(transaction);
-                transactionService.setCategoryIdForTransactionById(transaction.getId(), category);
-            }
+        ArrayList<Category> categoryList = new ArrayList<>();
+        for (Transaction transactionLiTransaction : transactionList){
+            categoryList.add(new Category(transactionLiTransaction.getCategoryId(), transactionLiTransaction.getId()));
         }
+        return categoryList;
     }
 
-    /**
-     * slouží pro znovuzkategorizování všech plateb (při smazání pravidla)
-     */
-    public void categorizeAllTransaction() {
+    public void findCategoriesForAllTransaction(boolean recategorizeAllTransaction) {
         TransactionService transactionService = getTransactionService();
         List<Transaction> transactionList = transactionService.findAllTransactions();
         for (Transaction transaction : transactionList) {
-            int category = categoryScorer.scoreCategories(transaction);
-            transactionService.setCategoryIdForTransactionById(transaction.getId(), category);
+            if (recategorizeAllTransaction && !transaction.getIsCategoryManuallyAssigned()) {
+                int category = categoryScorer.scoreCategories(transaction);
+                transactionService.setCategoryIdForTransactionById(transaction.getId(), category);
+            } else {
+                if (transaction.getCategoryId() == 0) {
+                    int category = categoryScorer.scoreCategories(transaction);
+                    transactionService.setCategoryIdForTransactionById(transaction.getId(), category);
+                }
+            }
         }
     }
 

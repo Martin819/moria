@@ -5,7 +5,6 @@ import java.util.Date;
 import me.xdrop.fuzzywuzzy.FuzzySearch;
 import moria.bankingApiClient.BankingAPIService;
 import moria.dto.Category;
-import moria.dto.TransactionDto;
 import moria.model.transactions.Transaction;
 import moria.services.TransactionServiceImpl;
 import moria.utils.Categories;
@@ -34,10 +33,11 @@ public class IncomingTransactionsController {
 
     // jen pro testovací účely
     @GetMapping(path = "/plsCategorize", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public String[] sendItems() {
+    public String[] getCategorizedTransactionTest() {
 
         TransactionCategorizer transactionCategorizer = new TransactionCategorizer();
-        ArrayList<Category> list = transactionCategorizer.findCategoriesForAllUncategorizedTransactionWithListing();
+        transactionCategorizer.findCategoriesForAllTransaction(false);
+        ArrayList<Category> list = transactionCategorizer.getListOfCategorizedTransaction();
 
         String[] strings = new String[list.size()];
         for (int i = 0; i < strings.length ; i++ ){
@@ -62,7 +62,6 @@ public class IncomingTransactionsController {
 
         java.time.LocalTime localTimeJava = java.time.LocalTime.of(21, 30, 59, 11001);
 
-//        return localTime.toString();
         LocalTime proper = new LocalTime(localTime.getHourOfDay(), localTime.getMinuteOfHour(), localTime.getSecondOfMinute());
         return proper.toString();
     }
@@ -70,15 +69,14 @@ public class IncomingTransactionsController {
     @GetMapping(value = "/categorize")
     public ResponseEntity<Void> categorizeTransactionWithoutCategoryID() {
         TransactionCategorizer transactionCategorizer = new TransactionCategorizer();
-        transactionCategorizer.findCategoriesForAllUncategorizedTransactionWithoutListing();
+        transactionCategorizer.findCategoriesForAllTransaction(false);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
 
     @GetMapping(path = "/fetchTransactions")
     public List<Transaction> fetchTransactions() throws IOException {
-        List<Transaction> transactions = APIservice.findTransactionsByDate("1990-01-01", "2020-12-31");
-        return transactions;
+        return APIservice.findTransactionsByDate("1990-01-01", "2020-12-31");
     }
 
     @GetMapping(path = "/saveTransactions")

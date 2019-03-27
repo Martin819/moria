@@ -45,6 +45,7 @@ public class Transaction implements Serializable {
     private TransactionAdditionalInfoForeign additionalInfoForeign;
     @Embedded
     private TransactionAdditionalInfoCard additionalInfoCard;
+    private Boolean isCategoryManuallyAssigned;
 
 
 
