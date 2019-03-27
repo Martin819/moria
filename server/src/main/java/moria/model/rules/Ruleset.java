@@ -14,12 +14,13 @@ public class Ruleset {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    // RULESET PROPERTIES
     private int id;
     private String ruleName;
+    private int categoryId;
 
     // COMMON
     private String partyName;
-    private int categoryId;
     private String direction;
     private String transactionType;
     private BigDecimal valueFrom;

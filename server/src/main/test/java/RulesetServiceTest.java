@@ -13,6 +13,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.math.BigDecimal;
+import java.time.LocalTime;
 import java.util.List;
 
 
@@ -33,8 +34,10 @@ public class RulesetServiceTest {
 
     @Before // takto anotovana metoda probehne VZDY pred kazdym testem.. takze sem jebnu veci, ktere potrebuju pro kazdy test
     public void init() {
-        ruleset = TestUtils.createTestRuleset(1, "INCOMING", 111, "PAYMENT_HOME",
-                new BigDecimal("1000.00"), new BigDecimal("2000.00"));
+
+        ruleset = TestUtils.createTestRuleset(1, "Pravidlo 1", 111, "Billa", "OUTGOING", "CARD", new BigDecimal(50), new BigDecimal(2000),
+                null, null, null, null, "thanks for your payment", null, null, null, String.valueOf(LocalTime.of(5, 0)),
+                String.valueOf(LocalTime.of(8, 0)), "777333666");
         rulesetService.saveRuleset(ruleset);
     }
 

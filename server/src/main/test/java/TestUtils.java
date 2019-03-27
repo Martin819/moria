@@ -17,52 +17,88 @@ import moria.model.transactions.TransactionValue;
  */
 class TestUtils {
 
-  //parametry upravuj dle libosti
-  static Ruleset createTestRuleset(int id, String direction, int categoryId, String transactionType, BigDecimal valueFrom, BigDecimal valueTo) {
+  static Ruleset createTestRuleset(
+
+          // RULESET PROPERTIES
+          int id,
+          String ruleName,
+          int categoryId,
+
+          // COMMON
+          String partyName,
+          String direction,
+          String transactionType,
+          BigDecimal valueFrom,
+          BigDecimal valueTo,
+
+          // BANK TRANSFER
+          String partyAccountPrefix,
+          String partyAccountNumber,
+          String partyBankCode,
+          String payerMessage,
+          String payeeMessage,
+          String constantSymbol,
+          String variableSymbol,
+          String specificSymbol,
+
+          // CARDS
+          String bookingTimeFrom,
+          String bookingTimeTo,
+          String cardNumber) {
+
     Ruleset ruleset = new Ruleset();
-    ruleset.setId(id);
-    ruleset.setDirection(direction);
-    ruleset.setCategoryId(categoryId);
-    ruleset.setTransactionType(transactionType);
-    ruleset.setValueFrom(valueFrom);
-    ruleset.setValueTo(valueTo);
-    return ruleset;
-  }
-
-
-  static Ruleset createTestRulesetFull(int id, String ruleName, String partyName, int categoryId,
-      String direction, String transactionType, BigDecimal valueFrom, BigDecimal valueTo, String partyAccountPrefix,
-      String partyAccountNumber, String partyBankCode, String payerMessage, String payeeMessage,
-      String constantSymbol, String variableSymbol, String specificSymbol, String bookingTimeFrom,
-      String bookingTimeTo, String cardNumber) {
-
-    Ruleset ruleset = new Ruleset();
+    // RULESET PROPERTIES
     ruleset.setId(id);
     ruleset.setRuleName(ruleName);
-    ruleset.setPartyName(partyName);
     ruleset.setCategoryId(categoryId);
+
+    // COMMON
+    ruleset.setPartyName(partyName);
     ruleset.setDirection(direction);
     ruleset.setTransactionType(transactionType);
     ruleset.setValueFrom(valueFrom);
     ruleset.setValueTo(valueTo);
+
+    // BANK TRANSFER
     ruleset.setPartyAccountPrefix(partyAccountPrefix);
     ruleset.setPartyAccountNumber(partyAccountNumber);
     ruleset.setPartyBankCode(partyBankCode);
-    ruleset.setPayeeMessage(payeeMessage);
     ruleset.setPayerMessage(payerMessage);
+    ruleset.setPayeeMessage(payeeMessage);
     ruleset.setConstantSymbol(constantSymbol);
     ruleset.setVariableSymbol(variableSymbol);
     ruleset.setSpecificSymbol(specificSymbol);
+
+    // CARDS
     ruleset.setBookingTimeFrom(bookingTimeFrom);
     ruleset.setBookingTimeTo(bookingTimeTo);
     ruleset.setCardNumber(cardNumber);
+
     return ruleset;
   }
 
-  static Transaction createTransaction(String id, int accountId, TransactionValue value, TransactionPartyAccount partyAccount, String partyDescription, String direction,
-      String transactionType, Date valueDate, Date bookingDate, String userDescription, String payerMessage, String payeeMessage, Integer categoryId,
-      BigDecimal transactionFee, Boolean transactionFeeCanceled, TransactionAdditionalInfoDomestic additionalInfoDomestic,
-      TransactionAdditionalInfoForeign additionalInfoForeign, TransactionAdditionalInfoCard additionalInfoCard) {
+  static Transaction createTransaction(
+          String id,
+          int accountId,
+          TransactionValue value,
+          TransactionPartyAccount partyAccount,
+          String partyDescription,
+          String direction,
+          String transactionType,
+          Date valueDate,
+          Date bookingDate,
+          String userDescription,
+          String payerMessage,
+          String payeeMessage,
+          Integer categoryId,
+          BigDecimal transactionFee,
+          Boolean transactionFeeCanceled,
+          TransactionAdditionalInfoDomestic additionalInfoDomestic,
+          TransactionAdditionalInfoForeign additionalInfoForeign,
+          TransactionAdditionalInfoCard additionalInfoCard,
+          Boolean isCategoryManuallyAssigned
+
+  ) {
 
     Transaction transaction = new Transaction();
 
@@ -84,6 +120,7 @@ class TestUtils {
     transaction.setAdditionalInfoDomestic(additionalInfoDomestic);
     transaction.setAdditionalInfoForeign(additionalInfoForeign);
     transaction.setAdditionalInfoCard(additionalInfoCard);
+    transaction.setIsCategoryManuallyAssigned(isCategoryManuallyAssigned);
 
     return transaction;
   }
