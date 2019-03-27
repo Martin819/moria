@@ -19,8 +19,7 @@ export const OutgoingTransactionCategories = Object.freeze({
   LOANS_AND_MORTGAGES: { id: 128, text: 'Loans & mortgages' },
   INSURANCE: { id: 129, text: 'Insurance' },
   GIFTS: { id: 130, text: 'Gifts' },
-  OTHER: { id: 131, text: 'Other' },
-  UNCATEGORIZED: { id: 0, text: 'Uncategorized' }
+  OTHER: { id: 131, text: 'Other' }
 });
 
 export const IncomingTransactionCategories = Object.freeze({
@@ -33,11 +32,15 @@ export const IncomingTransactionCategories = Object.freeze({
   I_LOANS: { id: 17, text: 'Loans' },
   I_POCKET_MONEY: { id: 18, text: 'Pocket money' },
   I_GIFTS: { id: 19, text: 'Gifts' },
-  I_OTHER: { id: 20, text: 'Other' },
-  I_UNCATEGORIZED: { id: 0, text: 'Uncategorized' }
+  I_OTHER: { id: 20, text: 'Other' }
+});
+
+export const SpecialCategories = Object.freeze({
+  UNCATEGORIZED: { id: 0, text: 'Uncategorized' }
 });
 
 export const TransactionCategories = Object.freeze({
   ...IncomingTransactionCategories,
-  ...OutgoingTransactionCategories
+  ...OutgoingTransactionCategories,
+  ...SpecialCategories
 });
