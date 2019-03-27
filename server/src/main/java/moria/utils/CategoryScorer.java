@@ -114,9 +114,8 @@ public class CategoryScorer {
 
     private double scorePartyName(String partyName) {
       double score = 0;
-      if (transaction.getPartyDescription() != null){
-        if (partyName.contains(transaction.getPartyDescription())) score++;
-      }
+      String partyDescription = transaction.getPartyDescription();
+      if (partyDescription != null && (partyDescription.contains(partyName))) score ++;
       return score;
     }
 
