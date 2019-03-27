@@ -16,7 +16,8 @@ import {
 import {
   OutgoingTransactionCategories,
   TransactionCategories,
-  IncomingTransactionCategories
+  IncomingTransactionCategories,
+  SpecialCategories
 } from '../../../constants/categories';
 import { Badge } from 'reactstrap';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
@@ -27,9 +28,16 @@ class TransactionItem extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      categoryId: props.categoryId,
+      categoryId: UNSELECTED,
       dropdownOpen: false
     };
+  }
+
+  componentDidMount() {
+    const { categoryId } = this.props;
+    if (categoryId !== SpecialCategories.UNCATEGORIZED.id) {
+      this.setState({ categoryId: categoryId });
+    }
   }
 
   toggleDropdown = () => {
@@ -127,6 +135,9 @@ class TransactionItem extends Component {
                                   bsSize="sm"
                                   style={{ width: 200 }}
                                 >
+                                  <option disabled value={UNSELECTED}>
+                                    -- select a category --
+                                  </option>
                                   {Object.values(transactionCategories).map(c => (
                                     <option key={c.id} value={c.id}>
                                       {c.text}
@@ -139,7 +150,9 @@ class TransactionItem extends Component {
                                   type="submit"
                                   className="ml-md-2"
                                   disabled={
-                                    categoryId === this.state.categoryId || transactionType === TransactionTypes.CASH.id
+                                    this.state.categoryId === UNSELECTED ||
+                                    categoryId === this.state.categoryId ||
+                                    transactionType === TransactionTypes.CASH.id
                                   }
                                   size="sm"
                                   onClick={this.handleTransactionCategoryUpdate}
@@ -249,7 +262,7 @@ class TransactionItem extends Component {
   }
 }
 
-TransactionItem.propTypes = {};
+const UNSELECTED = 'UNSELECTED';
 
 const styles = theme => ({
   heading: {
