@@ -111,7 +111,7 @@ public class CategoryScorer {
     private double scorePartyName(String partyName) {
         double score = 0;
         String partyDescription = transaction.getPartyDescription();
-        if (partyDescription != null && (partyDescription.contains(partyName))) score++;
+        if (partyDescription != null && (partyDescription.toLowerCase().contains(partyName.toLowerCase()))) score++;
         return score;
     }
 
@@ -147,7 +147,7 @@ public class CategoryScorer {
 
     private double scoreTransactionType(String ruleTransactionType, String transactionType) {
         double score = 0;
-        if (transactionType.contains(ruleTransactionType)) {
+        if (transactionType.toLowerCase().contains(ruleTransactionType.toLowerCase())) {
             score++;
         } else if (FuzzySearch.partialRatio(ruleTransactionType, transactionType) > threshold) {
             score++;
@@ -193,7 +193,7 @@ public class CategoryScorer {
     private double scorePayeeMessage(String rulePayeeMessage, String transactionPayeeMessage) {
         double score = 0;
         if (rulePayeeMessage != null && transactionPayeeMessage != null) {
-            if (transactionPayeeMessage.contains(rulePayeeMessage) && !rulePayeeMessage.isEmpty()) {
+            if (transactionPayeeMessage.toLowerCase().contains(rulePayeeMessage.toLowerCase()) && !rulePayeeMessage.isEmpty()) {
                 score++;
             } else if (FuzzySearch.partialRatio(rulePayeeMessage, transactionPayeeMessage) > threshold) {
                 score++;

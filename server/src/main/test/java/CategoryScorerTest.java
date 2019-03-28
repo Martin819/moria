@@ -37,7 +37,7 @@ public class CategoryScorerTest {
                 null, null, null, null, "thanks for your payment", null, null, null, String.valueOf(LocalTime.of(5, 0)),
                 String.valueOf(LocalTime.of(8, 0)), "777333666"));
 
-        testRulesetsList.add(TestUtils.createTestRuleset(3, "Pravidlo 2", 124, "Cinestar", "OUTGOING", "CARD", new BigDecimal(70), new BigDecimal(200),
+        testRulesetsList.add(TestUtils.createTestRuleset(3, "Pravidlo 2", 124, "cinestar", "OUTGOING", "CARD", new BigDecimal(70), new BigDecimal(200),
                 null, null, "0810", "Cinestar s.r.o", null, null, null, null, String.valueOf(LocalTime.of(19, 0)),
                 String.valueOf(LocalTime.of(23, 0)), "777333666"));
 
