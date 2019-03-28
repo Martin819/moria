@@ -4,7 +4,7 @@ import { TableCell, TableHead, TableRow, TableSortLabel, Checkbox, Tooltip } fro
 
 const tableColumnHeaders = [
   { id: 'ruleName', numeric: false, disablePadding: false, label: 'Rule name' },
-  { id: 'categoryId', numeric: false, disablePadding: false, label: 'Category' },
+  { id: 'categoryId', numeric: false, disablePadding: false, label: 'Target category' },
   { id: 'partyName', numeric: false, disablePadding: false, label: 'Party name' },
   { id: 'direction', numeric: false, disablePadding: false, label: 'Direction' },
   { id: 'transactionType', numeric: false, disablePadding: false, label: 'Transaction type' }
@@ -29,7 +29,7 @@ class EnhancedTableHead extends React.Component {
                 padding={row.disablePadding ? 'none' : 'default'}
                 sortDirection={orderBy === row.id ? order : false}
               >
-                <Tooltip title="Sort" placement={row.numeric ? 'bottom-end' : 'bottom-start'} enterDelay={300}>
+                <Tooltip title="Sort" placement={row.numeric ? 'bottom-end' : 'bottom-start'} enterDelay={150}>
                   <TableSortLabel
                     active={orderBy === row.id}
                     direction={order}

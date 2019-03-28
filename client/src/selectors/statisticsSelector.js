@@ -64,7 +64,7 @@ export const computeBarchartData = createSelector(
       const monthlyIncome = _.sumBy(monthlyIncomingTransactions, 'transactionValueAmount');
       const monthlyExpense = _.sumBy(monthlyOutgoingTransactions, 'transactionValueAmount');
       data = [
-        { name: `${now.format('MMM')} '${now.format('YY')}`, Income: monthlyIncome, Expense: monthlyExpense },
+        { name: `${now.format('MMM')} '${now.format('YY')}`, Incomes: monthlyIncome, Expenses: monthlyExpense },
         ...data
       ];
       now.subtract(1, 'M');

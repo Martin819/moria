@@ -10,8 +10,8 @@ export const TransactionValueOperators = Object.freeze({
 });
 
 export const TransactionTypes = Object.freeze({
-  PAYMENT_HOME: { id: 'PAYMENT_HOME', text: 'Payment home' },
-  MORTGAGE: { id: 'MORTGAGE', text: 'Mortgage' },
+  PAYMENT_HOME: { id: 'PAYMENT_HOME', text: 'Bank transfer' },
+  MORTGAGE: { id: 'MORTGAGE', text: 'Mortgage payment' },
   CARD: { id: 'CARD', text: 'Card payment' },
   CASH: { id: 'CASH', text: 'Cash payment' }
 });

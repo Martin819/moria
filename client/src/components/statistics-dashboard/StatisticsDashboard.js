@@ -13,7 +13,7 @@ const StatisticsDashboard = props => {
         <Grid container item xs={12} style={{ minWidth: 200 }} justify="center">
           {props.barChartData.length > 0 && !props.isLoading ? (
             <Fragment>
-              <h3>Income / Expense last 12 months</h3>
+              <h3>Incomes / Expenses last 12 months</h3>
               <CustomBarChart barChartData={props.barChartData} />
             </Fragment>
           ) : null}

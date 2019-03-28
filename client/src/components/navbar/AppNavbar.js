@@ -24,7 +24,7 @@ class AppNavbar extends Component {
               <Nav className="ml-auto" navbar>
                 <NavItem>
                   <NavLink exact className="nav-link" to="/">
-                    Home
+                    Transactions
                   </NavLink>
                 </NavItem>
                 <NavItem>
@@ -33,7 +33,7 @@ class AppNavbar extends Component {
                   </NavLink>
                 </NavItem>
                 <NavItem>
-                  <NavLink className="nav-link" to="/graphs">
+                  <NavLink className="nav-link" to="/stats">
                     Statistics
                   </NavLink>
                 </NavItem>

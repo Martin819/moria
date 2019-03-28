@@ -19,7 +19,7 @@ const CategoryOverviewArea = props => {
           {incomeChartData.length > 0 ? (
             <div className="text-center">
               <h4>
-                Income total:{' '}
+                Incomes total:{' '}
                 {incomeSum.toLocaleString('cs-cz', {
                   style: 'currency',
                   currency: 'CZK'

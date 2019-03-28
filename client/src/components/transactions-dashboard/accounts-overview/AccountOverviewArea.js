@@ -3,15 +3,15 @@ import AccountBalanceInfo from './AccountBalanceInfo';
 import { Grid } from '@material-ui/core';
 
 const dummyData = [
-  { accountNumber: '873113211/0800', accountOwner: 'John Doe', accountPreferredColor: 'orange', balance: 5000 },
-  { accountNumber: '512345678/0800', accountOwner: 'John Doe', accountPreferredColor: 'green', balance: 80000 },
-  { accountNumber: '791919191/0800', accountOwner: 'John Doe', accountPreferredColor: 'blue', balance: 133004 }
+  { accountNumber: '873113211/2010', accountOwner: 'Legolas', accountPreferredColor: 'orange', balance: 5000 },
+  { accountNumber: '512345678/6210', accountOwner: 'Bilbo Baggins', accountPreferredColor: 'green', balance: 80000 },
+  { accountNumber: '791919191/2700', accountOwner: 'Gandalf the White', accountPreferredColor: 'blue', balance: 133004 }
 ];
 
 const AccountOverviewArea = props => {
   const realAccount = {
     accountNumber: '717717717/0800',
-    accountOwner: 'John Doe',
+    accountOwner: 'Gimli, son of Gloin',
     accountPreferredColor: 'red',
     balance: props.balance || 0
   };

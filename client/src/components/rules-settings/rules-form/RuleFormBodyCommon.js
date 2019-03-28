@@ -29,7 +29,7 @@ class RuleFormBodyCommon extends React.Component {
           </Col>
           <Col md={6}>
             <FormGroup>
-              <Label for="categoryId">Category</Label>
+              <Label for="categoryId">Target category</Label>
               <Input
                 type="select"
                 name="categoryId"
@@ -195,7 +195,7 @@ class RuleFormBodyCommon extends React.Component {
               />
               <FormFeedback>Please specify a valid number.</FormFeedback>
             </Col>
-            {'-'}
+              {'–'}
             <Col sm={3}>
               <Input
                 invalid={isNaN(this.props.valueTo)}

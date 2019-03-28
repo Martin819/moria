@@ -19,15 +19,15 @@ const CustomBarChart = props => {
               paddingLeft: '10px'
             }}
           />
-          <Bar dataKey="Income" fill="#71ae1e" />
-          <Bar dataKey="Expense" fill="#cc3c29" />
+          <Bar dataKey="Incomes" fill="#71ae1e" />
+          <Bar dataKey="Expenses" fill="#cc3c29" />
         </BarChart>
       </ResponsiveContainer>
     </div>
   );
 };
 
-const yAxisFormatter = value => value.toLocaleString('en-US');
+const yAxisFormatter = value => value.toLocaleString('cs-cz');
 
 const tooltipValueFormatter = value =>
   value.toLocaleString('cs-cz', {

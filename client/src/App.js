@@ -20,7 +20,7 @@ class App extends Component {
               <Switch>
                 <Route exact path="/" component={TransactionsDashboard} />
                 <Route exact path="/rules" component={RulesSettings} />
-                <Route exact path="/graphs" component={StatisticsDashboardContainer} />
+                <Route exact path="/stats" component={StatisticsDashboardContainer} />
               </Switch>
             </div>
           </Fragment>
