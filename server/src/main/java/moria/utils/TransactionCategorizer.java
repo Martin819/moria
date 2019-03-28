@@ -41,11 +41,11 @@ public class TransactionCategorizer {
         List<Transaction> transactionList = transactionService.findAllTransactions();
         for (Transaction transaction : transactionList) {
             if (recategorizeAllTransaction && !transaction.getIsCategoryManuallyAssigned()) {
-                int category = categoryScorer.scoreCategories(transaction);
+                int category = categoryScorer.scorePossibleCategories(transaction);
                 transactionService.setCategoryIdForTransactionById(transaction.getId(), category);
             } else {
                 if (transaction.getCategoryId() == 0) {
-                    int category = categoryScorer.scoreCategories(transaction);
+                    int category = categoryScorer.scorePossibleCategories(transaction);
                     transactionService.setCategoryIdForTransactionById(transaction.getId(), category);
                 }
             }
@@ -55,7 +55,7 @@ public class TransactionCategorizer {
     public void categorizeTransaction(List<Transaction> transactionList) {
         TransactionService transactionService = getTransactionService();
         for (Transaction transaction : transactionList) {
-            int category = categoryScorer.scoreCategories(transaction);
+            int category = categoryScorer.scorePossibleCategories(transaction);
             transactionService.setCategoryIdForTransactionById(transaction.getId(), category);
         }
     }

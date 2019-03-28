@@ -77,7 +77,7 @@ class TestUtils {
     return ruleset;
   }
 
-  static Transaction createTransaction(
+  static Transaction createTestTransaction(
           String id,
           int accountId,
           TransactionValue value,
@@ -144,5 +144,5 @@ class TestUtils {
     }
     return null;
   }
-  //stejnym zpusobem napriklad createTransaction
+  //stejnym zpusobem napriklad createTestTransaction
 }
