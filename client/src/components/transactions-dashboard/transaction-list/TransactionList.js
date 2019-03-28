@@ -6,8 +6,6 @@ import Pagination from 'react-js-pagination';
 import { withStyles, Grid } from '@material-ui/core';
 import { Spinner } from 'reactstrap';
 
-const colors = ['red', 'green', 'orange', 'blue'];
-
 class TransactionsList extends Component {
   constructor(props) {
     super(props);
@@ -38,7 +36,6 @@ class TransactionsList extends Component {
             key={transaction.id}
             index={index}
             {...transaction}
-            accountPreferredColor={colors[Math.floor(Math.random() * colors.length)]}
             handleTransactionCategoryUpdate={handleTransactionCategoryUpdate}
           />
         );
@@ -60,7 +57,7 @@ class TransactionsList extends Component {
               transactionItems
             )}
           </Grid>
-          <Grid item container xs justify="center" className="mt-4">
+          <Grid item container xs justify="center" className="mt-3">
             <Pagination
               itemClass="page-item"
               linkClass="page-link"

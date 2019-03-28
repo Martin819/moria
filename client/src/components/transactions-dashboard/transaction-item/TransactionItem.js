@@ -95,7 +95,7 @@ class TransactionItem extends Component {
 
     return (
       <Grow in={true} timeout={500 + 100 * index}>
-        <ExpansionPanel>
+        <ExpansionPanel className="mb-2">
           <ExpansionPanelSummary
             expandIcon={<ExpandMoreIcon />}
             style={{ borderLeft: `6px solid ${accountPreferredColor}` }}

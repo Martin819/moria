@@ -18,12 +18,16 @@ const initialState = {
   loading: false
 };
 
+const colors = ['red', 'green', 'orange', 'blue'];
+
 export default function(state = initialState, action) {
   switch (action.type) {
     case GET_TRANSACTIONS: {
       return {
         ...state,
-        transactions: action.payload.data.sort((t1, t2) => moment(t2.valueDate).diff(t1.valueDate)),
+        transactions: action.payload.data
+          .map(t => Object.assign({}, t, { accountPreferredColor: colors[Math.floor(Math.random() * colors.length)] }))
+          .sort((t1, t2) => moment(t2.valueDate).diff(t1.valueDate)),
         visibleTransactions: action.payload.data,
         loading: false
       };
