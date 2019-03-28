@@ -25,7 +25,11 @@ const CategoryOverviewArea = props => {
                   currency: 'CZK'
                 })}
               </h4>
-              <CustomPieChart chartData={incomeChartData} direction={TransactionDirections.INCOMING.id} />
+              <CustomPieChart
+                chartData={incomeChartData}
+                direction={TransactionDirections.INCOMING.id}
+                sum={incomeSum}
+              />
             </div>
           ) : (
             <div className="text-center">
@@ -43,7 +47,11 @@ const CategoryOverviewArea = props => {
                   currency: 'CZK'
                 })}
               </h4>
-              <CustomPieChart chartData={expensesChartData} direction={TransactionDirections.OUTGOING.id} />
+              <CustomPieChart
+                chartData={expensesChartData}
+                direction={TransactionDirections.OUTGOING.id}
+                sum={expensesSum}
+              />
             </div>
           ) : (
             <div className="text-center">
