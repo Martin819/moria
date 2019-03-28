@@ -6,11 +6,11 @@ const CustomBarChart = props => {
   return (
     <div style={{ width: '100%', height: 300 }}>
       <ResponsiveContainer>
-        <BarChart data={barChartData} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+        <BarChart data={barChartData} margin={{ top: 5, right: 50, left: 20, bottom: 5 }}>
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis dataKey="name" />
-          <YAxis />
-          <Tooltip />
+          <YAxis tickFormatter={yAxisFormatter} />
+          <Tooltip formatter={tooltipValueFormatter} />
           <Legend
             verticalAlign="bottom"
             layout="horizontal"
@@ -26,5 +26,13 @@ const CustomBarChart = props => {
     </div>
   );
 };
+
+const yAxisFormatter = value => value.toLocaleString('en-US');
+
+const tooltipValueFormatter = value =>
+  value.toLocaleString('cs-cz', {
+    style: 'currency',
+    currency: 'CZK'
+  });
 
 export default CustomBarChart;
