@@ -2,8 +2,10 @@ package moria.controller;
 
 import moria.dto.CategoryToUpdateDto;
 import moria.dto.TransactionDto;
+import moria.model.transactions.Transaction;
 import moria.services.TransactionService;
 import moria.utils.TransactionsToDtoMapper;
+import moria.utils.utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -42,10 +44,12 @@ public class CategorizedTransactionsController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-
+    @GetMapping(value = "/test/dtoTransformation")
     private List<TransactionDto> loadAllTransactions() {
         TransactionsToDtoMapper dtoTransformer = new TransactionsToDtoMapper();
-        return dtoTransformer.transformToDto(transactionService.findAllTransactions());
+        List<Transaction> tList = transactionService.findAllTransactions();
+        List<Transaction> updatedTransactions = utils.bindParentAndChildTransactions(tList);
+        return dtoTransformer.transformToDto(updatedTransactions);
     }
 
 

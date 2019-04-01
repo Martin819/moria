@@ -22,6 +22,15 @@ INSERT INTO moria.transactions (id, account_id, card_number, mcc, merchant_name,
 INSERT INTO moria.transactions (id, account_id, card_number, mcc, merchant_name, constant_symbol, specific_symbol, variable_symbol, exchange_rate, foreign_amount, foreign_currency, booking_date, category_id, direction, party_account_number, party_bank_code, party_prefix, party_description, payee_message, payer_message, transaction_fee, transaction_fee_canceled, transaction_type, user_description, amount, currency, value_date, is_category_manually_assigned) VALUES ('19', 6666, null, null, null, '3347', '0', '4848218390', null, null, null, '2019-02-07 09:58:12', 0, 'OUTGOING', '597175768639', '2700', '00236541', null, null, 'jen tak posilam prachy random osobe', null, null, 'PAYMENT_HOME', 'random osoba', 90.00, 'CZK', '2019-02-08 20:03:00', null);
 INSERT INTO moria.transactions (id, account_id, card_number, mcc, merchant_name, constant_symbol, specific_symbol, variable_symbol, exchange_rate, foreign_amount, foreign_currency, booking_date, category_id, direction, party_account_number, party_bank_code, party_prefix, party_description, payee_message, payer_message, transaction_fee, transaction_fee_canceled, transaction_type, user_description, amount, currency, value_date, is_category_manually_assigned) VALUES ('20', 6666, '4562356984521568', '4899', 'Spotify', '0', '0', '0', null, null, null, '2019-02-15 21:43:19', 118, 'OUTGOING', null, null, null, null, null, null, null, null, 'CARD', null, 85.00, 'CZK', '2019-02-18 17:24:07', null);
 
+#-------------
+# CHILD TRANSAKCE:
+#-------------
+INSERT INTO moria.transactions (id, account_id, parent_id, category_id, amount, currency) VALUES ('test', 6666, '16', 11, 1000, 'CZK');
+INSERT INTO moria.transactions (id, account_id, parent_id, category_id, amount, currency) VALUES ('test2', 6666, '16', 12, 1000, 'CZK');
+INSERT INTO moria.transactions (id, account_id, parent_id, category_id, amount, currency) VALUES ('test3', 6666, '16', 13, 1000, 'CZK');
+
+
+
 # ----------------------------------------
 # RULESETY
 # ----------------------------------------

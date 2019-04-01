@@ -4,11 +4,12 @@ import lombok.Data;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.Map;
 
 @Data
 public class TransactionDto {
 
-    private int id;
+    private String id;
 
     //... PLATBA KARTOU ..//
 
@@ -37,7 +38,9 @@ public class TransactionDto {
 
 
     //... VYBER Z BANKOMATU ..//
-    // ?
+    private String parentId;
+    private BigDecimal originalValue;
+    private Map<Integer, BigDecimal> categories;
 
     //... SPOLECNE PRO VSECHNY ..//
     private BigDecimal  transactionValueAmount;

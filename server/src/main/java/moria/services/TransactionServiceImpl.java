@@ -9,8 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service("transactionService")
@@ -21,7 +23,7 @@ public class TransactionServiceImpl implements TransactionService {
 
     // Returns Transaction by given ID
     @Override
-    public Transaction findTransactionById(int id) {
+    public Transaction findTransactionById(String id) {
         return transactionRepository.findById(id);
     }
 
@@ -85,6 +87,11 @@ public class TransactionServiceImpl implements TransactionService {
         return transactionRepository.findByTransactionTypeIgnoreCase("PAYMENT_ABROAD");
     }
 
+    @Override
+    public List<Transaction> findByParentId(String parentId) {
+        return transactionRepository.findByParentId(parentId);
+    }
+
     // Sets categoryId to given ID for a Transaction identified by its ID
     @Override
     public void setCategoryIdForTransactionById(String transactionId, int categoryId) {
@@ -96,6 +103,28 @@ public class TransactionServiceImpl implements TransactionService {
     public void setManuallyUpdateCategory(String transactionId) {
         transactionRepository.setManuallyUpdateCategoryById(transactionId);
     }
+
+    @Override
+    public void setOriginalValueToValue() {
+        transactionRepository.setOriginalValueToValue();
+    }
+
+    @Override
+    @Modifying
+    public void setOriginalValueById(String transactionId, BigDecimal originalValue) {
+        transactionRepository.setOriginalValueById(transactionId, originalValue);
+    }
+
+    @Override
+    public void setValueAmountById(String transactionId, BigDecimal valueAmount) {
+        transactionRepository.setValueAmountById(transactionId, valueAmount);
+    }
+
+//    @Override
+//    public void setCategoriesById(String transactionId, Map<Integer, BigDecimal> categories) {
+//        System.out.println(categories);
+//        transactionRepository.setCategoriesById(transactionId, categories);
+//    }
 
     @Override
     @Modifying
