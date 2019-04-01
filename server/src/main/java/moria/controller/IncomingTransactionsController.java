@@ -1,15 +1,13 @@
 package moria.controller;
 
 import java.io.IOException;
-import java.util.Date;
-import me.xdrop.fuzzywuzzy.FuzzySearch;
+
 import moria.bankingApiClient.BankingAPIService;
 import moria.dto.Category;
 import moria.model.transactions.Transaction;
 import moria.services.TransactionServiceImpl;
 import moria.utils.Categories;
 import moria.utils.TransactionCategorizer;
-import org.joda.time.LocalTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -36,20 +34,23 @@ public class IncomingTransactionsController {
     public String[] getCategorizedTransactionTest() {
 
         TransactionCategorizer transactionCategorizer = new TransactionCategorizer();
-        transactionCategorizer.findCategoriesForAllTransaction(false);
-        ArrayList<Category> list = transactionCategorizer.getListOfCategorizedTransaction();
+        transactionCategorizer.categorizeAllTransactions(false);
+        ArrayList<Category> list = transactionCategorizer.getListOfCategorizedTransactions();
 
-        String[] strings = new String[list.size()];
-        for (int i = 0; i < strings.length ; i++ ){
-            strings[i] = "id platby je " + list.get(i).getIdPayment() + " id kategorie je " + list.get(i).getIdCategory() + " což je " + Categories.getCategoryById(list.get(i).getIdCategory());
+
+        //TODO po otestovani smazat
+
+        String[] outputStrings = new String[list.size()];
+        for (int i = 0; i < outputStrings.length ; i++ ){
+            outputStrings[i] = "id platby je " + list.get(i).getIdPayment() + "     id kategorie je " + list.get(i).getIdCategory() + " (" + Categories.getCategoryById(list.get(i).getIdCategory()) + ")";
         }
-        return strings;
+        return outputStrings;
     }
 
     @GetMapping(value = "/categorize")
     public ResponseEntity<Void> categorizeTransactionWithoutCategoryID() {
         TransactionCategorizer transactionCategorizer = new TransactionCategorizer();
-        transactionCategorizer.findCategoriesForAllTransaction(false);
+        transactionCategorizer.categorizeAllTransactions(false);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -64,7 +65,7 @@ public class IncomingTransactionsController {
         List<Transaction> transactions = APIservice.findTransactionsByDate("1990-01-01", "2020-12-31");
         traService.saveNewTransactionList(transactions);
         TransactionCategorizer transactionCategorizer = new TransactionCategorizer();
-        transactionCategorizer.categorizeTransaction(transactions);
+        transactionCategorizer.categorizeTransactions(transactions);
         return true;
     }
 

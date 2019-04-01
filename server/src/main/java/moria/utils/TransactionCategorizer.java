@@ -10,11 +10,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TransactionCategorizer {
-    private CategoryScorer categoryScorer;
+    private CategoryFinder categoryFinder;
 
     public TransactionCategorizer() {
         RulesetService rulesetService = getRulesetService();
-        categoryScorer = new CategoryScorer(rulesetService.findAllRulesets());
+        categoryFinder = new CategoryFinder(rulesetService.findAllRulesets());
     }
 
     private TransactionService getTransactionService() {
@@ -26,7 +26,7 @@ public class TransactionCategorizer {
     }
 
     //for test purposes only (tahle metoda bude smazana)
-    public ArrayList<Category> getListOfCategorizedTransaction() {
+    public ArrayList<Category> getListOfCategorizedTransactions() {
         TransactionService transactionService = getTransactionService();
         List<Transaction> transactionList = transactionService.findAllTransactions();
         ArrayList<Category> categoryList = new ArrayList<>();
@@ -36,26 +36,26 @@ public class TransactionCategorizer {
         return categoryList;
     }
 
-    public void findCategoriesForAllTransaction(boolean recategorizeAllTransaction) {
+    public void categorizeAllTransactions(boolean recategorizeAllTransaction) {
         TransactionService transactionService = getTransactionService();
         List<Transaction> transactionList = transactionService.findAllTransactions();
         for (Transaction transaction : transactionList) {
             if (recategorizeAllTransaction && !transaction.getIsCategoryManuallyAssigned()) {
-                int category = categoryScorer.scorePossibleCategories(transaction);
+                int category = categoryFinder.findBestMatchingCategory(transaction);
                 transactionService.setCategoryIdForTransactionById(transaction.getId(), category);
             } else {
                 if (transaction.getCategoryId() == 0) {
-                    int category = categoryScorer.scorePossibleCategories(transaction);
+                    int category = categoryFinder.findBestMatchingCategory(transaction);
                     transactionService.setCategoryIdForTransactionById(transaction.getId(), category);
                 }
             }
         }
     }
 
-    public void categorizeTransaction(List<Transaction> transactionList) {
+    public void categorizeTransactions(List<Transaction> transactionList) {
         TransactionService transactionService = getTransactionService();
         for (Transaction transaction : transactionList) {
-            int category = categoryScorer.scorePossibleCategories(transaction);
+            int category = categoryFinder.findBestMatchingCategory(transaction);
             transactionService.setCategoryIdForTransactionById(transaction.getId(), category);
         }
     }

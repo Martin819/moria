@@ -34,7 +34,7 @@ public class TransactionsToDtoMapper {
         if (t.getPartyDescription() != null && !t.getPartyDescription().trim().equals("")) {
             result = t.getPartyDescription();
         } else {
-            if (t.getTransactionType().equals("CARD")) {
+            if (t.getTransactionType().equals("CARD") || t.getTransactionType().equals("CASH")) { // protoze vyber hotovosti je v podstate taky karetni transakce
                 if (t.getAdditionalInfoCard().getMerchantName() != null && !t.getAdditionalInfoCard().getMerchantName().trim().equals("")) {
                     result = t.getAdditionalInfoCard().getMerchantName();
                 }
