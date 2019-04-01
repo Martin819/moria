@@ -26,9 +26,10 @@ INSERT INTO moria.transactions (id, account_id, card_number, mcc, merchant_name,
 # ----------------------------------------
 # CHILD TRANSAKCE:
 # ----------------------------------------
-INSERT INTO moria.transactions (id, account_id, parent_id, category_id, amount, currency) VALUES ('test', 6666, '18', 127, 1000, 'CZK');
-INSERT INTO moria.transactions (id, account_id, parent_id, category_id, amount, currency) VALUES ('test2', 6666, '18', 129, 1000, 'CZK');
-INSERT INTO moria.transactions (id, account_id, parent_id, category_id, amount, currency) VALUES ('test3', 6666, '18', 130, 1000, 'CZK');
+INSERT INTO moria.transactions (id, account_id, parent_id, category_id, amount, currency, direction) VALUES ('test', 6666, '18', 127, 1000, 'CZK', 'OUTGOING');
+INSERT INTO moria.transactions (id, account_id, parent_id, category_id, amount, currency, direction) VALUES ('test2', 6666, '18', 129, 1000, 'CZK', 'OUTGOING');
+INSERT INTO moria.transactions (id, account_id, parent_id, category_id, amount, currency, direction) VALUES ('test3', 6666, '18', 130, 1000, 'CZK', 'OUTGOING');
+INSERT INTO moria.transactions (id, account_id, parent_id, category_id, amount, currency, direction) VALUES ('theRest', 6666, '18', 0, 2000, 'CZK', 'OUTGOING');
 
 
 # ----------------------------------------

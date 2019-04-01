@@ -29,6 +29,7 @@ class TransactionsList extends Component {
     const { activePage, itemsCountPerPage } = this.state;
     const { classes, transactions, isLoading, handleTransactionCategoryUpdate } = this.props;
     const transactionItems = transactions
+      .filter(t => t.parentId === null)
       .slice((activePage - 1) * itemsCountPerPage, activePage * itemsCountPerPage)
       .map((transaction, index) => {
         return (

@@ -75,10 +75,17 @@ class TransactionItem extends Component {
       transactionValueCurrency,
       valueDate,
       transactionType,
-      categoryId
+      categoryId,
+      parentId,
+      originalValue,
+      categories
     } = this.props;
 
-    const categoryEnum = Object.values(TransactionCategories).find(cat => cat.id === categoryId);
+    const isParentTransaction = categories !== null && parentId === null;
+    const valueAmount = isParentTransaction ? originalValue : transactionValueAmount;
+    const categoryEnum = isParentTransaction
+      ? TransactionCategories.SPLIT
+      : Object.values(TransactionCategories).find(cat => cat.id === categoryId);
     const categoryText = categoryEnum === undefined ? 'Unknown' : categoryEnum.text;
     const transactionTypeEnum = Object.values(TransactionTypes).find(type => type.id === transactionType);
     const transactionTypeText = transactionTypeEnum === undefined ? 'Unknown' : transactionTypeEnum.text;
@@ -233,7 +240,7 @@ class TransactionItem extends Component {
                     {direction === 'OUTGOING' && (
                       <Typography className={classes.amountNegative}>
                         &#8722;&nbsp;
-                        {transactionValueAmount.toLocaleString('cs-cz', {
+                        {valueAmount.toLocaleString('cs-cz', {
                           style: 'currency',
                           currency: transactionValueCurrency
                         })}
@@ -241,7 +248,7 @@ class TransactionItem extends Component {
                     )}
                     {direction === 'INCOMING' && (
                       <Typography className={classes.amountPositive}>
-                        {transactionValueAmount.toLocaleString('cs-cz', {
+                        {valueAmount.toLocaleString('cs-cz', {
                           style: 'currency',
                           currency: transactionValueCurrency
                         })}
@@ -255,6 +262,7 @@ class TransactionItem extends Component {
           <TransactionItemPanelDetail
             detail={transactionType === TransactionTypes.CARD.id ? detailCardPayments : detailTransfers}
             accountPreferredColor={accountPreferredColor}
+            categories={categories}
           />
         </ExpansionPanel>
       </Grow>

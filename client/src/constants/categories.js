@@ -36,7 +36,8 @@ export const IncomingTransactionCategories = Object.freeze({
 });
 
 export const SpecialCategories = Object.freeze({
-  UNCATEGORIZED: { id: 0, text: 'Uncategorized' }
+  UNCATEGORIZED: { id: 0, text: 'Uncategorized' },
+  SPLIT: { id: -1, text: 'Various categories' }
 });
 
 export const TransactionCategories = Object.freeze({
