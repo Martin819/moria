@@ -22,6 +22,15 @@ INSERT INTO moria.transactions (id, account_id, card_number, mcc, merchant_name,
 INSERT INTO moria.transactions (id, account_id, card_number, mcc, merchant_name, constant_symbol, specific_symbol, variable_symbol, exchange_rate, foreign_amount, foreign_currency, booking_date, category_id, direction, party_account_number, party_bank_code, party_prefix, party_description, payee_message, payer_message, transaction_fee, transaction_fee_canceled, transaction_type, user_description, amount, currency, value_date) VALUES ('20', 6666, '4562356984521568', '4449', 'Kafekara', null, null, null, null, null, null, '2018-06-03 08:28:58', 115, 'OUTGOING', null, null, null, null, null, null, null, null, 'CARD', null, 55.00, 'CZK', '2018-06-04 08:00:10');
 INSERT INTO moria.transactions (id, account_id, card_number, mcc, merchant_name, constant_symbol, specific_symbol, variable_symbol, exchange_rate, foreign_amount, foreign_currency, booking_date, category_id, direction, party_account_number, party_bank_code, party_prefix, party_description, payee_message, payer_message, transaction_fee, transaction_fee_canceled, transaction_type, user_description, amount, currency, value_date) VALUES ('19', 6666, '4562356984521568', '2358', 'Bio Central', null, null, null, null, null, null, '2018-04-07 08:02:19', 124, 'OUTGOING', null, null, null, null, null, null, null, null, 'CARD', null, 260.00, 'CZK', '2018-04-08 00:50:19');
 
+#-------------
+# CHILD TRANSAKCE:
+#-------------
+INSERT INTO moria.transactions (id, account_id, parent_id, category_id, amount, currency) VALUES ('test', 6666, '16', 11, 1000, 'CZK');
+INSERT INTO moria.transactions (id, account_id, parent_id, category_id, amount, currency) VALUES ('test2', 6666, '16', 12, 1000, 'CZK');
+INSERT INTO moria.transactions (id, account_id, parent_id, category_id, amount, currency) VALUES ('test3', 6666, '16', 13, 1000, 'CZK');
+
+
+
 # ----------------------------------------
 # RULESETY
 # ----------------------------------------

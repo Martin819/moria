@@ -9,6 +9,7 @@ import moria.model.transactions.Transaction;
 import moria.services.TransactionServiceImpl;
 import moria.utils.Categories;
 import moria.utils.TransactionCategorizer;
+import moria.utils.utils;
 import org.joda.time.LocalTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -72,6 +73,7 @@ public class IncomingTransactionsController {
     public boolean saveTransactions(@PathVariable String fromDate, @PathVariable String toDate) throws IOException {
         List<Transaction> transactions = APIservice.findTransactionsByDate(fromDate, toDate);
         traService.saveNewTransactionList(transactions);
+        traService.setOriginalValueToValue();
         return true;
     }
 

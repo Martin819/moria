@@ -55,8 +55,10 @@ public class TransactionCategorizer {
     public void categorizeTransaction(List<Transaction> transactionList) {
         TransactionService transactionService = getTransactionService();
         for (Transaction transaction : transactionList) {
-            int category = categoryScorer.scorePossibleCategories(transaction);
-            transactionService.setCategoryIdForTransactionById(transaction.getId(), category);
+            if (transaction.getParentId() != null) {
+                int category = categoryScorer.scorePossibleCategories(transaction);
+                transactionService.setCategoryIdForTransactionById(transaction.getId(), category);
+            }
         }
     }
 }

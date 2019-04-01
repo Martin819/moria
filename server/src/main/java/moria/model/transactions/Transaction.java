@@ -7,6 +7,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.Map;
 
 @Data
 @SuppressWarnings("DefaultAnnotationParam")
@@ -46,8 +47,10 @@ public class Transaction implements Serializable {
     @Embedded
     private TransactionAdditionalInfoCard additionalInfoCard;
     private Boolean isCategoryManuallyAssigned;
-
-
+    private String parentId;
+    private BigDecimal originalValue;
+    @Transient
+    private Map<Integer, BigDecimal> categories;
 
 }
 

@@ -1,16 +1,24 @@
 package moria.utils;
 
+import moria.SpringContext;
 import moria.dto.TransactionDto;
 import moria.model.transactions.Transaction;
 import moria.model.transactions.TransactionPartyAccount;
+import moria.services.TransactionService;
+import moria.services.TransactionServiceImpl;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class TransactionsToDtoMapper {
 
     private static final ModelMapper modelMapper = new ModelMapper();
+
 
     /**
      * Mapuje db entitu Transaction na TransactionDto
@@ -22,10 +30,13 @@ public class TransactionsToDtoMapper {
         for (Transaction transaction : transactions ) {
             TransactionDto dto = modelMapper.map(transaction, TransactionDto.class);
             dto.setCategoryId(transaction.getCategoryId());
-            String partyDescription = determinePartyDescription(transaction);
-            dto.setPartyDescription(partyDescription);
+            if (transaction.getParentId() == null) {
+                String partyDescription = determinePartyDescription(transaction);
+                dto.setPartyDescription(partyDescription);
+            }
             transactionDtos.add(dto);
         }
+        System.out.println(transactionDtos);
         return transactionDtos;
     }
 
@@ -43,23 +54,12 @@ public class TransactionsToDtoMapper {
                     result = t.getUserDescription();
                 } else {
                     if (t.getPartyAccount().getAccountNumber() != null && !t.getPartyAccount().getAccountNumber().trim().equals("")) {
-                        result = getNormalizedAccountNumber(t.getPartyAccount());
+                        result = utils.getNormalizedAccountNumber(t.getPartyAccount());
                     }
                 }
             }
         }
         return result;
-    }
-
-    public String getNormalizedAccountNumber(TransactionPartyAccount a) {
-        return getNormalizedAccountNumber(a.getPrefix(), a.getAccountNumber(), a.getBankCode());
-    }
-
-    public String getNormalizedAccountNumber (String prefix, String number, String bankCode) {
-        prefix = prefix.replaceFirst("^0+(?!$)", "");
-        number = number.replaceFirst("^0+(?!$)", "");
-        bankCode = bankCode.replaceFirst("^0+(?!$)", "");
-        return prefix + "-" + number + "/" + bankCode;
     }
 
 }

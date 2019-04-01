@@ -21,7 +21,7 @@ node {
    }
    stage('Results') {
        dir('moria/client') {
-           sh "mkdir target"
+           sh "mkdir -p target"
            sh "tar -czvf target/build.tar.gz build"
         archiveArtifacts 'target/build.tar.gz'
         println("Results")
