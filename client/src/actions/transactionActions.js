@@ -42,6 +42,9 @@ export const handleTransactionCategoryUpdate = (transactionId, newCategoryId) =>
       console.log(error);
     });
 };
+export const handleTransactionSplit = transactionSplitDto => dispatch => {
+  console.log(transactionSplitDto);
+};
 
 export const setItemsLoading = () => {
   return {

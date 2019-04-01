@@ -27,7 +27,7 @@ class TransactionsList extends Component {
 
   render() {
     const { activePage, itemsCountPerPage } = this.state;
-    const { classes, transactions, isLoading, handleTransactionCategoryUpdate } = this.props;
+    const { classes, transactions, isLoading, handleTransactionCategoryUpdate, handleTransactionSplit } = this.props;
     const transactionItems = transactions
       .filter(t => t.parentId === null)
       .slice((activePage - 1) * itemsCountPerPage, activePage * itemsCountPerPage)
@@ -38,6 +38,7 @@ class TransactionsList extends Component {
             index={index}
             {...transaction}
             handleTransactionCategoryUpdate={handleTransactionCategoryUpdate}
+            handleTransactionSplit={handleTransactionSplit}
           />
         );
       });

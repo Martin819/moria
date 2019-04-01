@@ -14,13 +14,13 @@ const TransactionItemPanelDetail = props => {
             <Typography variant="title" className="mb-1">
               Category breakdown:
             </Typography>
-            {Object.entries(categories).map(entry => {
+            {Object.entries(categories).map((entry, i) => {
               const categoryId = entry[0];
               const amount = entry[1];
               const category = Object.values(TransactionCategories).find(c => c.id === parseInt(categoryId));
               const categoryText = category === undefined || category === null ? 'Unknown category' : category.text;
               return (
-                <Row noGutters={true}>
+                <Row noGutters={true} key={i}>
                   <Col xs={2}> {categoryText}:</Col>
                   <Col xs="auto">
                     {amount.toLocaleString('cs-cz', {
@@ -40,7 +40,7 @@ const TransactionItemPanelDetail = props => {
             Detail:
           </Typography>
           {Object.entries(detail).map((it, i) => (
-            <Row noGutters={true}>
+            <Row noGutters={true} key={i}>
               <Col xs={2}>{it[0]}:</Col>
               <Col xs="auto">{it[1]}</Col>
             </Row>
