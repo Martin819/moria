@@ -28,7 +28,7 @@ public class CategorizedTransactionsController {
      * @return list of transactions
      */
     @GetMapping(value = "/transactions")
-    public ResponseEntity<List<ParentTransaction>> getAllTransactions() {
+    public ResponseEntity<List<TransactionDto>> getAllTransactions() {
         return new ResponseEntity<>(loadAllTransactions(), HttpStatus.OK);
     }
 
@@ -68,9 +68,9 @@ public class CategorizedTransactionsController {
 
 
     @GetMapping(value = "/test/dtoTransformation")
-    private List<ParentTransaction> loadAllTransactions() {
+    private List<TransactionDto> loadAllTransactions() {
         List<Transaction> tList = transactionService.findAllTransactions();
-        List<ParentTransaction> updatedTransactions = utils.bindParentAndChildTransactions(tList);
+        List<TransactionDto> updatedTransactions = utils.bindParentAndChildTransactions(tList);
         return updatedTransactions;
     }
 

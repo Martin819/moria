@@ -3,6 +3,7 @@ package moria.utils;
 import moria.SpringContext;
 import moria.dto.ChildTransaction;
 import moria.dto.ParentTransaction;
+import moria.dto.TransactionDto;
 import moria.model.transactions.*;
 import moria.services.TransactionServiceImpl;
 
@@ -30,14 +31,14 @@ public class utils {
         return t;
     }
 
-    public static List<ParentTransaction> bindParentAndChildTransactions(List<Transaction> transactionList) {
+    public static List<TransactionDto> bindParentAndChildTransactions(List<Transaction> transactionList) {
 //        TransactionServiceImpl transactionService = getTransactionService();
-        List<ParentTransaction> parentTransactionList = new ArrayList<>();
+        List<TransactionDto> transactionDtoList = new ArrayList<>();
         for (Transaction transaction : transactionList) {
             List<ChildTransaction> childTransactions = findChildTransactions(transaction);
-            parentTransactionList.add(new ParentTransaction(transaction, childTransactions));
+            transactionDtoList.add(new TransactionDto(transaction, childTransactions));
         }
-        return parentTransactionList;
+        return transactionDtoList;
     }
 
     public static List<ChildTransaction> findChildTransactions(Transaction t) {
