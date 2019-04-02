@@ -30,54 +30,20 @@ public class utils {
         return t;
     }
 
-    public static List<Transaction> bindParentAndChildTransactions(List<Transaction> tList) {
-        TransactionServiceImpl transactionService = getTransactionService();
-        ArrayList<String> categorizedParentTransactions = new ArrayList<>();
-        for (Transaction transaction : tList) {
-            if (transaction.getParentId() != null && !transaction.getParentId().isEmpty()) {
-                String parentId = transaction.getParentId();
-                Transaction parentTransaction = new Transaction();
-                for (Transaction t : tList) {
-                    if (t.getId().equals(parentId)) {
-                        parentTransaction = t;
-                        break;
-                    }
-                }
-                if (parentTransaction.getOriginalValue() == null) {
-                    parentTransaction.setOriginalValue(parentTransaction.getValue().getAmount());
-                    transactionService.setOriginalValueById(parentId, parentTransaction.getValue().getAmount());
-                }
-                if (!categorizedParentTransactions.contains(parentId)) {
-                    System.out.println(transaction);
-                    parentTransaction.setCategories(getCategoriesForParentJob(parentTransaction));
-                    System.out.println(parentTransaction);
-                    categorizedParentTransactions.add(parentId);
-                }
-            }
+    public static List<ParentTransaction> bindParentAndChildTransactions(List<Transaction> transactionList) {
+//        TransactionServiceImpl transactionService = getTransactionService();
+        List<ParentTransaction> parentTransactionList = new ArrayList<>();
+        for (Transaction transaction : transactionList) {
+            List<ChildTransaction> childTransactions = findChildTransactions(transaction);
+            parentTransactionList.add(new ParentTransaction(transaction, childTransactions));
         }
-        return tList;
+        return parentTransactionList;
     }
 
-    public static Map<Integer, BigDecimal> getCategoriesForParentJob(Transaction t) {
+    public static List<ChildTransaction> findChildTransactions(Transaction t) {
         TransactionServiceImpl transactionService = getTransactionService();
         List<Transaction> childrenList = transactionService.findByParentId(t.getId());
-        Map<Integer, BigDecimal> categories = new HashMap<>();
-        BigDecimal categorizedValue = new BigDecimal(0);
-        System.out.println(childrenList);
-        if (childrenList.size() > 0) {
-//            transactionService.setOriginalValueById(t.getId(), t.getValue().getAmount());
-            for (Transaction child : childrenList) {
-                categorizedValue = categorizedValue.add(child.getValue().getAmount());
-                categories.put(child.getCategoryId(), child.getValue().getAmount());
-            }
-            BigDecimal remainingAmount = t.getOriginalValue().subtract(categorizedValue);
-            if (remainingAmount.compareTo(new BigDecimal(0)) > 0) {
-                categories.put(0, remainingAmount);
-            }
-            transactionService.setValueAmountById(t.getId(), new BigDecimal(0));
-            System.out.println(categories);
-        }
-        return categories;
+        return getChildTransactions(childrenList);
     }
 
     public static String getNormalizedAccountNumber(TransactionPartyAccount a) {
@@ -144,18 +110,24 @@ public class utils {
         updateRestOfAmountToOriginalValue(childTransaction);
 
         List<Transaction> childTransactionList = transactionService.findByParentId(parentTransaction.getId());
-        List<ChildTransaction> childList = new ArrayList<>();
-        for (Transaction transaction : childTransactionList){
-            ChildTransaction child = new ChildTransaction(transaction.getId(), transaction.getCategoryId(), transaction.getValue().getAmount());
-            childList.add(child);
-        }
+        List<ChildTransaction> childList = getChildTransactions(childTransactionList);
         ParentTransaction parentTransactionForFE = new ParentTransaction(parentTransaction, childList);
 
         return parentTransactionForFE;
     }
 
+    private static List<ChildTransaction> getChildTransactions(List<Transaction> childTransactionList) {
+        List<ChildTransaction> childList = new ArrayList<>();
+        for (Transaction transaction : childTransactionList) {
+            ChildTransaction child = new ChildTransaction(transaction.getId(), transaction.getCategoryId(), transaction.getValue().getAmount());
+            childList.add(child);
+        }
+        return childList;
+    }
+
     /**
      * Update child transaction to have rest amount to parent transaction
+     *
      * @param childTransaction transaction which is being split
      */
     private static void updateRestOfAmountToOriginalValue(ChildTransaction childTransaction) {
@@ -205,7 +177,7 @@ public class utils {
         BigDecimal difference = new BigDecimal(parentAmount.subtract(total).longValue());
         if (difference.compareTo(parentAmount) != 0) {
             newTransactionValue.setAmount(parentAmount.subtract(total));
-        }else{
+        } else {
             newTransactionValue.setAmount(new BigDecimal(0));
         }
 

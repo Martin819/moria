@@ -49,8 +49,6 @@ public class Transaction implements Serializable, Cloneable {
     private Boolean isCategoryManuallyAssigned;
     private String parentId;
     private BigDecimal originalValue;
-    @Transient
-    private Map<Integer, BigDecimal> categories;
 
     public Object clone() throws CloneNotSupportedException {
         return super.clone();
