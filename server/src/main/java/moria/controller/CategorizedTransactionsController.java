@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -61,9 +62,9 @@ public class CategorizedTransactionsController {
      * @return created transaction
      */
     @PostMapping(value = "/transactions/removeSplit")
-    public ResponseEntity<Void> removeSplitTransaction(@RequestBody CategoryID categoryID) {
-        utils.removeSplitTransaction(categoryID.getId());
-        return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<BigDecimal> removeSplitTransaction(@RequestBody CategoryID categoryID) {
+        BigDecimal uncategorizedValue = utils.removeSplitTransaction(categoryID.getId());
+        return new ResponseEntity<>(uncategorizedValue, HttpStatus.OK);
     }
 
 

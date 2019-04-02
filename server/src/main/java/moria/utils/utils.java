@@ -199,7 +199,7 @@ public class utils {
         }
     }
 
-    public static void removeSplitTransaction(String id) {
+    public static BigDecimal removeSplitTransaction(String id) {
         TransactionServiceImpl transactionService = getTransactionService();
 
         Transaction transactionToRemove = transactionService.findTransactionById(id);
@@ -207,5 +207,16 @@ public class utils {
         List<Transaction> transactionList = transactionService.findByParentId(transactionToRemove.getParentId());
         Transaction parentTransaction = transactionService.findTransactionById(transactionToRemove.getParentId());
         updateRestOfAmountToOriginalValue(parentTransaction, transactionList); //aktualizuje dopocitavaci transakci (v pripade smazani vsech bude nula)
+
+        //vratime na FE hodnotu dopocitavaciho skore
+        transactionList = transactionService.findByParentId(transactionToRemove.getParentId());
+         BigDecimal returnValue = null;
+        for (Transaction transaction : transactionList){
+            if (transaction.getCategoryId() == 0 ){
+                returnValue = transaction.getValue().getAmount();
+            }
+        }
+        return returnValue;
+
     }
 }
