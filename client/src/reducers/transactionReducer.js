@@ -3,7 +3,8 @@ import {
   TRANSACTIONS_LOADING,
   SET_FILTER,
   UPDATE_TRANSACTION_CATEGORY,
-  SPLIT_TRANSACTION
+  SPLIT_TRANSACTION,
+  UNSPLIT_TRANSACTION
 } from '../actions/types';
 import {
   FILTER_TIME_PERIOD,
@@ -15,7 +16,6 @@ import moment from 'moment';
 
 const initialState = {
   transactions: [],
-  visibleTransactions: [],
   filters: {
     [FILTER_TIME_PERIOD.id]: TimePeriodFilters.ALL_TIME.id,
     [FILTER_DIRECTION.id]: DirectionFilters.ALL.id
@@ -34,7 +34,6 @@ export default function(state = initialState, action) {
         transactions: action.payload.data
           .map(t => Object.assign({}, t, { accountPreferredColor: colors[Math.floor(Math.random() * colors.length)] }))
           .sort((t1, t2) => moment(t2.valueDate).diff(t1.valueDate)),
-        visibleTransactions: action.payload.data,
         loading: false
       };
     }
@@ -50,8 +49,7 @@ export default function(state = initialState, action) {
         filters: {
           ...state.filters,
           [action.payload.filterType]: action.payload.filterId
-        },
-        visibleTransactions: [...state.transactions]
+        }
       };
     }
     case UPDATE_TRANSACTION_CATEGORY: {
@@ -63,8 +61,7 @@ export default function(state = initialState, action) {
             return t;
           }
           return t;
-        }),
-        visibleTransactions: [...state.transactions]
+        })
       };
     }
     case SPLIT_TRANSACTION: {
@@ -74,14 +71,29 @@ export default function(state = initialState, action) {
           if (t.id === action.payload.id) {
             return {
               ...t,
-              categories: {
-                //TODO
-              }
+              childTransactionsList: action.payload.childTransactionsList,
+              originalValue: action.payload.originalValue,
+              transactionValueAmount: action.payload.transactionValueAmount
             };
           }
           return t;
-        }),
-        visibleTransactions: [...state.transactions]
+        })
+      };
+    }
+    case UNSPLIT_TRANSACTION: {
+      return {
+        ...state,
+        transactions: state.transactions.map(t => {
+          if (t.id == action.payload.parentTransactionId) {
+            return {
+              ...t,
+              childTransactionsList: action.payload.data.childTransactionsList,
+              originalValue: action.payload.data.originalValue,
+              transactionValueAmount: action.payload.data.transactionValueAmount
+            };
+          }
+          return t;
+        })
       };
     }
     default:
