@@ -21,7 +21,7 @@ class TransactionItemCategorySplitForm extends Component {
   handleTransactionSplit = event => {
     event.preventDefault();
     this.props.handleTransactionSplit({
-      transactionId: this.props.transactionId,
+      id: this.props.transactionId,
       amount: this.state.dropdownAmount,
       categoryId: parseInt(this.state.dropdownCategoryId)
     });
@@ -30,6 +30,8 @@ class TransactionItemCategorySplitForm extends Component {
   render() {
     const { transactionCategories } = this.props;
     const { dropdownOpen, dropdownAmount, dropdownCategoryId } = this.state;
+
+    const invalidForSubmit = dropdownCategoryId === UNSELECTED || dropdownAmount === '';
     return (
       <ButtonDropdown
         isOpen={dropdownOpen}
@@ -80,13 +82,13 @@ class TransactionItemCategorySplitForm extends Component {
               </Input>
               <div className="text-right">
                 <Button
-                  color="primary"
+                  color={invalidForSubmit ? 'secondary' : 'primary'}
                   className="mt-2"
                   size="sm"
                   onClick={this.handleTransactionSplit}
-                  disabled={dropdownCategoryId === UNSELECTED || dropdownAmount === ''}
+                  disabled={invalidForSubmit}
                 >
-                  SAVE
+                  Save
                 </Button>
               </div>
             </FormGroup>

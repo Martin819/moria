@@ -1,18 +1,7 @@
 import React, { Component } from 'react';
 import moment from 'moment';
 import { withStyles, ExpansionPanel, ExpansionPanelSummary, Typography, Grid, Grow } from '@material-ui/core/';
-import {
-  Button,
-  Form,
-  FormGroup,
-  Col,
-  Row,
-  Input,
-  ButtonDropdown,
-  DropdownToggle,
-  DropdownMenu,
-  Label
-} from 'reactstrap';
+import { Button, Form, FormGroup, Col, Row, Input } from 'reactstrap';
 import {
   OutgoingTransactionCategories,
   TransactionCategories,
@@ -90,10 +79,14 @@ class TransactionItem extends Component {
     const detailTransfers = {
       'Party account': `${transactionPartyAccountPrefix}-${transactionPartyAccountAccountNumber}/${transactionPartyAccountBankCode}`,
       'Variable symbol': transactionAdditionalInfoDomesticVariableSymbol,
-      'Constant symbol': transactionAdditionalInfoDomesticConstantSymbol,
-      'Payer message': payerMessage,
-      'Payee message': payeeMessage
+      Message: `${direction === TransactionDirections.INCOMING.id ? payeeMessage : payerMessage}`,
+      'Constant symbol': transactionAdditionalInfoDomesticConstantSymbol
     };
+
+    const invalidForSubmit =
+      this.state.categoryId === UNSELECTED ||
+      categoryId === this.state.categoryId ||
+      transactionType === TransactionTypes.CASH.id;
 
     return (
       <Grow in={true} timeout={500 + 100 * index}>
@@ -148,14 +141,10 @@ class TransactionItem extends Component {
                                 </Input>
 
                                 <Button
-                                  color="primary"
+                                  color={invalidForSubmit ? 'secondary' : 'primary'}
                                   type="submit"
                                   className="ml-md-2"
-                                  disabled={
-                                    this.state.categoryId === UNSELECTED ||
-                                    categoryId === this.state.categoryId ||
-                                    transactionType === TransactionTypes.CASH.id
-                                  }
+                                  disabled={invalidForSubmit}
                                   size="sm"
                                   onClick={this.handleTransactionCategoryUpdate}
                                 >
@@ -184,7 +173,7 @@ class TransactionItem extends Component {
                         &#8722;&nbsp;
                         {valueAmount.toLocaleString('cs-cz', {
                           style: 'currency',
-                          currency: transactionValueCurrency
+                          currency: transactionValueCurrency || 'CZK'
                         })}
                       </Typography>
                     )}
@@ -192,7 +181,7 @@ class TransactionItem extends Component {
                       <Typography className={classes.amountPositive}>
                         {valueAmount.toLocaleString('cs-cz', {
                           style: 'currency',
-                          currency: transactionValueCurrency
+                          currency: transactionValueCurrency || 'CZK'
                         })}
                       </Typography>
                     )}
@@ -205,6 +194,8 @@ class TransactionItem extends Component {
             detail={transactionType === TransactionTypes.CARD.id ? detailCardPayments : detailTransfers}
             accountPreferredColor={accountPreferredColor}
             categories={categories}
+            handleTransactionUnsplit={this.props.handleTransactionUnsplit}
+            transactionId={id}
           />
         </ExpansionPanel>
       </Grow>

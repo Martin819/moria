@@ -1,4 +1,10 @@
-import { GET_TRANSACTIONS, TRANSACTIONS_LOADING, SET_FILTER, UPDATE_TRANSACTION_CATEGORY } from '../actions/types';
+import {
+  GET_TRANSACTIONS,
+  TRANSACTIONS_LOADING,
+  SET_FILTER,
+  UPDATE_TRANSACTION_CATEGORY,
+  SPLIT_TRANSACTION
+} from '../actions/types';
 import {
   FILTER_TIME_PERIOD,
   FILTER_DIRECTION,
@@ -55,6 +61,23 @@ export default function(state = initialState, action) {
           if (t.id === action.payload.transactionId) {
             t.categoryId = action.payload.newCategoryId;
             return t;
+          }
+          return t;
+        }),
+        visibleTransactions: [...state.transactions]
+      };
+    }
+    case SPLIT_TRANSACTION: {
+      return {
+        ...state,
+        transactions: state.transactions.map(t => {
+          if (t.id === action.payload.id) {
+            return {
+              ...t,
+              categories: {
+                //TODO
+              }
+            };
           }
           return t;
         }),

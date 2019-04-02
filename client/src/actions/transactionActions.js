@@ -1,4 +1,10 @@
-import { GET_TRANSACTIONS, TRANSACTIONS_LOADING, SET_FILTER, UPDATE_TRANSACTION_CATEGORY } from './types';
+import {
+  GET_TRANSACTIONS,
+  TRANSACTIONS_LOADING,
+  SET_FILTER,
+  UPDATE_TRANSACTION_CATEGORY,
+  SPLIT_TRANSACTION
+} from './types';
 import axios from 'axios';
 
 export const getData = () => async (dispatch, getState) => {
@@ -43,7 +49,24 @@ export const handleTransactionCategoryUpdate = (transactionId, newCategoryId) =>
     });
 };
 export const handleTransactionSplit = transactionSplitDto => dispatch => {
-  console.log(transactionSplitDto);
+  axios({
+    method: 'post',
+    url: '/transactions/split',
+    data: transactionSplitDto
+  })
+    .then(response => {
+      console.log(response);
+      dispatch({
+        type: SPLIT_TRANSACTION,
+        payload: response.data
+      });
+    })
+    .catch(error => {
+      console.log(error);
+    });
+};
+export const handleTransactionUnsplit = id => dispatch => {
+  console.log('unsplit', id);
 };
 
 export const setItemsLoading = () => {
