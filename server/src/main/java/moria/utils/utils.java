@@ -204,13 +204,26 @@ public class utils {
 
         Transaction transactionToRemove = transactionService.findTransactionById(id);
         transactionService.removeTransaction(transactionToRemove);
-        List<Transaction> transactionList = transactionService.findByParentId(transactionToRemove.getParentId());
-        Transaction parentTransaction = transactionService.findTransactionById(transactionToRemove.getParentId());
-        updateRestOfAmountToOriginalValue(parentTransaction, transactionList); //aktualizuje dopocitavaci transakci (v pripade smazani vsech bude nula)
+        List<Transaction> childTransactionList = transactionService.findByParentId(transactionToRemove.getParentId());
+        //pokud je uz dopocitavaci kategorie sama, je smazana a parent transakci se prehodi original value do amountu
+        if (childTransactionList.size() == 1){
+            transactionService.removeTransaction(childTransactionList.get(0));
+
+            Transaction parentTransaction = transactionService.findTransactionById(transactionToRemove.getParentId());
+            TransactionValue transactionValue = parentTransaction.getValue();
+            transactionValue.setAmount(parentTransaction.getOriginalValue());
+            parentTransaction.setValue(transactionValue);
+            parentTransaction.setOriginalValue(null);
+            transactionService.saveTransaction(parentTransaction);
+        }else {
+            Transaction parentTransaction  = transactionService.findTransactionById(transactionToRemove.getParentId());
+            updateRestOfAmountToOriginalValue(parentTransaction, childTransactionList); //aktualizuje dopocitavaci transakci
+        }
+
 
         //vratime na FE hodnotu dopocitavaciho skore
-        transactionList = transactionService.findByParentId(transactionToRemove.getParentId());
-        List<ChildTransaction> childTransactions = getChildTransactions(transactionList);
+        childTransactionList = transactionService.findByParentId(transactionToRemove.getParentId());
+        List<ChildTransaction> childTransactions = getChildTransactions(childTransactionList);
 
         return childTransactions;
 
