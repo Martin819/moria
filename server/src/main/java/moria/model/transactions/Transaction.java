@@ -14,7 +14,7 @@ import java.util.Map;
 @Entity(name = "transactions")
 @AllArgsConstructor
 @NoArgsConstructor
-public class Transaction implements Serializable {
+public class Transaction implements Serializable, Cloneable {
 
     @Id
     @SerializedName("_id")
@@ -51,6 +51,10 @@ public class Transaction implements Serializable {
     private BigDecimal originalValue;
     @Transient
     private Map<Integer, BigDecimal> categories;
+
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
 
 }
 

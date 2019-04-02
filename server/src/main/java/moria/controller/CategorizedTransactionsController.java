@@ -1,7 +1,6 @@
 package moria.controller;
 
-import moria.dto.CategoryToUpdateDto;
-import moria.dto.TransactionDto;
+import moria.dto.*;
 import moria.model.transactions.Transaction;
 import moria.services.TransactionService;
 import moria.utils.TransactionsToDtoMapper;
@@ -11,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -43,6 +43,29 @@ public class CategorizedTransactionsController {
         transactionService.setManuallyUpdateCategory(categoryToUpdateDto.getId());
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    /**
+     * Change categoryId of given transaction
+     * @param childTransaction - contains transaction id, amount of money divided from transaction and category id
+     * @return created transaction
+     */
+    @PostMapping(value = "/transactions/split")
+    public ResponseEntity<ParentTransaction> splitTransaction(@RequestBody ChildTransaction childTransaction) {
+        ParentTransaction parentTransaction = utils.createDividedTransaction(childTransaction);
+        return new ResponseEntity<>(parentTransaction, HttpStatus.CREATED);
+    }
+
+    /**
+     * Remove transaction
+     * @param categoryID - transaction id to remove
+     * @return created transaction
+     */
+    @PostMapping(value = "/transactions/removeSplit")
+    public ResponseEntity<Void> removeSplitTransaction(@RequestBody CategoryID categoryID) {
+        utils.removeSplitTransaction(categoryID.getId());
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
 
     @GetMapping(value = "/test/dtoTransformation")
     private List<TransactionDto> loadAllTransactions() {

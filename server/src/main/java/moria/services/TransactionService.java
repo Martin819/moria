@@ -53,6 +53,8 @@ public interface TransactionService {
 
     void saveNewTransaction(Transaction transaction);
 
+    void removeTransaction(Transaction transaction);
+
     int getNumberOfTransactionsById(String transactionId);
 
 }

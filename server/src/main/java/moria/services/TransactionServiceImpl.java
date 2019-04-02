@@ -144,6 +144,12 @@ public class TransactionServiceImpl implements TransactionService {
         }
     }
 
+    @Override
+    @Modifying
+    public void removeTransaction(Transaction transaction) {
+        transactionRepository.delete(transaction);
+    }
+
     public void saveNewTransactionList(List<Transaction> list) {
         for (Transaction t:list) {
             Transaction tra = utils.verifyTransactionForNullValues(t);

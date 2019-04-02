@@ -26,6 +26,7 @@ public class TransactionDto {
     // platebni symboly
     private String transactionAdditionalInfoDomesticConstantSymbol;
     private String transactionAdditionalInfoDomesticVariableSymbol;
+    private String transactionAdditionalInfoDomesticSpecificSymbol;
 
     // zprava
     private String payeeMessage;
