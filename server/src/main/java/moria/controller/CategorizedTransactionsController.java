@@ -62,9 +62,9 @@ public class CategorizedTransactionsController {
      * @return created transaction
      */
     @PostMapping(value = "/transactions/removeSplit")
-    public ResponseEntity<BigDecimal> removeSplitTransaction(@RequestBody CategoryID categoryID) {
-        BigDecimal uncategorizedValue = utils.removeSplitTransaction(categoryID.getId());
-        return new ResponseEntity<>(uncategorizedValue, HttpStatus.OK);
+    public ResponseEntity<List<ChildTransaction>> removeSplitTransaction(@RequestBody CategoryID categoryID) {
+        List<ChildTransaction> childTransactions = utils.removeSplitTransaction(categoryID.getId());
+        return new ResponseEntity<>(childTransactions, HttpStatus.OK);
     }
 
 

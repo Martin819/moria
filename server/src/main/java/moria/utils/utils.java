@@ -199,7 +199,7 @@ public class utils {
         }
     }
 
-    public static BigDecimal removeSplitTransaction(String id) {
+    public static List<ChildTransaction> removeSplitTransaction(String id) {
         TransactionServiceImpl transactionService = getTransactionService();
 
         Transaction transactionToRemove = transactionService.findTransactionById(id);
@@ -210,13 +210,9 @@ public class utils {
 
         //vratime na FE hodnotu dopocitavaciho skore
         transactionList = transactionService.findByParentId(transactionToRemove.getParentId());
-         BigDecimal returnValue = null;
-        for (Transaction transaction : transactionList){
-            if (transaction.getCategoryId() == 0 ){
-                returnValue = transaction.getValue().getAmount();
-            }
-        }
-        return returnValue;
+        List<ChildTransaction> childTransactions = getChildTransactions(transactionList);
+
+        return childTransactions;
 
     }
 }
