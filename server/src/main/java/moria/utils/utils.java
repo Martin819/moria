@@ -199,33 +199,33 @@ public class utils {
         }
     }
 
-    public static List<ChildTransaction> removeSplitTransaction(String id) {
+    public static TransactionDto removeSplitTransaction(String id) {
         TransactionServiceImpl transactionService = getTransactionService();
 
         Transaction transactionToRemove = transactionService.findTransactionById(id);
         transactionService.removeTransaction(transactionToRemove);
         List<Transaction> childTransactionList = transactionService.findByParentId(transactionToRemove.getParentId());
+        Transaction parentTransaction = transactionService.findTransactionById(transactionToRemove.getParentId());
         //pokud je uz dopocitavaci kategorie sama, je smazana a parent transakci se prehodi original value do amountu
         if (childTransactionList.size() == 1){
             transactionService.removeTransaction(childTransactionList.get(0));
-
-            Transaction parentTransaction = transactionService.findTransactionById(transactionToRemove.getParentId());
             TransactionValue transactionValue = parentTransaction.getValue();
             transactionValue.setAmount(parentTransaction.getOriginalValue());
             parentTransaction.setValue(transactionValue);
             parentTransaction.setOriginalValue(null);
             transactionService.saveTransaction(parentTransaction);
         }else {
-            Transaction parentTransaction  = transactionService.findTransactionById(transactionToRemove.getParentId());
             updateRestOfAmountToOriginalValue(parentTransaction, childTransactionList); //aktualizuje dopocitavaci transakci
         }
 
 
-        //vratime na FE hodnotu dopocitavaciho skore
+        //vratime na FE celou parent transakci
         childTransactionList = transactionService.findByParentId(transactionToRemove.getParentId());
         List<ChildTransaction> childTransactions = getChildTransactions(childTransactionList);
 
-        return childTransactions;
+        TransactionDto transactionForFrontend = new TransactionDto(parentTransaction, childTransactions);
+
+        return transactionForFrontend;
 
     }
 }

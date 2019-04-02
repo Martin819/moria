@@ -62,9 +62,9 @@ public class CategorizedTransactionsController {
      * @return created transaction
      */
     @PostMapping(value = "/transactions/removeSplit")
-    public ResponseEntity<List<ChildTransaction>> removeSplitTransaction(@RequestBody CategoryID categoryID) {
-        List<ChildTransaction> childTransactions = utils.removeSplitTransaction(categoryID.getId());
-        return new ResponseEntity<>(childTransactions, HttpStatus.OK);
+    public ResponseEntity<TransactionDto> removeSplitTransaction(@RequestBody CategoryID categoryID) {
+        TransactionDto transactionDto = utils.removeSplitTransaction(categoryID.getId());
+        return new ResponseEntity<>(transactionDto, HttpStatus.OK);
     }
 
 
