@@ -21,6 +21,7 @@ node {
    }
    stage('Results') {
        dir('moria/client') {
+           sh "cp package.json build/package.json"
            sh "mkdir -p target"
            sh "tar -czvf target/build.tar.gz build"
         archiveArtifacts 'target/build.tar.gz'
