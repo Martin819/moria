@@ -2,7 +2,6 @@ package moria.utils;
 
 import moria.SpringContext;
 import moria.dto.ChildTransaction;
-import moria.dto.ParentTransaction;
 import moria.dto.TransactionDto;
 import moria.model.transactions.*;
 import moria.services.TransactionServiceImpl;
@@ -79,11 +78,11 @@ public class utils {
         } catch (CloneNotSupportedException e) {
             e.printStackTrace();
         }
+        newTransactionValue.setAmount(childTransaction.getAmount());
+        newTransaction.setValue(newTransactionValue);
         if (parentTransaction.getValue().getAmount() != null && parentTransaction.getValue().getAmount().compareTo(new BigDecimal(0)) != 0) { //pokud je hodnota v amount
             //nasetuju nove transakci stejnou menu, ale jinou castku
-            newTransactionValue.setAmount(childTransaction.getAmount());
 
-            newTransaction.setValue(newTransactionValue);
 
             //Prehozeni amountu do original value
             BigDecimal originalValue = new BigDecimal(parentTransaction.getValue().getAmount().longValue());
@@ -93,24 +92,43 @@ public class utils {
             transactionService.saveTransaction(parentTransaction);
 
         } else { //pokud je uz v originalValue, tak jenom nasetuju hodnoty nove transakce
-            newTransactionValue.setAmount(childTransaction.getAmount());
-            newTransaction.setValue(newTransactionValue);
             newTransaction.setOriginalValue(null);
         }
+        List<Transaction> childTransactionList = transactionService.findByParentId(parentTransaction.getId());
+        List<ChildTransaction> childList = getChildTransactions(childTransactionList);
+        TransactionDto transactionDto = new TransactionDto(parentTransaction, childList);
 
-        //nasetuju hodnoty nove splitove transakce
-        newTransaction.setParentId(parentTransaction.getId());
-        UUID uuid = UUID.randomUUID();
-        newTransaction.setId(uuid.toString());
+        boolean isChildTransactionAlreadyCreated = false;
+        Transaction createdChildTransaction = null;
+        for (Transaction childTransactionFromParentList : childTransactionList){
+            if (childTransactionFromParentList.getCategoryId() == childTransaction.getCategoryId()){
+                isChildTransactionAlreadyCreated = true;
+                createdChildTransaction = childTransactionFromParentList;
+            }
+        }
 
-        newTransaction.setCategoryId(childTransaction.getCategoryId());
+        //pokud child transakce s danym category_id neexistuje
+        if (!isChildTransactionAlreadyCreated){
+            //nasetuju hodnoty nove splitove transakce
+            newTransaction.setParentId(parentTransaction.getId());
+            UUID uuid = UUID.randomUUID();
+            newTransaction.setId(uuid.toString());
+
+            newTransaction.setCategoryId(childTransaction.getCategoryId());
+        }else { //pokud existuje, provede se pouze update value
+            newTransaction = createdChildTransaction;
+            TransactionValue transactionValueChild = newTransaction.getValue();
+            transactionValueChild.setAmount(childTransaction.getAmount().add(transactionValueChild.getAmount()));
+            newTransaction.setValue(transactionValueChild);
+        }
 
         transactionService.saveNewTransaction(newTransaction);
         updateRestOfAmountToOriginalValue(childTransaction);
 
-        List<Transaction> childTransactionList = transactionService.findByParentId(parentTransaction.getId());
-        List<ChildTransaction> childList = getChildTransactions(childTransactionList);
-        TransactionDto transactionDto = new TransactionDto(parentTransaction, childList);
+        //po updatu databaze si znovu načtu chil transakce (pro FE)
+        childTransactionList = transactionService.findByParentId(parentTransaction.getId());
+        childList = getChildTransactions(childTransactionList);
+        transactionDto = new TransactionDto(parentTransaction, childList);
 
         return transactionDto;
     }
@@ -216,14 +234,11 @@ public class utils {
             updateRestOfAmountToOriginalValue(parentTransaction, childTransactionList); //aktualizuje dopocitavaci transakci
         }
 
-
         //vratime na FE celou parent transakci
         childTransactionList = transactionService.findByParentId(transactionToRemove.getParentId());
         List<ChildTransaction> childTransactions = getChildTransactions(childTransactionList);
-
         TransactionDto transactionForFrontend = new TransactionDto(parentTransaction, childTransactions);
 
         return transactionForFrontend;
-
     }
 }
