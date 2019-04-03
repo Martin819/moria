@@ -78,12 +78,11 @@ public class utils {
         } catch (CloneNotSupportedException e) {
             e.printStackTrace();
         }
+        //nasetuju nove transakci stejnou menu, ale jinou castku
         newTransactionValue.setAmount(childTransaction.getAmount());
         newTransaction.setValue(newTransactionValue);
+
         if (parentTransaction.getValue().getAmount() != null && parentTransaction.getValue().getAmount().compareTo(new BigDecimal(0)) != 0) { //pokud je hodnota v amount
-            //nasetuju nove transakci stejnou menu, ale jinou castku
-
-
             //Prehozeni amountu do original value
             BigDecimal originalValue = new BigDecimal(parentTransaction.getValue().getAmount().longValue());
             parentTransaction.setOriginalValue(originalValue);
@@ -94,28 +93,28 @@ public class utils {
         } else { //pokud je uz v originalValue, tak jenom nasetuju hodnoty nove transakce
             newTransaction.setOriginalValue(null);
         }
-        List<Transaction> childTransactionList = transactionService.findByParentId(parentTransaction.getId());
-        List<ChildTransaction> childList = getChildTransactions(childTransactionList);
-        TransactionDto transactionDto = new TransactionDto(parentTransaction, childList);
 
+        List<Transaction> childTransactionList = transactionService.findByParentId(parentTransaction.getId());
+
+        //najdu child transakci se stejným category_id
         boolean isChildTransactionAlreadyCreated = false;
         Transaction createdChildTransaction = null;
-        for (Transaction childTransactionFromParentList : childTransactionList){
-            if (childTransactionFromParentList.getCategoryId() == childTransaction.getCategoryId()){
+        for (Transaction childTransactionFromParentList : childTransactionList) {
+            if (childTransactionFromParentList.getCategoryId() == childTransaction.getCategoryId()) {
                 isChildTransactionAlreadyCreated = true;
                 createdChildTransaction = childTransactionFromParentList;
             }
         }
 
         //pokud child transakce s danym category_id neexistuje
-        if (!isChildTransactionAlreadyCreated){
+        if (!isChildTransactionAlreadyCreated) {
             //nasetuju hodnoty nove splitove transakce
             newTransaction.setParentId(parentTransaction.getId());
             UUID uuid = UUID.randomUUID();
             newTransaction.setId(uuid.toString());
 
             newTransaction.setCategoryId(childTransaction.getCategoryId());
-        }else { //pokud existuje, provede se pouze update value
+        } else { //pokud existuje, provede se pouze update value
             newTransaction = createdChildTransaction;
             TransactionValue transactionValueChild = newTransaction.getValue();
             transactionValueChild.setAmount(childTransaction.getAmount().add(transactionValueChild.getAmount()));
@@ -126,9 +125,9 @@ public class utils {
         updateRestOfAmountToOriginalValue(childTransaction);
 
         //po updatu databaze si znovu načtu chil transakce (pro FE)
-        childTransactionList = transactionService.findByParentId(parentTransaction.getId());
-        childList = getChildTransactions(childTransactionList);
-        transactionDto = new TransactionDto(parentTransaction, childList);
+        childTransactionList = transactionService.findByParentId(parentTransaction.getId());  //musím zavolat znovu, protože se seznam child transakci zmenil
+        List<ChildTransaction> childList = getChildTransactions(childTransactionList);
+        TransactionDto transactionDto = new TransactionDto(parentTransaction, childList);
 
         return transactionDto;
     }
@@ -223,14 +222,14 @@ public class utils {
         List<Transaction> childTransactionList = transactionService.findByParentId(transactionToRemove.getParentId());
         Transaction parentTransaction = transactionService.findTransactionById(transactionToRemove.getParentId());
         //pokud je uz dopocitavaci kategorie sama, je smazana a parent transakci se prehodi original value do amountu
-        if (childTransactionList.size() == 1){
+        if (childTransactionList.size() == 1) {
             transactionService.removeTransaction(childTransactionList.get(0));
             TransactionValue transactionValue = parentTransaction.getValue();
             transactionValue.setAmount(parentTransaction.getOriginalValue());
             parentTransaction.setValue(transactionValue);
             parentTransaction.setOriginalValue(null);
             transactionService.saveTransaction(parentTransaction);
-        }else {
+        } else {
             updateRestOfAmountToOriginalValue(parentTransaction, childTransactionList); //aktualizuje dopocitavaci transakci
         }
 

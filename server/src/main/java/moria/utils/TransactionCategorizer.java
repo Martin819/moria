@@ -31,7 +31,9 @@ public class TransactionCategorizer {
         List<Transaction> transactionList = transactionService.findAllTransactions();
         ArrayList<Category> categoryList = new ArrayList<>();
         for (Transaction transactionLiTransaction : transactionList){
-            categoryList.add(new Category(transactionLiTransaction.getCategoryId(), transactionLiTransaction.getId()));
+            if (transactionLiTransaction.getParentId() == null){
+                categoryList.add(new Category(transactionLiTransaction.getCategoryId(), transactionLiTransaction.getId()));
+            }
         }
         return categoryList;
     }
