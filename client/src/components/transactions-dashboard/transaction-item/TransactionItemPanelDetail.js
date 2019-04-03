@@ -54,18 +54,20 @@ class TransactionItemPanelDetail extends Component {
             </Col>
           )}
 
-          <Col className="p-0">
-            <hr />
-            <Typography variant="title" className="mb-1">
-              Detail:
-            </Typography>
-            {Object.entries(detail).map((it, i) => (
-              <Row noGutters={true} key={i}>
-                <Col xs={2}>{it[0]}:</Col>
-                <Col xs="auto">{it[1]}</Col>
-              </Row>
-            ))}
-          </Col>
+          {detail && (
+            <Col className="p-0">
+              <hr />
+              <Typography variant="title" className="mb-1">
+                Detail:
+              </Typography>
+              {Object.entries(detail).map((it, i) => (
+                <Row noGutters={true} key={i}>
+                  <Col xs={2}>{it[0]}:</Col>
+                  <Col xs="auto">{it[1]}</Col>
+                </Row>
+              ))}
+            </Col>
+          )}
         </Grid>
       </ExpansionPanelDetails>
     );

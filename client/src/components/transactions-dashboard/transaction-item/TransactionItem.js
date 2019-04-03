@@ -101,6 +101,18 @@ class TransactionItem extends Component {
       Message: `${direction === TransactionDirections.INCOMING.id ? payeeMessage : payerMessage}`,
       'Constant symbol': transactionAdditionalInfoDomesticConstantSymbol
     };
+    let activeDetail;
+    switch (transactionType) {
+      case TransactionTypes.CARD.id:
+        activeDetail = detailCardPayments;
+        break;
+      case TransactionTypes.CASH.id:
+        activeDetail = null;
+        break;
+      default:
+        activeDetail = detailTransfers;
+    }
+
     const invalidForSubmit =
       this.state.categoryId === UNSELECTED ||
       categoryId === this.state.categoryId ||
@@ -210,7 +222,7 @@ class TransactionItem extends Component {
             </Grid>
           </ExpansionPanelSummary>
           <TransactionItemPanelDetail
-            detail={transactionType === TransactionTypes.CARD.id ? detailCardPayments : detailTransfers}
+            detail={activeDetail}
             accountPreferredColor={accountPreferredColor}
             childTransactionsList={childTransactionsList}
             handleTransactionUnsplit={this.props.handleTransactionUnsplit}
