@@ -65,7 +65,7 @@ class TransactionItem extends Component {
       childTransactionsList
     } = this.props;
 
-    const isParentTransaction = childTransactionsList.length > 0 && parentId === null;
+    const isParentTransaction = childTransactionsList !== null && childTransactionsList.length > 0 && parentId === null;
     const valueAmount = isParentTransaction ? originalValue : transactionValueAmount;
     const maxValueToAssign = isParentTransaction
       ? childTransactionsList.find(it => it.categoryId === TransactionCategories.UNCATEGORIZED.id).amount
@@ -171,7 +171,7 @@ class TransactionItem extends Component {
                   </Grid>
 
                   <Grid item xs className="text-md-right">
-                    {direction === 'OUTGOING' && (
+                    {direction === TransactionDirections.OUTGOING.id && (
                       <Typography className={classes.amountNegative}>
                         &#8722;&nbsp;
                         {valueAmount.toLocaleString('cs-cz', {
@@ -180,7 +180,7 @@ class TransactionItem extends Component {
                         })}
                       </Typography>
                     )}
-                    {direction === 'INCOMING' && (
+                    {direction === TransactionDirections.INCOMING.id && (
                       <Typography className={classes.amountPositive}>
                         {valueAmount.toLocaleString('cs-cz', {
                           style: 'currency',

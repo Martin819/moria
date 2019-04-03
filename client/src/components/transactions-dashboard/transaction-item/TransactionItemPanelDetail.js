@@ -15,7 +15,7 @@ class TransactionItemPanelDetail extends Component {
     return (
       <ExpansionPanelDetails style={{ borderLeft: `6px solid ${accountPreferredColor}` }}>
         <Grid item container direction="column">
-          {childTransactionsList.length > 0 && (
+          {childTransactionsList && childTransactionsList.length > 0 && (
             <Col className="p-0">
               <hr />
               <Typography variant="title" className="mb-1">

@@ -31,13 +31,15 @@ class TransactionItemCategorySplitForm extends Component {
       amount: this.state.dropdownAmount,
       categoryId: parseInt(this.state.dropdownCategoryId)
     });
+    this.setState({ dropdownAmount:'' });
+
   };
 
   render() {
     const { transactionCategories, maxValueToAssign } = this.props;
     const { dropdownOpen, dropdownAmount, dropdownCategoryId } = this.state;
 
-    const invalidForSubmit = dropdownCategoryId === UNSELECTED || dropdownAmount === '';
+    const invalidForSubmit = dropdownCategoryId === UNSELECTED || dropdownAmount === '' || dropdownAmount == 0 ;
     return (
       <ButtonDropdown
         isOpen={dropdownOpen}

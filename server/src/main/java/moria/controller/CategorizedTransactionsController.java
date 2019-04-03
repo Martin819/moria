@@ -72,7 +72,9 @@ public class CategorizedTransactionsController {
     private List<TransactionDto> loadAllTransactions() {
         TransactionsToDtoMapper dtoTransformer = new TransactionsToDtoMapper();
         List<Transaction> tList = transactionService.findAllTransactions();
-        return dtoTransformer.transformToDto(tList);
+        List<TransactionDto> transactionDtos = dtoTransformer.transformToDto(tList);
+        List<TransactionDto> updatedDtos = utils.bindParentAndChildTransactions(transactionDtos);
+        return updatedDtos;
     }
 
 

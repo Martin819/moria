@@ -31,21 +31,19 @@ public class utils {
         return t;
     }
 
-//    public static List<TransactionDto> bindParentAndChildTransactions(List<Transaction> transactionList) {
-////        TransactionServiceImpl transactionService = getTransactionService();
-//        List<TransactionDto> transactionDtoList = new ArrayList<>();
-//        for (Transaction transaction : transactionList) {
-//            List<ChildTransaction> childTransactions = findChildTransactions(transaction);
-//            transactionDtoList.add(new TransactionDto(transaction, childTransactions));
-//        }
-//        return transactionDtoList;
-//    }
-//
-//    public static List<ChildTransaction> findChildTransactions(Transaction t) {
-//        TransactionServiceImpl transactionService = getTransactionService();
-//        List<Transaction> childrenList = transactionService.findByParentId(t.getId());
-//        return getChildTransactions(childrenList);
-//    }
+    public static List<TransactionDto> bindParentAndChildTransactions(List<TransactionDto> transactionList) {
+        for (TransactionDto transaction : transactionList) {
+            List<ChildTransaction> childTransactions = findChildTransactions(transaction);
+            transaction.setChildTransactionsList(childTransactions);
+        }
+        return transactionList;
+    }
+
+    public static List<ChildTransaction> findChildTransactions(TransactionDto t) {
+        TransactionServiceImpl transactionService = getTransactionService();
+        List<Transaction> childrenList = transactionService.findByParentId(t.getId());
+        return getChildTransactions(childrenList);
+    }
 
     public static String getNormalizedAccountNumber(TransactionPartyAccount a) {
         return getNormalizedAccountNumber(a.getPrefix(), a.getAccountNumber(), a.getBankCode());
