@@ -3,7 +3,8 @@ import {
   TRANSACTIONS_LOADING,
   SET_FILTER,
   UPDATE_TRANSACTION_CATEGORY,
-  SPLIT_TRANSACTION
+  SPLIT_TRANSACTION,
+  UNSPLIT_TRANSACTION
 } from './types';
 import axios from 'axios';
 
@@ -65,8 +66,27 @@ export const handleTransactionSplit = transactionSplitDto => dispatch => {
       console.log(error);
     });
 };
-export const handleTransactionUnsplit = id => dispatch => {
-  console.log('unsplit', id);
+
+export const handleTransactionUnsplit = (parentTransactionId, childTransactionId) => dispatch => {
+  axios({
+    method: 'post',
+    url: '/transactions/removeSplit',
+    data: { id: childTransactionId }
+  })
+    .then(response => {
+      console.log(response);
+      dispatch({
+        type: UNSPLIT_TRANSACTION,
+        payload: {
+          parentTransactionId: parentTransactionId,
+          childTransactionId: childTransactionId,
+          data: response.data
+        }
+      });
+    })
+    .catch(error => {
+      console.log(error);
+    });
 };
 
 export const setItemsLoading = () => {
