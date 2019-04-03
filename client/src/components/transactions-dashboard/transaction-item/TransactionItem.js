@@ -62,11 +62,14 @@ class TransactionItem extends Component {
       categoryId,
       parentId,
       originalValue,
-      categories
+      childTransactionsList
     } = this.props;
 
-    const isParentTransaction = categories !== null && parentId === null;
+    const isParentTransaction = childTransactionsList !== null && childTransactionsList.length > 0 && parentId === null;
     const valueAmount = isParentTransaction ? originalValue : transactionValueAmount;
+    const maxValueToAssign = isParentTransaction
+      ? childTransactionsList.find(it => it.categoryId === TransactionCategories.UNCATEGORIZED.id).amount
+      : transactionValueAmount;
     const categoryEnum = isParentTransaction
       ? TransactionCategories.SPLIT
       : Object.values(TransactionCategories).find(cat => cat.id === categoryId);
@@ -82,7 +85,6 @@ class TransactionItem extends Component {
       Message: `${direction === TransactionDirections.INCOMING.id ? payeeMessage : payerMessage}`,
       'Constant symbol': transactionAdditionalInfoDomesticConstantSymbol
     };
-
     const invalidForSubmit =
       this.state.categoryId === UNSELECTED ||
       categoryId === this.state.categoryId ||
@@ -159,6 +161,7 @@ class TransactionItem extends Component {
                                 transactionCategories={transactionCategories}
                                 handleTransactionSplit={this.props.handleTransactionSplit}
                                 transactionId={id}
+                                maxValueToAssign={maxValueToAssign}
                               />
                             )}
                           </Grid>
@@ -168,7 +171,7 @@ class TransactionItem extends Component {
                   </Grid>
 
                   <Grid item xs className="text-md-right">
-                    {direction === 'OUTGOING' && (
+                    {direction === TransactionDirections.OUTGOING.id && (
                       <Typography className={classes.amountNegative}>
                         &#8722;&nbsp;
                         {valueAmount.toLocaleString('cs-cz', {
@@ -177,7 +180,7 @@ class TransactionItem extends Component {
                         })}
                       </Typography>
                     )}
-                    {direction === 'INCOMING' && (
+                    {direction === TransactionDirections.INCOMING.id && (
                       <Typography className={classes.amountPositive}>
                         {valueAmount.toLocaleString('cs-cz', {
                           style: 'currency',
@@ -193,7 +196,7 @@ class TransactionItem extends Component {
           <TransactionItemPanelDetail
             detail={transactionType === TransactionTypes.CARD.id ? detailCardPayments : detailTransfers}
             accountPreferredColor={accountPreferredColor}
-            categories={categories}
+            childTransactionsList={childTransactionsList}
             handleTransactionUnsplit={this.props.handleTransactionUnsplit}
             transactionId={id}
           />

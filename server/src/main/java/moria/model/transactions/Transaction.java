@@ -2,11 +2,13 @@ package moria.model.transactions;
 
 import com.google.gson.annotations.SerializedName;
 import lombok.*;
+import moria.dto.ChildTransaction;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 @Data
@@ -50,7 +52,7 @@ public class Transaction implements Serializable, Cloneable {
     private String parentId;
     private BigDecimal originalValue;
     @Transient
-    private Map<Integer, BigDecimal> categories;
+    private List<ChildTransaction> childTransactions;
 
     public Object clone() throws CloneNotSupportedException {
         return super.clone();

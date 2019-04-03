@@ -3,6 +3,7 @@ package moria.utils;
 import moria.SpringContext;
 import moria.dto.ChildTransaction;
 import moria.dto.ParentTransaction;
+import moria.dto.TransactionDto;
 import moria.model.transactions.*;
 import moria.services.TransactionServiceImpl;
 
@@ -30,54 +31,18 @@ public class utils {
         return t;
     }
 
-    public static List<Transaction> bindParentAndChildTransactions(List<Transaction> tList) {
-        TransactionServiceImpl transactionService = getTransactionService();
-        ArrayList<String> categorizedParentTransactions = new ArrayList<>();
-        for (Transaction transaction : tList) {
-            if (transaction.getParentId() != null && !transaction.getParentId().isEmpty()) {
-                String parentId = transaction.getParentId();
-                Transaction parentTransaction = new Transaction();
-                for (Transaction t : tList) {
-                    if (t.getId().equals(parentId)) {
-                        parentTransaction = t;
-                        break;
-                    }
-                }
-                if (parentTransaction.getOriginalValue() == null) {
-                    parentTransaction.setOriginalValue(parentTransaction.getValue().getAmount());
-                    transactionService.setOriginalValueById(parentId, parentTransaction.getValue().getAmount());
-                }
-                if (!categorizedParentTransactions.contains(parentId)) {
-                    System.out.println(transaction);
-                    parentTransaction.setCategories(getCategoriesForParentJob(parentTransaction));
-                    System.out.println(parentTransaction);
-                    categorizedParentTransactions.add(parentId);
-                }
-            }
+    public static List<TransactionDto> bindParentAndChildTransactions(List<TransactionDto> transactionList) {
+        for (TransactionDto transaction : transactionList) {
+            List<ChildTransaction> childTransactions = findChildTransactions(transaction);
+            transaction.setChildTransactionsList(childTransactions);
         }
-        return tList;
+        return transactionList;
     }
 
-    public static Map<Integer, BigDecimal> getCategoriesForParentJob(Transaction t) {
+    public static List<ChildTransaction> findChildTransactions(TransactionDto t) {
         TransactionServiceImpl transactionService = getTransactionService();
         List<Transaction> childrenList = transactionService.findByParentId(t.getId());
-        Map<Integer, BigDecimal> categories = new HashMap<>();
-        BigDecimal categorizedValue = new BigDecimal(0);
-        System.out.println(childrenList);
-        if (childrenList.size() > 0) {
-//            transactionService.setOriginalValueById(t.getId(), t.getValue().getAmount());
-            for (Transaction child : childrenList) {
-                categorizedValue = categorizedValue.add(child.getValue().getAmount());
-                categories.put(child.getCategoryId(), child.getValue().getAmount());
-            }
-            BigDecimal remainingAmount = t.getOriginalValue().subtract(categorizedValue);
-            if (remainingAmount.compareTo(new BigDecimal(0)) > 0) {
-                categories.put(0, remainingAmount);
-            }
-            transactionService.setValueAmountById(t.getId(), new BigDecimal(0));
-            System.out.println(categories);
-        }
-        return categories;
+        return getChildTransactions(childrenList);
     }
 
     public static String getNormalizedAccountNumber(TransactionPartyAccount a) {
@@ -97,7 +62,7 @@ public class utils {
      * @param childTransaction information about new transaction from frontend
      * @return child transaction with all parameter of parent with another category_id, amount
      */
-    public static ParentTransaction createDividedTransaction(ChildTransaction childTransaction) {
+    public static TransactionDto createDividedTransaction(ChildTransaction childTransaction) {
         TransactionServiceImpl transactionService = getTransactionService();
         Transaction parentTransaction = transactionService.findTransactionById(childTransaction.getId());
         Transaction newTransaction = null;
@@ -144,18 +109,24 @@ public class utils {
         updateRestOfAmountToOriginalValue(childTransaction);
 
         List<Transaction> childTransactionList = transactionService.findByParentId(parentTransaction.getId());
+        List<ChildTransaction> childList = getChildTransactions(childTransactionList);
+        TransactionDto transactionDto = new TransactionDto(parentTransaction, childList);
+
+        return transactionDto;
+    }
+
+    private static List<ChildTransaction> getChildTransactions(List<Transaction> childTransactionList) {
         List<ChildTransaction> childList = new ArrayList<>();
-        for (Transaction transaction : childTransactionList){
+        for (Transaction transaction : childTransactionList) {
             ChildTransaction child = new ChildTransaction(transaction.getId(), transaction.getCategoryId(), transaction.getValue().getAmount());
             childList.add(child);
         }
-        ParentTransaction parentTransactionForFE = new ParentTransaction(parentTransaction, childList);
-
-        return parentTransactionForFE;
+        return childList;
     }
 
     /**
      * Update child transaction to have rest amount to parent transaction
+     *
      * @param childTransaction transaction which is being split
      */
     private static void updateRestOfAmountToOriginalValue(ChildTransaction childTransaction) {
@@ -205,7 +176,7 @@ public class utils {
         BigDecimal difference = new BigDecimal(parentAmount.subtract(total).longValue());
         if (difference.compareTo(parentAmount) != 0) {
             newTransactionValue.setAmount(parentAmount.subtract(total));
-        }else{
+        } else {
             newTransactionValue.setAmount(new BigDecimal(0));
         }
 
@@ -226,13 +197,33 @@ public class utils {
         }
     }
 
-    public static void removeSplitTransaction(String id) {
+    public static TransactionDto removeSplitTransaction(String id) {
         TransactionServiceImpl transactionService = getTransactionService();
 
         Transaction transactionToRemove = transactionService.findTransactionById(id);
         transactionService.removeTransaction(transactionToRemove);
-        List<Transaction> transactionList = transactionService.findByParentId(transactionToRemove.getParentId());
+        List<Transaction> childTransactionList = transactionService.findByParentId(transactionToRemove.getParentId());
         Transaction parentTransaction = transactionService.findTransactionById(transactionToRemove.getParentId());
-        updateRestOfAmountToOriginalValue(parentTransaction, transactionList); //aktualizuje dopocitavaci transakci (v pripade smazani vsech bude nula)
+        //pokud je uz dopocitavaci kategorie sama, je smazana a parent transakci se prehodi original value do amountu
+        if (childTransactionList.size() == 1){
+            transactionService.removeTransaction(childTransactionList.get(0));
+            TransactionValue transactionValue = parentTransaction.getValue();
+            transactionValue.setAmount(parentTransaction.getOriginalValue());
+            parentTransaction.setValue(transactionValue);
+            parentTransaction.setOriginalValue(null);
+            transactionService.saveTransaction(parentTransaction);
+        }else {
+            updateRestOfAmountToOriginalValue(parentTransaction, childTransactionList); //aktualizuje dopocitavaci transakci
+        }
+
+
+        //vratime na FE celou parent transakci
+        childTransactionList = transactionService.findByParentId(transactionToRemove.getParentId());
+        List<ChildTransaction> childTransactions = getChildTransactions(childTransactionList);
+
+        TransactionDto transactionForFrontend = new TransactionDto(parentTransaction, childTransactions);
+
+        return transactionForFrontend;
+
     }
 }

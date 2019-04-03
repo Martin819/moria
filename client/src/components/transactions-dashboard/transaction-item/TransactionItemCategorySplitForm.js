@@ -15,6 +15,12 @@ class TransactionItemCategorySplitForm extends Component {
   };
 
   handleChange = event => {
+    if (event.target.name === 'dropdownAmount') {
+      if (event.target.value > this.props.maxValueToAssign) {
+        this.setState({ [event.target.name]: this.props.maxValueToAssign });
+        return;
+      }
+    }
     this.setState({ [event.target.name]: event.target.value });
   };
 
@@ -25,13 +31,15 @@ class TransactionItemCategorySplitForm extends Component {
       amount: this.state.dropdownAmount,
       categoryId: parseInt(this.state.dropdownCategoryId)
     });
+    this.setState({ dropdownAmount:'' });
+
   };
 
   render() {
-    const { transactionCategories } = this.props;
+    const { transactionCategories, maxValueToAssign } = this.props;
     const { dropdownOpen, dropdownAmount, dropdownCategoryId } = this.state;
 
-    const invalidForSubmit = dropdownCategoryId === UNSELECTED || dropdownAmount === '';
+    const invalidForSubmit = dropdownCategoryId === UNSELECTED || dropdownAmount === '' || dropdownAmount == 0 ;
     return (
       <ButtonDropdown
         isOpen={dropdownOpen}
@@ -57,6 +65,7 @@ class TransactionItemCategorySplitForm extends Component {
                 bsSize="sm"
                 type="number"
                 min="0.01"
+                max={maxValueToAssign}
                 step="0.01"
               />
               <Label for="" className="mt-2">

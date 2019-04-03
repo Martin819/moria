@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,8 +51,8 @@ public class CategorizedTransactionsController {
      * @return created transaction
      */
     @PostMapping(value = "/transactions/split")
-    public ResponseEntity<ParentTransaction> splitTransaction(@RequestBody ChildTransaction childTransaction) {
-        ParentTransaction parentTransaction = utils.createDividedTransaction(childTransaction);
+    public ResponseEntity<TransactionDto> splitTransaction(@RequestBody ChildTransaction childTransaction) {
+        TransactionDto parentTransaction = utils.createDividedTransaction(childTransaction);
         return new ResponseEntity<>(parentTransaction, HttpStatus.CREATED);
     }
 
@@ -61,9 +62,9 @@ public class CategorizedTransactionsController {
      * @return created transaction
      */
     @PostMapping(value = "/transactions/removeSplit")
-    public ResponseEntity<Void> removeSplitTransaction(@RequestBody CategoryID categoryID) {
-        utils.removeSplitTransaction(categoryID.getId());
-        return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<TransactionDto> removeSplitTransaction(@RequestBody CategoryID categoryID) {
+        TransactionDto transactionDto = utils.removeSplitTransaction(categoryID.getId());
+        return new ResponseEntity<>(transactionDto, HttpStatus.OK);
     }
 
 
@@ -71,8 +72,9 @@ public class CategorizedTransactionsController {
     private List<TransactionDto> loadAllTransactions() {
         TransactionsToDtoMapper dtoTransformer = new TransactionsToDtoMapper();
         List<Transaction> tList = transactionService.findAllTransactions();
-        List<Transaction> updatedTransactions = utils.bindParentAndChildTransactions(tList);
-        return dtoTransformer.transformToDto(updatedTransactions);
+        List<TransactionDto> transactionDtos = dtoTransformer.transformToDto(tList);
+        List<TransactionDto> updatedDtos = utils.bindParentAndChildTransactions(transactionDtos);
+        return updatedDtos;
     }
 
 

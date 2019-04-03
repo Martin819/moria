@@ -35,7 +35,6 @@ class TransactionsList extends Component {
       handleTransactionSplit,
       handleTransactionUnsplit
     } = this.props;
-    console.log(transactions);
     const transactionItems = transactions
       .filter(t => t.parentId === null)
       .slice((activePage - 1) * itemsCountPerPage, activePage * itemsCountPerPage)
