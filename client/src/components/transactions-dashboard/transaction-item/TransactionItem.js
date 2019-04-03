@@ -39,6 +39,24 @@ class TransactionItem extends Component {
     this.props.handleTransactionCategoryUpdate(this.props.id, this.state.categoryId);
   };
 
+  getCategoryEnum = (isParentTransaction, childTransactionsList, transactionCategoryId, transactionValue) => {
+    if (isParentTransaction) {
+      if (childTransactionsList.length === 2) {
+        const categorizedChild = childTransactionsList.find(
+          c => c.categoryId !== TransactionCategories.UNCATEGORIZED.id
+        );
+        if (categorizedChild !== undefined && categorizedChild.amount === transactionValue) {
+          return Object.values(TransactionCategories).find(cat => cat.id === categorizedChild.categoryId);
+        } else {
+          return TransactionCategories.SPLIT;
+        }
+      } else {
+        return TransactionCategories.SPLIT;
+      }
+    }
+    return Object.values(TransactionCategories).find(cat => cat.id === transactionCategoryId);
+  };
+
   render() {
     const {
       classes,
@@ -70,9 +88,7 @@ class TransactionItem extends Component {
     const maxValueToAssign = isParentTransaction
       ? childTransactionsList.find(it => it.categoryId === TransactionCategories.UNCATEGORIZED.id).amount
       : transactionValueAmount;
-    const categoryEnum = isParentTransaction
-      ? TransactionCategories.SPLIT
-      : Object.values(TransactionCategories).find(cat => cat.id === categoryId);
+    const categoryEnum = this.getCategoryEnum(isParentTransaction, childTransactionsList, categoryId, valueAmount);
     const categoryText = categoryEnum === undefined ? 'Unknown' : categoryEnum.text;
     const transactionTypeEnum = Object.values(TransactionTypes).find(type => type.id === transactionType);
     const transactionTypeText = transactionTypeEnum === undefined ? 'Unknown' : transactionTypeEnum.text;

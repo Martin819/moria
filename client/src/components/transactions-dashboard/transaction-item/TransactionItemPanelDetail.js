@@ -21,34 +21,36 @@ class TransactionItemPanelDetail extends Component {
               <Typography variant="title" className="mb-1">
                 Category breakdown:
               </Typography>
-              {childTransactionsList.map((childTransaction, i) => {
-                const categoryId = childTransaction.categoryId;
-                const amount = childTransaction.amount;
-                const category = Object.values(TransactionCategories).find(c => c.id === parseInt(categoryId));
-                const categoryText = category === undefined || category === null ? 'Unknown category' : category.text;
-                const isUncategorized = categoryId == TransactionCategories.UNCATEGORIZED.id;
-                return (
-                  <Row noGutters={true} key={i}>
-                    <Col xs="auto">
-                      <IconButton
-                        aria-label="Delete"
-                        className="p-0 mb-1"
-                        disabled={isUncategorized}
-                        onClick={e => this.handleTransactionUnsplit(e, childTransaction.id)}
-                      >
-                        <ClearIcon fontSize="small" color={isUncategorized ? 'disabled' : 'error'} />
-                      </IconButton>
-                    </Col>
-                    <Col xs={2}> {categoryText}:</Col>
-                    <Col xs="auto">
-                      {amount.toLocaleString('cs-cz', {
-                        style: 'currency',
-                        currency: 'CZK'
-                      })}
-                    </Col>
-                  </Row>
-                );
-              })}
+              {childTransactionsList
+                .sort((a, b) => b.amount - a.amount)
+                .map((childTransaction, i) => {
+                  const categoryId = childTransaction.categoryId;
+                  const amount = childTransaction.amount;
+                  const category = Object.values(TransactionCategories).find(c => c.id === parseInt(categoryId));
+                  const categoryText = category === undefined || category === null ? 'Unknown category' : category.text;
+                  const isUncategorized = categoryId == TransactionCategories.UNCATEGORIZED.id;
+                  return (
+                    <Row noGutters={true} key={i}>
+                      <Col xs="auto">
+                        <IconButton
+                          aria-label="Delete"
+                          className="p-0 mb-1"
+                          disabled={isUncategorized}
+                          onClick={e => this.handleTransactionUnsplit(e, childTransaction.id)}
+                        >
+                          <ClearIcon fontSize="small" color={isUncategorized ? 'disabled' : 'error'} />
+                        </IconButton>
+                      </Col>
+                      <Col xs={2}> {categoryText}:</Col>
+                      <Col xs="auto">
+                        {amount.toLocaleString('cs-cz', {
+                          style: 'currency',
+                          currency: 'CZK'
+                        })}
+                      </Col>
+                    </Row>
+                  );
+                })}
             </Col>
           )}
 
