@@ -58,7 +58,7 @@ class TransactionItemCategorySplitForm extends Component {
               <Input
                 name="dropdownAmount"
                 id="dropdownAmount"
-                placeholder="100.00"
+                placeholder="insert amount"
                 value={dropdownAmount}
                 className="text-right"
                 onChange={e => this.handleChange(e)}
