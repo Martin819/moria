@@ -1,6 +1,7 @@
 package moria.dto;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import moria.model.transactions.Transaction;
 
 import java.math.BigDecimal;
@@ -9,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 @Data
+@NoArgsConstructor
 public class TransactionDto {
 
     private String id;

@@ -31,21 +31,21 @@ public class utils {
         return t;
     }
 
-    public static List<TransactionDto> bindParentAndChildTransactions(List<Transaction> transactionList) {
+//    public static List<TransactionDto> bindParentAndChildTransactions(List<Transaction> transactionList) {
+////        TransactionServiceImpl transactionService = getTransactionService();
+//        List<TransactionDto> transactionDtoList = new ArrayList<>();
+//        for (Transaction transaction : transactionList) {
+//            List<ChildTransaction> childTransactions = findChildTransactions(transaction);
+//            transactionDtoList.add(new TransactionDto(transaction, childTransactions));
+//        }
+//        return transactionDtoList;
+//    }
+//
+//    public static List<ChildTransaction> findChildTransactions(Transaction t) {
 //        TransactionServiceImpl transactionService = getTransactionService();
-        List<TransactionDto> transactionDtoList = new ArrayList<>();
-        for (Transaction transaction : transactionList) {
-            List<ChildTransaction> childTransactions = findChildTransactions(transaction);
-            transactionDtoList.add(new TransactionDto(transaction, childTransactions));
-        }
-        return transactionDtoList;
-    }
-
-    public static List<ChildTransaction> findChildTransactions(Transaction t) {
-        TransactionServiceImpl transactionService = getTransactionService();
-        List<Transaction> childrenList = transactionService.findByParentId(t.getId());
-        return getChildTransactions(childrenList);
-    }
+//        List<Transaction> childrenList = transactionService.findByParentId(t.getId());
+//        return getChildTransactions(childrenList);
+//    }
 
     public static String getNormalizedAccountNumber(TransactionPartyAccount a) {
         return getNormalizedAccountNumber(a.getPrefix(), a.getAccountNumber(), a.getBankCode());
@@ -64,7 +64,7 @@ public class utils {
      * @param childTransaction information about new transaction from frontend
      * @return child transaction with all parameter of parent with another category_id, amount
      */
-    public static ParentTransaction createDividedTransaction(ChildTransaction childTransaction) {
+    public static TransactionDto createDividedTransaction(ChildTransaction childTransaction) {
         TransactionServiceImpl transactionService = getTransactionService();
         Transaction parentTransaction = transactionService.findTransactionById(childTransaction.getId());
         Transaction newTransaction = null;
@@ -112,9 +112,9 @@ public class utils {
 
         List<Transaction> childTransactionList = transactionService.findByParentId(parentTransaction.getId());
         List<ChildTransaction> childList = getChildTransactions(childTransactionList);
-        ParentTransaction parentTransactionForFE = new ParentTransaction(parentTransaction, childList);
+        TransactionDto transactionDto = new TransactionDto(parentTransaction, childList);
 
-        return parentTransactionForFE;
+        return transactionDto;
     }
 
     private static List<ChildTransaction> getChildTransactions(List<Transaction> childTransactionList) {

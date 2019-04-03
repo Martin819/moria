@@ -51,8 +51,8 @@ public class CategorizedTransactionsController {
      * @return created transaction
      */
     @PostMapping(value = "/transactions/split")
-    public ResponseEntity<ParentTransaction> splitTransaction(@RequestBody ChildTransaction childTransaction) {
-        ParentTransaction parentTransaction = utils.createDividedTransaction(childTransaction);
+    public ResponseEntity<TransactionDto> splitTransaction(@RequestBody ChildTransaction childTransaction) {
+        TransactionDto parentTransaction = utils.createDividedTransaction(childTransaction);
         return new ResponseEntity<>(parentTransaction, HttpStatus.CREATED);
     }
 
@@ -70,9 +70,9 @@ public class CategorizedTransactionsController {
 
     @GetMapping(value = "/test/dtoTransformation")
     private List<TransactionDto> loadAllTransactions() {
+        TransactionsToDtoMapper dtoTransformer = new TransactionsToDtoMapper();
         List<Transaction> tList = transactionService.findAllTransactions();
-        List<TransactionDto> updatedTransactions = utils.bindParentAndChildTransactions(tList);
-        return updatedTransactions;
+        return dtoTransformer.transformToDto(tList);
     }
 
 
