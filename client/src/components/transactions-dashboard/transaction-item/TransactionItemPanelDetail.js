@@ -19,7 +19,7 @@ class TransactionItemPanelDetail extends Component {
             <Col className="p-0">
               <hr />
               <Typography variant="title" className="mb-1">
-                Category breakdown:
+                Split into categories:
               </Typography>
               {childTransactionsList
                 .sort((a, b) => b.amount - a.amount)

@@ -98,8 +98,8 @@ class TransactionItem extends Component {
     const detailTransfers = {
       'Party account': `${transactionPartyAccountPrefix}-${transactionPartyAccountAccountNumber}/${transactionPartyAccountBankCode}`,
       'Variable symbol': transactionAdditionalInfoDomesticVariableSymbol,
-      Message: `${direction === TransactionDirections.INCOMING.id ? payeeMessage : payerMessage}`,
-      'Constant symbol': transactionAdditionalInfoDomesticConstantSymbol
+      'Constant symbol': transactionAdditionalInfoDomesticConstantSymbol,
+      Message: `${direction === TransactionDirections.INCOMING.id ? payeeMessage : payerMessage}`
     };
     let activeDetail;
     switch (transactionType) {
