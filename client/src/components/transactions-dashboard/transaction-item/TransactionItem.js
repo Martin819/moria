@@ -84,10 +84,21 @@ class TransactionItem extends Component {
     } = this.props;
 
     const isParentTransaction = childTransactionsList !== null && childTransactionsList.length > 0 && parentId === null;
+    const isSplitableTransaction = childTransactionsList !== null && parentId === null;
     const valueAmount = isParentTransaction ? originalValue : transactionValueAmount;
-    const maxValueToAssign = isParentTransaction
-      ? childTransactionsList.find(it => it.categoryId === TransactionCategories.UNCATEGORIZED.id).amount
-      : transactionValueAmount;
+
+    let maxValueToAssign = 0;
+    if (isSplitableTransaction) {
+      const uncategorizedChild = childTransactionsList.find(
+        it => it.categoryId === TransactionCategories.UNCATEGORIZED.id
+      );
+      if (uncategorizedChild !== undefined) {
+        maxValueToAssign = uncategorizedChild.amount;
+      } else {
+        maxValueToAssign = valueAmount;
+      }
+    }
+
     const categoryEnum = this.getCategoryEnum(isParentTransaction, childTransactionsList, categoryId, valueAmount);
     const categoryText = categoryEnum === undefined ? 'Unknown' : categoryEnum.text;
     const transactionTypeEnum = Object.values(TransactionTypes).find(type => type.id === transactionType);

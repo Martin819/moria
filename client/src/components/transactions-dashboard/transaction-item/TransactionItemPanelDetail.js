@@ -7,7 +7,7 @@ import { TransactionCategories } from '../../../constants/categories';
 class TransactionItemPanelDetail extends Component {
   handleTransactionUnsplit = (event, childTransactionId) => {
     event.preventDefault();
-    this.props.handleTransactionUnsplit(parseInt(this.props.transactionId), childTransactionId);
+    this.props.handleTransactionUnsplit(this.props.transactionId, childTransactionId);
   };
 
   render() {

@@ -10,6 +10,7 @@ const getTransactionsByDirection = (state, direction) =>
   state.transactions.transactions.filter(t => t.direction === direction);
 const getAllTransactions = state => state.transactions.transactions;
 const getAllFilters = state => state.statistics.filters;
+const getNonChildTransactions = state => state.transactions.transactions.filter(t => t.parentId === null);
 
 const filterTransactions = (transactions, filters) => {
   Object.entries(filters).forEach(filter => {
@@ -30,13 +31,14 @@ export const computeStatistics = () =>
   createSelector(
     [getTransactionsByDirection, getAllFilters],
     (transactions, filters) => {
+      transactions = transactions.filter(t => t.parentId === null);
       transactions = filterTransactions(transactions, filters);
       return _.chain(transactions)
         .groupBy(t => t.categoryId)
         .map((t, categoryId) => {
           return {
             name: Object.values(TransactionCategories).find(cat => cat.id == categoryId).text,
-            value: _.sumBy(t, 'transactionValueAmount')
+            value: _.sumBy(t, tr => tr.originalValue || tr.transactionValueAmount)
           };
         })
         .orderBy('value', 'desc')
@@ -45,7 +47,7 @@ export const computeStatistics = () =>
   );
 
 export const computeBarchartData = createSelector(
-  [getAllTransactions],
+  [getNonChildTransactions],
   transactions => {
     const incomingTransactions = transactions.filter(t => t.direction === TransactionDirections.INCOMING.id);
     const outgoingTransactions = transactions.filter(t => t.direction === TransactionDirections.OUTGOING.id);
@@ -61,8 +63,8 @@ export const computeBarchartData = createSelector(
         t => moment(t.valueDate).month() === currentMonth && moment(t.valueDate).year() === currentYear
       );
 
-      const monthlyIncome = _.sumBy(monthlyIncomingTransactions, 'transactionValueAmount');
-      const monthlyExpense = _.sumBy(monthlyOutgoingTransactions, 'transactionValueAmount');
+      const monthlyIncome = _.sumBy(monthlyIncomingTransactions, t => t.transactionValueAmount || t.originalValue);
+      const monthlyExpense = _.sumBy(monthlyOutgoingTransactions, t => t.transactionValueAmount || t.originalValue);
       data = [
         { name: `${now.format('MMM')} '${now.format('YY')}`, Incomes: monthlyIncome, Expenses: monthlyExpense },
         ...data
@@ -77,24 +79,25 @@ export const sumTransactions = () =>
   createSelector(
     [getTransactionsByDirection, getAllFilters],
     (transactions, filters) => {
+      transactions = transactions.filter(t => t.parentId === null);
       transactions = filterTransactions(transactions, filters);
       return _.chain(transactions)
-        .sumBy('transactionValueAmount')
+        .sumBy(t => t.transactionValueAmount || t.originalValue)
         .value();
     }
   );
 
 export const computeAccountBalance = createSelector(
-  [getAllTransactions],
+  [getNonChildTransactions],
   transactions => {
     const incomingTransactions = transactions.filter(t => t.direction === TransactionDirections.INCOMING.id);
     const gains = _.chain(incomingTransactions)
-      .sumBy('transactionValueAmount')
+      .sumBy(t => t.transactionValueAmount || t.originalValue)
       .value();
 
     const outgoingTransactions = transactions.filter(t => t.direction === TransactionDirections.OUTGOING.id);
     const losses = _.chain(outgoingTransactions)
-      .sumBy('transactionValueAmount')
+      .sumBy(t => t.transactionValueAmount || t.originalValue)
       .value();
 
     return _.subtract(gains, losses);
