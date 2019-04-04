@@ -41,20 +41,16 @@ public class TransactionCategorizer {
     public void categorizeAllTransactions(boolean recategorizeAllTransaction) {
         TransactionService transactionService = getTransactionService();
         List<Transaction> transactionList = transactionService.findAllTransactions();
+        List<Transaction> toRemove = new ArrayList<>();
         for (Transaction transaction : transactionList) {
-            if (recategorizeAllTransaction && transaction.getIsCategoryManuallyAssigned() == null && transaction.getParentId() == null || transaction.getOriginalValue() == null ){
-                int category = categoryFinder.findBestMatchingCategory(transaction);
-                transactionService.setCategoryIdForTransactionById(transaction.getId(), category);
-            } else if (recategorizeAllTransaction && !transaction.getIsCategoryManuallyAssigned() && transaction.getParentId() == null || transaction.getOriginalValue() == null) {
-                int category = categoryFinder.findBestMatchingCategory(transaction);
-                transactionService.setCategoryIdForTransactionById(transaction.getId(), category);
-            } else {
-                if (transaction.getCategoryId() == 0 && transaction.getParentId() == null || transaction.getOriginalValue() == null) {
-                    int category = categoryFinder.findBestMatchingCategory(transaction);
-                    transactionService.setCategoryIdForTransactionById(transaction.getId(), category);
-                }
+            if (transaction.getParentId() == null) {
+                toRemove.add(transaction);
+            } else if (!recategorizeAllTransaction && transaction.getIsCategoryManuallyAssigned() != null && transaction.getIsCategoryManuallyAssigned()) {
+                toRemove.add(transaction);
             }
         }
+        transactionList.removeAll(toRemove);
+        categorizeTransactions(transactionList);
     }
 
     public void categorizeTransactions(List<Transaction> transactionList) {
