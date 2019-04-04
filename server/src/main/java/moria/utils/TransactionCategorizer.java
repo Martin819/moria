@@ -56,10 +56,8 @@ public class TransactionCategorizer {
     public void categorizeTransactions(List<Transaction> transactionList) {
         TransactionService transactionService = getTransactionService();
         for (Transaction transaction : transactionList) {
-            if (transaction.getParentId() != null) {
                 int category = categoryFinder.findBestMatchingCategory(transaction);
                 transactionService.setCategoryIdForTransactionById(transaction.getId(), category);
-            }
         }
     }
 }
