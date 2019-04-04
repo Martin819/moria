@@ -42,11 +42,14 @@ public class TransactionCategorizer {
         TransactionService transactionService = getTransactionService();
         List<Transaction> transactionList = transactionService.findAllTransactions();
         for (Transaction transaction : transactionList) {
-            if (recategorizeAllTransaction && !transaction.getIsCategoryManuallyAssigned()) {
+            if (recategorizeAllTransaction && transaction.getIsCategoryManuallyAssigned() == null && transaction.getParentId() == null || transaction.getOriginalValue() == null ){
+                int category = categoryFinder.findBestMatchingCategory(transaction);
+                transactionService.setCategoryIdForTransactionById(transaction.getId(), category);
+            } else if (recategorizeAllTransaction && !transaction.getIsCategoryManuallyAssigned() && transaction.getParentId() == null || transaction.getOriginalValue() == null) {
                 int category = categoryFinder.findBestMatchingCategory(transaction);
                 transactionService.setCategoryIdForTransactionById(transaction.getId(), category);
             } else {
-                if (transaction.getCategoryId() == 0) {
+                if (transaction.getCategoryId() == 0 && transaction.getParentId() == null || transaction.getOriginalValue() == null) {
                     int category = categoryFinder.findBestMatchingCategory(transaction);
                     transactionService.setCategoryIdForTransactionById(transaction.getId(), category);
                 }
