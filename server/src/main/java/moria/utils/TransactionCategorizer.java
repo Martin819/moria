@@ -43,7 +43,7 @@ public class TransactionCategorizer {
         List<Transaction> transactionList = transactionService.findAllTransactions();
         List<Transaction> toRemove = new ArrayList<>();
         for (Transaction transaction : transactionList) {
-            if (transaction.getParentId() != null) {
+            if (transaction.getParentId() != null || transaction.getOriginalValue() != null) {
                 toRemove.add(transaction);
             } else if (!recategorizeAllTransaction && transaction.getIsCategoryManuallyAssigned() != null && transaction.getIsCategoryManuallyAssigned()) {
                 toRemove.add(transaction);
