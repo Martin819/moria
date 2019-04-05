@@ -59,11 +59,13 @@ class RuleFormBodyCommon extends React.Component {
                 onChange={e => this.props.handleChange(e)}
                 bsSize="sm"
               >
-                {Object.values(TransactionTypes).map(type => (
-                  <option key={type.id} value={type.id}>
-                    {type.text}
-                  </option>
-                ))}
+                {Object.values(TransactionTypes)
+                  .filter(type => type !== TransactionTypes.CASH.id)
+                  .map(type => (
+                    <option key={type.id} value={type.id}>
+                      {type.text}
+                    </option>
+                  ))}
               </Input>
             </FormGroup>
           </Col>
@@ -195,7 +197,7 @@ class RuleFormBodyCommon extends React.Component {
               />
               <FormFeedback>Please specify a valid number.</FormFeedback>
             </Col>
-              {'–'}
+            {'–'}
             <Col sm={3}>
               <Input
                 invalid={isNaN(this.props.valueTo)}

@@ -1,7 +1,7 @@
-import React, { Fragment, Component } from 'react';
+import React, { Component } from 'react';
 import { ExpansionPanelDetails, Grid, Typography, IconButton } from '@material-ui/core';
 import ClearIcon from '@material-ui/icons/Clear';
-import { Row, Col, Container } from 'reactstrap';
+import { Row, Col } from 'reactstrap';
 import { TransactionCategories } from '../../../constants/categories';
 
 class TransactionItemPanelDetail extends Component {
@@ -22,6 +22,7 @@ class TransactionItemPanelDetail extends Component {
                 Split into categories:
               </Typography>
               {childTransactionsList
+                .filter(childTransaction => childTransaction.amount > 0)
                 .sort((a, b) => b.amount - a.amount)
                 .map((childTransaction, i) => {
                   const categoryId = childTransaction.categoryId;
