@@ -35,9 +35,10 @@ class TransactionsList extends Component {
       handleTransactionSplit,
       handleTransactionUnsplit
     } = this.props;
-    const transactionItems = transactions
-      .filter(t => t.parentId === null)
-      .slice((activePage - 1) * itemsCountPerPage, activePage * itemsCountPerPage)
+
+    const nonChildTransactions = transactions.filter(t => t.parentId === null);
+    const transactionItems = nonChildTransactions
+      .slice((activePage - 1) * itemsCountPerPage, (activePage - 1) * itemsCountPerPage + itemsCountPerPage)
       .map((transaction, index) => {
         return (
           <TransactionItem
@@ -73,7 +74,7 @@ class TransactionsList extends Component {
               linkClass="page-link"
               pageRangeDisplayed={5}
               activePage={activePage}
-              totalItemsCount={transactions.length}
+              totalItemsCount={nonChildTransactions.length}
               itemsCountPerPage={itemsCountPerPage}
               onChange={this.handlePageChange}
             />
