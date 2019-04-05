@@ -8,8 +8,6 @@ import moria.model.transactions.Transaction;
 import moria.services.TransactionServiceImpl;
 import moria.utils.Categories;
 import moria.utils.TransactionCategorizer;
-import moria.utils.utils;
-import org.joda.time.LocalTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -36,7 +34,7 @@ public class IncomingTransactionsController {
     public String[] getCategorizedTransactionTest() {
 
         TransactionCategorizer transactionCategorizer = new TransactionCategorizer();
-        transactionCategorizer.categorizeAllTransactions(false);
+        transactionCategorizer.categorizeTransactions(false);
         ArrayList<Category> list = transactionCategorizer.getListOfCategorizedTransactions();
 
 
@@ -52,7 +50,7 @@ public class IncomingTransactionsController {
     @GetMapping(value = "/categorize")
     public ResponseEntity<Void> categorizeTransactionWithoutCategoryID() {
         TransactionCategorizer transactionCategorizer = new TransactionCategorizer();
-        transactionCategorizer.categorizeAllTransactions(false);
+        transactionCategorizer.categorizeTransactions(false);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -67,7 +65,7 @@ public class IncomingTransactionsController {
         List<Transaction> transactions = APIservice.findTransactionsByDate("1990-01-01", "2020-12-31");
         traService.saveNewTransactionList(transactions);
         TransactionCategorizer transactionCategorizer = new TransactionCategorizer();
-        transactionCategorizer.categorizeTransactions(transactions);
+        transactionCategorizer.assignCategories(transactions);
         return true;
     }
 

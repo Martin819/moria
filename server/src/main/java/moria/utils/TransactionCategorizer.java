@@ -38,22 +38,25 @@ public class TransactionCategorizer {
         return categoryList;
     }
 
-    public void categorizeAllTransactions(boolean recategorizeAllTransaction) {
+    public void categorizeTransactions(boolean recategorizeAll) {
         TransactionService transactionService = getTransactionService();
         List<Transaction> transactionList = transactionService.findAllTransactions();
         List<Transaction> toRemove = new ArrayList<>();
         for (Transaction transaction : transactionList) {
+            // vyjmout z kategorizace child transakce (tzn. takove, co maji vyplnene parentId) a vyjmout uz prazdne (plne rozdelene) rodicovske transakce
             if (transaction.getParentId() != null || transaction.getOriginalValue() != null) {
                 toRemove.add(transaction);
-            } else if (!recategorizeAllTransaction && transaction.getIsCategoryManuallyAssigned() != null && transaction.getIsCategoryManuallyAssigned()) {
+            }
+            // vyjmout z kategorizace transakce, co byly kategorizovany rucne (maji parametr nastaven na true)
+            if (transaction.getIsCategoryManuallyAssigned() != null && transaction.getIsCategoryManuallyAssigned()) {
                 toRemove.add(transaction);
             }
         }
         transactionList.removeAll(toRemove);
-        categorizeTransactions(transactionList);
+        assignCategories(transactionList);
     }
 
-    public void categorizeTransactions(List<Transaction> transactionList) {
+    public void assignCategories(List<Transaction> transactionList) {
         TransactionService transactionService = getTransactionService();
         for (Transaction transaction : transactionList) {
                 int category = categoryFinder.findBestMatchingCategory(transaction);

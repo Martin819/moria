@@ -39,7 +39,7 @@ public class RulesController {
     public ResponseEntity<Ruleset> createRule(@RequestBody Ruleset rule) {
         Ruleset ruleset = rulesetService.saveRuleset(rule);
         TransactionCategorizer transactionCategorizer = new TransactionCategorizer();
-        transactionCategorizer.categorizeAllTransactions(true);
+        transactionCategorizer.categorizeTransactions(true);
         return new ResponseEntity<>(ruleset, HttpStatus.CREATED);
     }
 
