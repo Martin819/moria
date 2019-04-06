@@ -7,12 +7,12 @@ import {
   UNSPLIT_TRANSACTION
 } from './types';
 import axios from 'axios';
+import { API_CONN } from '../utils/connection';
 
 export const getData = () => async (dispatch, getState) => {
-  console.log('getstate', getState());
   dispatch(setItemsLoading());
   try {
-    const response = await axios.get('/transactions');
+    const response = await axios.get(`${API_CONN}/transactions`);
     dispatch({
       type: GET_TRANSACTIONS,
       payload: response
@@ -32,7 +32,7 @@ export const setTransactionFilter = (filterId, filterType) => {
 export const handleTransactionCategoryUpdate = (transactionId, newCategoryId) => dispatch => {
   axios({
     method: 'put',
-    url: '/transactions/update',
+    url: `${API_CONN}/transactions/update`,
     data: { id: transactionId, categoryId: newCategoryId }
   })
     .then(response => {
@@ -52,7 +52,7 @@ export const handleTransactionCategoryUpdate = (transactionId, newCategoryId) =>
 export const handleTransactionSplit = transactionSplitDto => dispatch => {
   axios({
     method: 'post',
-    url: '/transactions/split',
+    url: `${API_CONN}/transactions/split`,
     data: transactionSplitDto
   })
     .then(response => {
@@ -70,7 +70,7 @@ export const handleTransactionSplit = transactionSplitDto => dispatch => {
 export const handleTransactionUnsplit = (parentTransactionId, childTransactionId) => dispatch => {
   axios({
     method: 'post',
-    url: '/transactions/removeSplit',
+    url: `${API_CONN}/transactions/removeSplit`,
     data: { id: childTransactionId }
   })
     .then(response => {

@@ -9,11 +9,12 @@ import {
   RULES_DELETE
 } from './types';
 import axios from 'axios';
+import { API_CONN } from '../utils/connection';
 
 export const getRules = () => async dispatch => {
   dispatch(setItemsLoading());
   try {
-    const response = await axios.get('/rules');
+    const response = await axios.get(`${API_CONN}/rules`);
     dispatch({
       type: GET_RULES,
       payload: response
@@ -40,7 +41,7 @@ export const handleRuleEdit = ruleId => dispatch => {
 export const handleRuleSubmitCreate = newRule => dispatch => {
   axios({
     method: 'post',
-    url: 'rules',
+    url: `${API_CONN}/rules`,
     data: newRule
   })
     .then(response => {
@@ -57,7 +58,7 @@ export const handleRuleSubmitCreate = newRule => dispatch => {
 export const handleRuleSubmitUpdate = editedRule => dispatch => {
   axios({
     method: 'put',
-    url: 'rules',
+    url: `${API_CONN}/rules`,
     data: editedRule
   })
     .then(response => {
@@ -74,7 +75,7 @@ export const handleRuleSubmitUpdate = editedRule => dispatch => {
 export const handleRulesDelete = ruleIds => dispatch => {
   axios({
     method: 'post',
-    url: 'rules/remove',
+    url: `${API_CONN}/rules/remove`,
     data: ruleIds
   })
     .then(response => {
