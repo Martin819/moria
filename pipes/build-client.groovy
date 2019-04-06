@@ -18,10 +18,10 @@ node {
       dir('moria/client') {
         nodejs(nodeJSInstallationName: 'NodeJS') {
           sh "npm install --no-optional"
-          sh "npm install jquery@1.9.1 --no-optional"
-          sh "npm install bootstrap@4.3.1 --no-optional"
-          sh "npm install typescript@* --no-optional"
-          sh "npm install ts-pnp@1.0.1 --no-optional"
+          sh "npm list jquery || npm install jquery@1.9.1 --no-optional"
+          sh "npm list bootstrap || npm install bootstrap@4.3.1 --no-optional"
+          sh "npm list typescript || npm install typescript@* --no-optional"
+          sh "npm list ts-pnp || npm install ts-pnp@1.0.1 --no-optional"
           sh "npm install --no-optional"
           sh "npm run build"
         }
