@@ -45,7 +45,7 @@ public class TransactionsToDtoMapper {
                     result = t.getUserDescription();
                 } else {
                     if (t.getPartyAccount().getAccountNumber() != null && !t.getPartyAccount().getAccountNumber().trim().equals("")) {
-                        result = utils.getNormalizedAccountNumber(t.getPartyAccount());
+                        result = Utils.getNormalizedAccountNumber(t.getPartyAccount());
                     }
                 }
             }

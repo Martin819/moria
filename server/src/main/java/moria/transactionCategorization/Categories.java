@@ -1,4 +1,4 @@
-package moria.utils;
+package moria.transactionCategorization;
 
 public enum Categories {
 

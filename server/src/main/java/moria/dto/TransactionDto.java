@@ -13,11 +13,14 @@ import java.util.Map;
 @NoArgsConstructor
 public class TransactionDto {
 
+    //... SPOLECNE PRO VSECHNY ..//
     private String id;
-
-    //... PLATBA KARTOU ..//
-
     private String direction;
+    private BigDecimal  transactionValueAmount;
+    private String  transactionValueCurrency;
+    private Date valueDate;
+    private String transactionType;
+    private int categoryId;
 
     // cislo uctu
     private String transactionPartyAccountPrefix;
@@ -27,10 +30,6 @@ public class TransactionDto {
     // jmeno/popis uctu?
     private String partyDescription;
 
-    // platebni symboly
-    private String transactionAdditionalInfoDomesticConstantSymbol;
-    private String transactionAdditionalInfoDomesticVariableSymbol;
-    private String transactionAdditionalInfoDomesticSpecificSymbol;
 
     // zprava
     private String payeeMessage;
@@ -38,8 +37,11 @@ public class TransactionDto {
 
 
     //... PLATBA KARTOU ..//
-
     private String transactionAdditionalInfoCardMerchantName;
+
+    private String transactionAdditionalInfoDomesticConstantSymbol;
+    private String transactionAdditionalInfoDomesticVariableSymbol;
+    private String transactionAdditionalInfoDomesticSpecificSymbol;
 
 
     //... VYBER Z BANKOMATU ..//
@@ -47,12 +49,6 @@ public class TransactionDto {
     private BigDecimal originalValue;
     private List<ChildTransaction> childTransactionsList;
 
-    //... SPOLECNE PRO VSECHNY ..//
-    private BigDecimal  transactionValueAmount;
-    private String  transactionValueCurrency;
-    private Date valueDate;
-    private String transactionType;
-    private int categoryId;
 
     public TransactionDto(Transaction transaction, List<ChildTransaction> categories) {
         id = transaction.getId();

@@ -1,4 +1,4 @@
-package moria.splitTransaction;
+package moria.tansactionSplitting;
 
 import moria.SpringContext;
 import moria.dto.ChildTransaction;
@@ -6,7 +6,7 @@ import moria.dto.TransactionDto;
 import moria.model.transactions.Transaction;
 import moria.model.transactions.TransactionValue;
 import moria.services.TransactionServiceImpl;
-import moria.utils.utils;
+import moria.utils.Utils;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -24,7 +24,7 @@ public class TransactionSplitter {
      * @param childTransaction information about new transaction from frontend
      * @return child transaction with all parameter of parent with another category_id, amount
      */
-    public static TransactionDto createDividedTransaction(ChildTransaction childTransaction) {
+    public static TransactionDto createSplittedTransaction(ChildTransaction childTransaction) {
         TransactionServiceImpl transactionService = getTransactionService();
         Transaction parentTransaction = transactionService.findTransactionById(childTransaction.getId());
         Transaction newTransaction = null;
@@ -89,7 +89,7 @@ public class TransactionSplitter {
 
         //po updatu databaze si znovu načtu chil transakce (pro FE)
         childTransactionList = transactionService.findByParentId(parentTransaction.getId());  //musím zavolat znovu, protože se seznam child transakci zmenil
-        List<ChildTransaction> childList = utils.getChildTransactions(childTransactionList);
+        List<ChildTransaction> childList = Utils.getChildTransactions(childTransactionList);
         TransactionDto transactionDto = new TransactionDto(parentTransaction, childList);
 
         return transactionDto;
@@ -169,7 +169,7 @@ public class TransactionSplitter {
         }
     }
 
-    public static TransactionDto removeSplitTransaction(String id) {
+    public static TransactionDto removeSplittedTransaction(String id) {
         TransactionServiceImpl transactionService = getTransactionService();
 
         Transaction transactionToRemove = transactionService.findTransactionById(id);
@@ -190,7 +190,7 @@ public class TransactionSplitter {
 
         //vratime na FE celou parent transakci
         childTransactionList = transactionService.findByParentId(transactionToRemove.getParentId());
-        List<ChildTransaction> childTransactions = utils.getChildTransactions(childTransactionList);
+        List<ChildTransaction> childTransactions = Utils.getChildTransactions(childTransactionList);
         TransactionDto transactionForFrontend = new TransactionDto(parentTransaction, childTransactions);
 
         return transactionForFrontend;

@@ -9,7 +9,7 @@ import moria.services.TransactionServiceImpl;
 import java.math.BigDecimal;
 import java.util.*;
 
-public class utils {
+public class Utils {
 
     private static TransactionServiceImpl getTransactionService() {
         return SpringContext.getBean(TransactionServiceImpl.class);

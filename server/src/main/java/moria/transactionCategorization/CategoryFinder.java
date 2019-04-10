@@ -1,4 +1,4 @@
-package moria.utils;
+package moria.transactionCategorization;
 
 import me.xdrop.fuzzywuzzy.FuzzySearch;
 import moria.model.rules.Ruleset;
@@ -15,7 +15,6 @@ public class CategoryFinder {
     private static final int threshold = 75; //pro fuzzy
     private List<Ruleset> ruleset;
     private Transaction transaction;
-    private boolean isBankAccountFilledButDifferent; //pokud je v pravidle vyplněno číslo účtu, musí mít transakce stejný číslo - pokud nema, hodi to tuhle proměnnou na true a hodí skore kategorie na 0
 
     /**
      * Find best matching categoryId for provided Transaction.
@@ -33,7 +32,6 @@ public class CategoryFinder {
             Nejvyšší skóre (tzn. nejvyšší podobnost pravidla s platbou) vyhrává a metoda vrátí ID odpovídající kategorie */
 
         for (Ruleset ruleset : ruleset) {
-            isBankAccountFilledButDifferent = false;
 
             // pokud se smery platby shoduji, pokracuju dal k vyhodnoceni
             if (ruleset.getDirection().equals(transaction.getDirection())) {
@@ -79,17 +77,11 @@ public class CategoryFinder {
         }
 
 
-        if (
-                (ruleset.getPartyName() != null) && (
-                        transaction.getPartyDescription() != null ||  checkMerchantNameNotNull(transaction)
-                        )
-
-                )
+        if ((ruleset.getPartyName() != null) && (transaction.getPartyDescription() != null ||  checkMerchantNameNotNull(transaction)))
         {
             totalScore += scorePartyName(ruleset.getPartyName());
         }
 
-        checkMerchantNameNotNull(transaction);
 
         if (ruleset.getBookingTimeFrom() != null && ruleset.getBookingTimeTo() != null) {
             totalScore += scoreTransactionDate(LocalTime.parse(ruleset.getBookingTimeFrom()), LocalTime.parse(ruleset.getBookingTimeTo()));
@@ -113,10 +105,6 @@ public class CategoryFinder {
             }
         }
 
-        // TODO tohle se po overeni nejspis muze uplne smazat
-        if (isBankAccountFilledButDifferent) {
-            totalScore = 0;
-        }
 
 /*        //zjistí kolik pravidel v rulesetu je vyplněných a poté *převrácenou hodnotou* tohoto počtu vynásobí skore (pro zvýhodnění malého počtu vyplněných pravidel v rulesetu)
         double notNullRulesCount = getNotNullRulesCount(ruleset);
@@ -269,8 +257,11 @@ public class CategoryFinder {
                 && transactionPartyAccount.getBankCode().equals(rulesetPartyBankCode)) {
             score += 2;
         }
+
+
         else if (!rulesetPartyAccountNumber.isEmpty()) {
-            isBankAccountFilledButDifferent = true;
+            // pokud cislo je vyplnene, ale neshoduje se s rulesetem, prislusny ruleset se znevyhodni snizenim skore
+            score -= 5;
         }
 
         return score;

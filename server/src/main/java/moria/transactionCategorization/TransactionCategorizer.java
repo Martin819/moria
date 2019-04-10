@@ -1,4 +1,4 @@
-package moria.utils;
+package moria.transactionCategorization;
 
 import moria.SpringContext;
 import moria.dto.Category;
