@@ -3,6 +3,7 @@ package moria.controller;
 import moria.dto.*;
 import moria.model.transactions.Transaction;
 import moria.services.TransactionService;
+import moria.splitTransaction.TransactionSplitter;
 import moria.utils.TransactionsToDtoMapper;
 import moria.utils.utils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,7 +54,7 @@ public class CategorizedTransactionsController {
      */
     @PostMapping(value = "/transactions/split")
     public ResponseEntity<TransactionDto> splitTransaction(@RequestBody ChildTransaction childTransaction) {
-        TransactionDto parentTransaction = utils.createDividedTransaction(childTransaction);
+        TransactionDto parentTransaction = TransactionSplitter.createDividedTransaction(childTransaction);
         return new ResponseEntity<>(parentTransaction, HttpStatus.CREATED);
     }
 
@@ -64,7 +65,7 @@ public class CategorizedTransactionsController {
      */
     @PostMapping(value = "/transactions/removeSplit")
     public ResponseEntity<TransactionDto> removeSplitTransaction(@RequestBody CategoryID categoryID) {
-        TransactionDto transactionDto = utils.removeSplitTransaction(categoryID.getId());
+        TransactionDto transactionDto = TransactionSplitter.removeSplitTransaction(categoryID.getId());
         return new ResponseEntity<>(transactionDto, HttpStatus.OK);
     }
 
@@ -74,8 +75,7 @@ public class CategorizedTransactionsController {
         TransactionsToDtoMapper dtoTransformer = new TransactionsToDtoMapper();
         List<Transaction> tList = transactionService.findAllTransactions();
         List<TransactionDto> transactionDtos = dtoTransformer.transformToDto(tList);
-        List<TransactionDto> updatedDtos = utils.bindParentAndChildTransactions(transactionDtos);
-        return updatedDtos;
+        return utils.bindParentAndChildTransactions(transactionDtos);
     }
 
 
