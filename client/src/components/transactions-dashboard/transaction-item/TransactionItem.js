@@ -145,14 +145,14 @@ class TransactionItem extends Component {
             style={{ borderLeft: `6px solid ${accountPreferredColor}` }}
           >
             <Grid container direction="row">
-              <Grid item xs={12} sm="auto">
+              <Grid item xs={12} md={1}>
                 <Typography className={classes.date}>{moment(valueDate).format('DD MMM YYYY')}</Typography>
               </Grid>
-              <Grid item xs className="ml-sm-3">
+              <Grid item xs={12} md={11} className="ml-xs-3 ml-sm-0">
                 <Grid container justify="space-between" alignItems="center">
                   <Grid item xs={9}>
                     <Row>
-                      <Col lg={4} xs={12}>
+                      <Col xs={12} lg={4}>
                         <Badge color="warning" pill>
                           {categoryText}
                         </Badge>
@@ -161,7 +161,7 @@ class TransactionItem extends Component {
                           <span className={classes.secondaryHeading}>{transactionTypeText}</span>
                         </Typography>
                       </Col>
-                      <Col lg={8} xs={12}>
+                      <Col xs={12} md={8}>
                         <Grid container justify="flex-start" alignItems="center" className="mt-3">
                           <Grid item>
                             <Form inline>
@@ -217,7 +217,7 @@ class TransactionItem extends Component {
                     </Row>
                   </Grid>
 
-                  <Grid item md={3} sm={12} className="text-lg-right pt-sm-0 pt-1">
+                  <Grid item xs={12} sm={3} className="text-lg-right pt-sm-0 pt-1">
                     {direction === TransactionDirections.OUTGOING.id && (
                       <Typography className={classes.amountNegative}>
                         &#8722;&nbsp;

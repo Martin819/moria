@@ -20,13 +20,13 @@
   transition: opacity 1000ms ease-in;
 }
 
-@media (max-width: 600px) {
+@media (max-width: 800px) {
   .app-container {
     max-width: 95%;
     margin: auto;
   }
 }
-@media (min-width: 600px) {
+@media (min-width: 800px) {
   .app-container {
     max-width: 70%;
     margin: auto;
