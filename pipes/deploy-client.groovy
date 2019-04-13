@@ -19,6 +19,6 @@ node {
        }
    }
    stage('Deploy') {
-       sshPublisher(publishers: [sshPublisherDesc(configName: 'moria-cloud-3', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: 'systemctl start deploy-client.service', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: 'client', remoteDirectorySDF: false, removePrefix: '', sourceFiles: 'target/*.tar.gz')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: true)])
+       sshPublisher(publishers: [sshPublisherDesc(configName: 'moria-cloud-3', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: 'systemctl restart deploy-client.service', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: 'client', remoteDirectorySDF: false, removePrefix: '', sourceFiles: 'target/*.tar.gz')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: true)])
    }
 }
