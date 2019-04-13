@@ -27,11 +27,10 @@ const filterTransactions = (transactions, filters) => {
   return transactions;
 };
 
-export const computeStatistics = () =>
+export const computeTransactionSumsPerCategoryByDirection = () =>
   createSelector(
     [getTransactionsByDirection, getAllFilters],
     (transactions, filters) => {
-      transactions = transactions.filter(t => t.parentId === null);
       transactions = filterTransactions(transactions, filters);
       return _.chain(transactions)
         .groupBy(t => t.categoryId)

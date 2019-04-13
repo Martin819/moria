@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { computeStatistics } from '../../selectors/statisticsSelector';
+import { computeTransactionSumsPerCategoryByDirection } from '../../selectors/statisticsSelector';
 import StatisticsTable from '../../components/statistics-dashboard/tabular-section/StatisticsTable';
 
 class TableContainer extends Component {
@@ -17,7 +17,7 @@ TableContainer.propTypes = {
 };
 
 const makeMapStateToProps = () => {
-  const getData = computeStatistics();
+  const getData = computeTransactionSumsPerCategoryByDirection();
   const mapStateToProps = (state, ownProps) => ({
     tableData: getData(state, ownProps.direction),
     isLoading: state.transactions.loading

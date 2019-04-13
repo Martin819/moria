@@ -99,6 +99,19 @@ class TransactionItem extends Component {
       }
     }
 
+    let isSplitOffered = false;
+    if (isParentTransaction) {
+      isSplitOffered = maxValueToAssign > 0;
+    } else {
+      isSplitOffered = categoryId === TransactionCategories.UNCATEGORIZED.id;
+    }
+
+    const invalidForNewCategorySubmit =
+      this.state.categoryId === UNSELECTED ||
+      categoryId === this.state.categoryId ||
+      transactionType === TransactionTypes.CASH.id ||
+      isParentTransaction;
+
     const categoryEnum = this.getCategoryEnum(isParentTransaction, childTransactionsList, categoryId, valueAmount);
     const categoryText = categoryEnum === undefined ? 'Unknown' : categoryEnum.text;
     const transactionTypeEnum = Object.values(TransactionTypes).find(type => type.id === transactionType);
@@ -123,11 +136,6 @@ class TransactionItem extends Component {
       default:
         activeDetail = detailTransfers;
     }
-
-    const invalidForSubmit =
-      this.state.categoryId === UNSELECTED ||
-      categoryId === this.state.categoryId ||
-      transactionType === TransactionTypes.CASH.id;
 
     return (
       <Grow in={true} timeout={500 + 100 * index}>
@@ -166,7 +174,7 @@ class TransactionItem extends Component {
                                   onClick={e => {
                                     e.stopPropagation();
                                   }}
-                                  disabled={transactionType === TransactionTypes.CASH.id}
+                                  disabled={isParentTransaction}
                                   value={this.state.categoryId}
                                   bsSize="sm"
                                   style={{ width: 220 }}
@@ -182,10 +190,10 @@ class TransactionItem extends Component {
                                 </Input>
 
                                 <Button
-                                  color={invalidForSubmit ? 'secondary' : 'primary'}
+                                  color={invalidForNewCategorySubmit ? 'secondary' : 'primary'}
                                   type="submit"
                                   className="ml-md-2"
-                                  disabled={invalidForSubmit}
+                                  disabled={invalidForNewCategorySubmit}
                                   size="sm"
                                   onClick={this.handleTransactionCategoryUpdate}
                                 >
@@ -195,7 +203,7 @@ class TransactionItem extends Component {
                             </Form>
                           </Grid>
                           <Grid item xs={12} md="auto" className="ml-xl-2">
-                            {transactionType === TransactionTypes.CASH.id && (
+                            {isSplitOffered && (
                               <TransactionItemCategorySplitForm
                                 transactionCategories={transactionCategories}
                                 handleTransactionSplit={this.props.handleTransactionSplit}
