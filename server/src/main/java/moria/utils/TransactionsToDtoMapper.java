@@ -1,19 +1,11 @@
 package moria.utils;
 
-import moria.SpringContext;
 import moria.dto.TransactionDto;
 import moria.model.transactions.Transaction;
-import moria.model.transactions.TransactionPartyAccount;
-import moria.services.TransactionService;
-import moria.services.TransactionServiceImpl;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class TransactionsToDtoMapper {
 
@@ -36,7 +28,6 @@ public class TransactionsToDtoMapper {
             }
             transactionDtos.add(dto);
         }
-        System.out.println(transactionDtos);
         return transactionDtos;
     }
 
@@ -54,7 +45,7 @@ public class TransactionsToDtoMapper {
                     result = t.getUserDescription();
                 } else {
                     if (t.getPartyAccount().getAccountNumber() != null && !t.getPartyAccount().getAccountNumber().trim().equals("")) {
-                        result = utils.getNormalizedAccountNumber(t.getPartyAccount());
+                        result = Utils.getNormalizedAccountNumber(t.getPartyAccount());
                     }
                 }
             }

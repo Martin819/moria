@@ -3,15 +3,14 @@ package moria.controller;
 import moria.dto.*;
 import moria.model.transactions.Transaction;
 import moria.services.TransactionService;
+import moria.tansactionSplitting.TransactionSplitter;
 import moria.utils.TransactionsToDtoMapper;
-import moria.utils.utils;
+import moria.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -53,7 +52,7 @@ public class CategorizedTransactionsController {
      */
     @PostMapping(value = "/transactions/split")
     public ResponseEntity<TransactionDto> splitTransaction(@RequestBody ChildTransaction childTransaction) {
-        TransactionDto parentTransaction = utils.createDividedTransaction(childTransaction);
+        TransactionDto parentTransaction = TransactionSplitter.createSplittedTransaction(childTransaction);
         return new ResponseEntity<>(parentTransaction, HttpStatus.CREATED);
     }
 
@@ -64,7 +63,7 @@ public class CategorizedTransactionsController {
      */
     @PostMapping(value = "/transactions/removeSplit")
     public ResponseEntity<TransactionDto> removeSplitTransaction(@RequestBody CategoryID categoryID) {
-        TransactionDto transactionDto = utils.removeSplitTransaction(categoryID.getId());
+        TransactionDto transactionDto = TransactionSplitter.removeSplittedTransaction(categoryID.getId());
         return new ResponseEntity<>(transactionDto, HttpStatus.OK);
     }
 
@@ -74,8 +73,7 @@ public class CategorizedTransactionsController {
         TransactionsToDtoMapper dtoTransformer = new TransactionsToDtoMapper();
         List<Transaction> tList = transactionService.findAllTransactions();
         List<TransactionDto> transactionDtos = dtoTransformer.transformToDto(tList);
-        List<TransactionDto> updatedDtos = utils.bindParentAndChildTransactions(transactionDtos);
-        return updatedDtos;
+        return Utils.bindParentAndChildTransactions(transactionDtos);
     }
 
 

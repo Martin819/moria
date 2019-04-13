@@ -6,8 +6,8 @@ import moria.bankingApiClient.BankingAPIService;
 import moria.dto.Category;
 import moria.model.transactions.Transaction;
 import moria.services.TransactionServiceImpl;
-import moria.utils.Categories;
-import moria.utils.TransactionCategorizer;
+import moria.transactionCategorization.Categories;
+import moria.transactionCategorization.TransactionCategorizer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -36,7 +36,7 @@ public class IncomingTransactionsController {
     public String[] getCategorizedTransactionTest() {
 
         TransactionCategorizer transactionCategorizer = new TransactionCategorizer();
-        transactionCategorizer.categorizeTransactions(false);
+        transactionCategorizer.categorizeTransactions();
         ArrayList<Category> list = transactionCategorizer.getListOfCategorizedTransactions();
 
 
@@ -52,7 +52,7 @@ public class IncomingTransactionsController {
     @GetMapping(value = "/categorize")
     public ResponseEntity<Void> categorizeTransactionWithoutCategoryID() {
         TransactionCategorizer transactionCategorizer = new TransactionCategorizer();
-        transactionCategorizer.categorizeTransactions(false);
+        transactionCategorizer.categorizeTransactions();
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

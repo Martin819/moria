@@ -2,7 +2,7 @@ package moria.controller;
 
 import moria.model.rules.Ruleset;
 import moria.services.RulesetService;
-import moria.utils.TransactionCategorizer;
+import moria.transactionCategorization.TransactionCategorizer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,7 +40,7 @@ public class RulesController {
     public ResponseEntity<Ruleset> createRule(@RequestBody Ruleset rule) {
         Ruleset ruleset = rulesetService.saveRuleset(rule);
         TransactionCategorizer transactionCategorizer = new TransactionCategorizer();
-        transactionCategorizer.categorizeTransactions(true);
+        transactionCategorizer.categorizeTransactions();
         return new ResponseEntity<>(ruleset, HttpStatus.CREATED);
     }
 

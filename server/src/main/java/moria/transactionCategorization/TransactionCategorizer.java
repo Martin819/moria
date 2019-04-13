@@ -1,4 +1,4 @@
-package moria.utils;
+package moria.transactionCategorization;
 
 import moria.SpringContext;
 import moria.dto.Category;
@@ -38,7 +38,7 @@ public class TransactionCategorizer {
         return categoryList;
     }
 
-    public void categorizeTransactions(boolean recategorizeAll) {
+    public void categorizeTransactions() {
         TransactionService transactionService = getTransactionService();
         List<Transaction> transactionList = transactionService.findAllTransactions();
         List<Transaction> toRemove = new ArrayList<>();

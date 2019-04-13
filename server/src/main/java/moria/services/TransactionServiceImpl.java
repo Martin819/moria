@@ -2,9 +2,7 @@ package moria.services;
 
 import moria.model.transactions.Transaction;
 import moria.repository.TransactionRepository;
-import moria.utils.utils;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
+import moria.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
@@ -12,8 +10,6 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 
 @Service("transactionService")
 public class TransactionServiceImpl implements TransactionService {
@@ -152,7 +148,7 @@ public class TransactionServiceImpl implements TransactionService {
 
     public void saveNewTransactionList(List<Transaction> list) {
         for (Transaction t:list) {
-            Transaction tra = utils.verifyTransactionForNullValues(t);
+            Transaction tra = Utils.verifyTransactionForNullValues(t);
             saveNewTransaction(tra);
         }
     }

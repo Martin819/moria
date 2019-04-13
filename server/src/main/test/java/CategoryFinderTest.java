@@ -5,7 +5,7 @@ import moria.model.transactions.Transaction;
 import moria.model.transactions.TransactionAdditionalInfoCard;
 import moria.model.transactions.TransactionPartyAccount;
 import moria.model.transactions.TransactionValue;
-import moria.utils.CategoryFinder;
+import moria.transactionCategorization.CategoryFinder;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

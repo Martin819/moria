@@ -136,15 +136,15 @@ class TransactionItem extends Component {
             expandIcon={<ExpandMoreIcon />}
             style={{ borderLeft: `6px solid ${accountPreferredColor}` }}
           >
-            <Grid container direction="row" spacing={24}>
-              <Grid item>
+            <Grid container direction="row">
+              <Grid item xs={12} sm="auto">
                 <Typography className={classes.date}>{moment(valueDate).format('DD MMM YYYY')}</Typography>
               </Grid>
-              <Grid item xs>
+              <Grid item xs className="ml-sm-3">
                 <Grid container justify="space-between" alignItems="center">
                   <Grid item xs={9}>
                     <Row>
-                      <Col xs={4}>
+                      <Col lg={4} xs={12}>
                         <Badge color="warning" pill>
                           {categoryText}
                         </Badge>
@@ -153,11 +153,11 @@ class TransactionItem extends Component {
                           <span className={classes.secondaryHeading}>{transactionTypeText}</span>
                         </Typography>
                       </Col>
-                      <Col xs={8}>
+                      <Col lg={8} xs={12}>
                         <Grid container justify="flex-start" alignItems="center" className="mt-3">
                           <Grid item>
                             <Form inline>
-                              <FormGroup>
+                              <FormGroup className="p-0 m-0">
                                 <Input
                                   type="select"
                                   name="categorySelect"
@@ -169,7 +169,7 @@ class TransactionItem extends Component {
                                   disabled={transactionType === TransactionTypes.CASH.id}
                                   value={this.state.categoryId}
                                   bsSize="sm"
-                                  style={{ width: 200 }}
+                                  style={{ width: 220 }}
                                 >
                                   <option disabled value={UNSELECTED}>
                                     -- select a category --
@@ -194,7 +194,7 @@ class TransactionItem extends Component {
                               </FormGroup>
                             </Form>
                           </Grid>
-                          <Grid item className="ml-md-2">
+                          <Grid item xs={12} md="auto" className="ml-xl-2">
                             {transactionType === TransactionTypes.CASH.id && (
                               <TransactionItemCategorySplitForm
                                 transactionCategories={transactionCategories}
@@ -209,7 +209,7 @@ class TransactionItem extends Component {
                     </Row>
                   </Grid>
 
-                  <Grid item xs className="text-md-right">
+                  <Grid item md={3} sm={12} className="text-lg-right pt-sm-0 pt-1">
                     {direction === TransactionDirections.OUTGOING.id && (
                       <Typography className={classes.amountNegative}>
                         &#8722;&nbsp;

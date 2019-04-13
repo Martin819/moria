@@ -20,9 +20,17 @@
   transition: opacity 1000ms ease-in;
 }
 
-.app-container {
-  max-width: 70%;
-  margin: auto;
+@media (max-width: 600px) {
+  .app-container {
+    max-width: 95%;
+    margin: auto;
+  }
+}
+@media (min-width: 600px) {
+  .app-container {
+    max-width: 70%;
+    margin: auto;
+  }
 }
 
 .navbar {
