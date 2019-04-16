@@ -37,14 +37,12 @@ public class IncomingTransactionsController {
 
         TransactionCategorizer transactionCategorizer = new TransactionCategorizer();
         transactionCategorizer.categorizeTransactions();
-        ArrayList<Category> list = transactionCategorizer.getListOfCategorizedTransactions();
+        ArrayList<Category> listOfAllTransactions = transactionCategorizer.getListOfCategorizedTransactions();
 
 
-        //TODO po otestovani smazat
-
-        String[] outputStrings = new String[list.size()];
+        String[] outputStrings = new String[listOfAllTransactions.size()];
         for (int i = 0; i < outputStrings.length ; i++ ){
-            outputStrings[i] = "id platby je " + list.get(i).getIdPayment() + "     id kategorie je " + list.get(i).getIdCategory() + " (" + Categories.getCategoryById(list.get(i).getIdCategory()) + ")";
+            outputStrings[i] = "id platby je " + listOfAllTransactions.get(i).getIdPayment() + "     id kategorie je " + listOfAllTransactions.get(i).getIdCategory() + " (" + Categories.getCategoryById(listOfAllTransactions.get(i).getIdCategory()) + ")";
         }
         return outputStrings;
     }

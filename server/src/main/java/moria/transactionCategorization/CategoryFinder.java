@@ -12,7 +12,7 @@ import java.util.TreeMap;
 
 public class CategoryFinder {
 
-    private static final int threshold = 75; //pro fuzzy
+    private static final int THRESHOLD = 75; //pro fuzzy
     private List<Ruleset> ruleset;
     private Transaction transaction;
 
@@ -106,12 +106,6 @@ public class CategoryFinder {
         }
 
 
-/*        //zjistí kolik pravidel v rulesetu je vyplněných a poté *převrácenou hodnotou* tohoto počtu vynásobí skore (pro zvýhodnění malého počtu vyplněných pravidel v rulesetu)
-        double notNullRulesCount = getNotNullRulesCount(ruleset);
-        double totalRulesCount = Ruleset.class.getDeclaredFields().length;
-        double coefficient = totalRulesCount / notNullRulesCount; // tohle neni prevracena hodnota, je to jen obycejne deleni
-        totalScore = totalScore * coefficient;*/
-
         if (totalScore >= 1.0) {
             possibleCategories.put(totalScore, ruleset.getCategoryId());
             System.out.print(transaction.getId() + "  " + totalScore + "  " + ruleset.getCategoryId() + " " + getNotNullRulesCount(ruleset) + "\n");
@@ -137,7 +131,7 @@ public class CategoryFinder {
 
     private double scoreType(String ruleTransactionType, String transactionType, int notNullRulesCount) {
         double score = 0;
-        if ((transactionType.toLowerCase().equals(ruleTransactionType.toLowerCase())) || FuzzySearch.partialRatio(ruleTransactionType, transactionType) > threshold) {
+        if ((transactionType.toLowerCase().equals(ruleTransactionType.toLowerCase())) || FuzzySearch.partialRatio(ruleTransactionType, transactionType) > THRESHOLD) {
             if (notNullRulesCount >1) {
                 score+= 0.5;
             }
@@ -164,10 +158,9 @@ public class CategoryFinder {
     private boolean checkPartyAccountNotNull(String rulesetPartyPrefix, String rulesetPartyAccountNumber, String rulesetPartyBankCode) {
         TransactionPartyAccount transactionPartyAccount = transaction.getPartyAccount();
 
-        return (transaction != null && transactionPartyAccount != null && rulesetPartyPrefix != null && transactionPartyAccount.getPrefix() != null
+        return (transactionPartyAccount != null && rulesetPartyPrefix != null && transactionPartyAccount.getPrefix() != null
                 && rulesetPartyAccountNumber != null && transactionPartyAccount.getAccountNumber() != null
-                && rulesetPartyBankCode != null && transactionPartyAccount.getBankCode() != null
-                && transaction != null);
+                && rulesetPartyBankCode != null && transactionPartyAccount.getBankCode() != null);
     }
 
     private boolean checkMerchantNameNotNull(Transaction transaction) {
@@ -203,7 +196,7 @@ public class CategoryFinder {
         if (ruleMessage != null && transactionMessage != null) {
             if (transactionMessage.toLowerCase().contains(ruleMessage.toLowerCase()) && !ruleMessage.isEmpty()) {
                 score++;
-            } else if (FuzzySearch.partialRatio(ruleMessage, transactionMessage) > threshold) {
+            } else if (FuzzySearch.partialRatio(ruleMessage, transactionMessage) > THRESHOLD) {
                 score++;
             }
         }
@@ -213,17 +206,17 @@ public class CategoryFinder {
     private double scoreValue(BigDecimal rulesetValueFrom, BigDecimal rulesetValueTo) {
         double score = 0;
         //neni vyplneno
-        if (rulesetValueFrom == null && rulesetValueTo == null){
+        if (rulesetValueFrom == null & rulesetValueTo == null){
             return score;
         }
         //castka do
-        else if (rulesetValueFrom == null && rulesetValueTo != null){
+        else if (rulesetValueFrom == null & rulesetValueTo != null){
             if (transaction.getValue().getAmount().compareTo(rulesetValueTo) < 0){
                 score++;
             }
         }
         //castka od
-        else if (rulesetValueFrom != null && rulesetValueTo == null){
+        else if (rulesetValueFrom != null & rulesetValueTo == null){
             if (transaction.getValue().getAmount().compareTo(rulesetValueFrom) > 0){
                 score++;
             }
@@ -276,30 +269,30 @@ public class CategoryFinder {
      */
     private int getNotNullRulesCount(Ruleset ruleset) {
         // V uvahu se neberou polozky, ktere nemaji vliv na rozhodovani (jako IDkategorie, nazev rulesetu apod)
-        int NotNullRulesCount = 0;
+        int notNullRulesCount = 0;
 
         // COMMON
-        if (ruleset.getPartyName() != null) NotNullRulesCount++;
-        if (ruleset.getTransactionType() != null) NotNullRulesCount++;
-        if (ruleset.getValueFrom() != null) NotNullRulesCount++;
-        if (ruleset.getValueTo() != null) NotNullRulesCount++;
+        if (ruleset.getPartyName() != null) notNullRulesCount++;
+        if (ruleset.getTransactionType() != null) notNullRulesCount++;
+        if (ruleset.getValueFrom() != null) notNullRulesCount++;
+        if (ruleset.getValueTo() != null) notNullRulesCount++;
 
         // BANK TRANSFER
-        if (ruleset.getPartyAccountPrefix() != null) NotNullRulesCount++;
-        if (ruleset.getPartyAccountNumber() != null) NotNullRulesCount++;
-        if (ruleset.getPartyBankCode() != null) NotNullRulesCount++;
-        if (ruleset.getPayerMessage() != null) NotNullRulesCount++;
-        if (ruleset.getPayeeMessage() != null) NotNullRulesCount++;
-        if (ruleset.getConstantSymbol() != null) NotNullRulesCount++;
-        if (ruleset.getVariableSymbol() != null) NotNullRulesCount++;
-        if (ruleset.getSpecificSymbol() != null) NotNullRulesCount++;
+        if (ruleset.getPartyAccountPrefix() != null) notNullRulesCount++;
+        if (ruleset.getPartyAccountNumber() != null) notNullRulesCount++;
+        if (ruleset.getPartyBankCode() != null) notNullRulesCount++;
+        if (ruleset.getPayerMessage() != null) notNullRulesCount++;
+        if (ruleset.getPayeeMessage() != null) notNullRulesCount++;
+        if (ruleset.getConstantSymbol() != null) notNullRulesCount++;
+        if (ruleset.getVariableSymbol() != null) notNullRulesCount++;
+        if (ruleset.getSpecificSymbol() != null) notNullRulesCount++;
 
         // CARDS
-        if (ruleset.getBookingTimeFrom() != null) NotNullRulesCount++;
-        if (ruleset.getBookingTimeTo() != null) NotNullRulesCount++;
-        if (ruleset.getCardNumber() != null) NotNullRulesCount++;
+        if (ruleset.getBookingTimeFrom() != null) notNullRulesCount++;
+        if (ruleset.getBookingTimeTo() != null) notNullRulesCount++;
+        if (ruleset.getCardNumber() != null) notNullRulesCount++;
 
-        return NotNullRulesCount;
+        return notNullRulesCount;
     }
 
     public CategoryFinder(List<Ruleset> ruleset) {

@@ -12,12 +12,12 @@ import java.util.List;
 
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
-public class RulesController {
+public class RulesetsController {
 
     private final RulesetService rulesetService;
 
     @Autowired
-    public RulesController(RulesetService rulesetService) {
+    public RulesetsController(RulesetService rulesetService) {
         this.rulesetService = rulesetService;
     }
 

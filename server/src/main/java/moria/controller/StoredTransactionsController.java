@@ -15,12 +15,12 @@ import java.util.List;
 
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
-public class CategorizedTransactionsController {
+public class StoredTransactionsController {
 
     private final TransactionService transactionService;
 
     @Autowired
-    public CategorizedTransactionsController(TransactionService transactionService) {
+    public StoredTransactionsController(TransactionService transactionService) {
         this.transactionService = transactionService;
     }
 

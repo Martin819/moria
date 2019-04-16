@@ -49,9 +49,11 @@ public class Utils {
     }
 
     public static String getNormalizedAccountNumber(String prefix, String number, String bankCode) {
-        prefix = prefix.replaceFirst("^0+(?!$)", "");
-        number = number.replaceFirst("^0+(?!$)", "");
-        bankCode = bankCode.replaceFirst("^0+(?!$)", "");
+        String leadingZerosRegex = "^0+(?!$)";
+        String emptyString = "";
+        prefix = prefix.replaceFirst(leadingZerosRegex, emptyString);
+        number = number.replaceFirst(leadingZerosRegex, emptyString);
+        bankCode = bankCode.replaceFirst(leadingZerosRegex, emptyString);
         return prefix + "-" + number + "/" + bankCode;
     }
 
