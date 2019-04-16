@@ -65,7 +65,7 @@ public class IncomingTransactionsController {
         List<Transaction> transactions = APIservice.findTransactionsByDate("1990-01-01", "2020-12-31");
         traService.saveNewTransactionList(transactions);
         TransactionCategorizer transactionCategorizer = new TransactionCategorizer();
-        transactionCategorizer.assignCategories(transactions);
+        transactionCategorizer.categorizeTransactions();
         return true;
     }
 

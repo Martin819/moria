@@ -147,9 +147,8 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     public void saveNewTransactionList(List<Transaction> list) {
-        for (Transaction t:list) {
-            Transaction tra = Utils.verifyTransactionForNullValues(t);
-            saveNewTransaction(tra);
+        for (Transaction transaction:list) {
+            saveNewTransaction(transaction);
         }
     }
 
@@ -157,6 +156,5 @@ public class TransactionServiceImpl implements TransactionService {
     public int getNumberOfTransactionsById(String transactionId) {
         return transactionRepository.getNumberOfTransactionsById(transactionId);
     }
-
 
 }

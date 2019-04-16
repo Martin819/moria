@@ -59,7 +59,7 @@ public class CategoryFinder {
             totalScore += scoreValue(ruleset.getValueFrom(), ruleset.getValueTo());
         }
 
-        if (ruleset.getTransactionType() != null && transaction.getTransactionType() != null) {
+        if (isNotNullOrEmpty(ruleset.getTransactionType()) && isNotNullOrEmpty(transaction.getTransactionType())) {
             totalScore += scoreType(ruleset.getTransactionType(), transaction.getTransactionType(), notNullRulesCount);
         }
 
@@ -77,18 +77,18 @@ public class CategoryFinder {
         }
 
 
-        if ((ruleset.getPartyName() != null) && (transaction.getPartyDescription() != null ||  checkMerchantNameNotNull(transaction)))
+        if (isNotNullOrEmpty(ruleset.getPartyName()) && isNotNullOrEmpty(transaction.getPartyDescription()) ||  checkMerchantNameNotNull(transaction))
         {
             totalScore += scorePartyName(ruleset.getPartyName());
         }
 
 
-        if (ruleset.getBookingTimeFrom() != null && ruleset.getBookingTimeTo() != null) {
+        if (isNotNullOrEmpty(ruleset.getBookingTimeFrom()) && isNotNullOrEmpty(ruleset.getBookingTimeTo())) {
             totalScore += scoreTransactionDate(LocalTime.parse(ruleset.getBookingTimeFrom()), LocalTime.parse(ruleset.getBookingTimeTo()));
         }
 
 
-        if (ruleset.getCardNumber() != null && checkCardNumberNotNull(transaction)) {
+        if (isNotNullOrEmpty(ruleset.getCardNumber()) && checkCardNumberNotNull(transaction)) {
             totalScore += scoreCardNumber(ruleset.getCardNumber(), transaction.getAdditionalInfoCard().getCardNumber());
         }
 
@@ -108,6 +108,7 @@ public class CategoryFinder {
 
         if (totalScore >= 1.0) {
             possibleCategories.put(totalScore, ruleset.getCategoryId());
+            //for testing only
             System.out.print(transaction.getId() + "  " + totalScore + "  " + ruleset.getCategoryId() + " " + getNotNullRulesCount(ruleset) + "\n");
         }
 
@@ -117,7 +118,7 @@ public class CategoryFinder {
         double score = 0;
         String transactionPartyName = null;
 
-        if (transaction.getPartyDescription() != null) {
+        if (isNotNullOrEmpty(transaction.getPartyDescription())) {
             transactionPartyName = transaction.getPartyDescription();
         } else if (checkMerchantNameNotNull(transaction)) {
             transactionPartyName = transaction.getAdditionalInfoCard().getMerchantName();
@@ -139,7 +140,6 @@ public class CategoryFinder {
                 score++;
             }
         }
-
         return score;
     }
 
@@ -152,20 +152,20 @@ public class CategoryFinder {
     }
 
     private boolean checkSymbolNotNull(String rulesetSymbol, String transactionSymbol) { // jedna metoda stejna pro konstantni, variabilni i specificky symbol
-        return (transactionSymbol != null && rulesetSymbol != null);
+        return (isNotNullOrEmpty(transactionSymbol) && isNotNullOrEmpty(rulesetSymbol));
     }
 
     private boolean checkPartyAccountNotNull(String rulesetPartyPrefix, String rulesetPartyAccountNumber, String rulesetPartyBankCode) {
         TransactionPartyAccount transactionPartyAccount = transaction.getPartyAccount();
 
-        return (transactionPartyAccount != null && rulesetPartyPrefix != null && transactionPartyAccount.getPrefix() != null
-                && rulesetPartyAccountNumber != null && transactionPartyAccount.getAccountNumber() != null
-                && rulesetPartyBankCode != null && transactionPartyAccount.getBankCode() != null);
+        return (transactionPartyAccount != null && isNotNullOrEmpty(rulesetPartyPrefix) && isNotNullOrEmpty(transactionPartyAccount.getPrefix())
+                && isNotNullOrEmpty(rulesetPartyAccountNumber) && isNotNullOrEmpty(transactionPartyAccount.getAccountNumber())
+                && isNotNullOrEmpty(rulesetPartyBankCode) && isNotNullOrEmpty(transactionPartyAccount.getBankCode()));
     }
 
     private boolean checkMerchantNameNotNull(Transaction transaction) {
         if (transaction.getAdditionalInfoCard() != null) {
-            if (transaction.getAdditionalInfoCard().getMerchantName() != null) {
+            if (isNotNullOrEmpty(transaction.getAdditionalInfoCard().getMerchantName())) {
                 return true;
             }
         }
@@ -175,7 +175,7 @@ public class CategoryFinder {
 
     private boolean checkCardNumberNotNull(Transaction transaction) {
         if (transaction.getAdditionalInfoCard() != null) {
-            if (transaction.getAdditionalInfoCard().getCardNumber() != null) {
+            if (isNotNullOrEmpty(transaction.getAdditionalInfoCard().getCardNumber())) {
                 return true;
             }
         }
@@ -193,7 +193,7 @@ public class CategoryFinder {
 
     private double scoreMessage(String ruleMessage, String transactionMessage) {
         double score = 0;
-        if (ruleMessage != null && transactionMessage != null) {
+        if (isNotNullOrEmpty(ruleMessage) && isNotNullOrEmpty(transactionMessage)) {
             if (transactionMessage.toLowerCase().contains(ruleMessage.toLowerCase()) && !ruleMessage.isEmpty()) {
                 score++;
             } else if (FuzzySearch.partialRatio(ruleMessage, transactionMessage) > THRESHOLD) {
@@ -260,6 +260,9 @@ public class CategoryFinder {
         return score;
     }
 
+    private boolean isNotNullOrEmpty(String string) {
+        return string != null && !string.trim().isEmpty();
+    }
 
     /**
      * Count how many rules in a ruleset are not null
@@ -272,25 +275,25 @@ public class CategoryFinder {
         int notNullRulesCount = 0;
 
         // COMMON
-        if (ruleset.getPartyName() != null) notNullRulesCount++;
-        if (ruleset.getTransactionType() != null) notNullRulesCount++;
+        if (isNotNullOrEmpty(ruleset.getPartyName())) notNullRulesCount++;
+        if (isNotNullOrEmpty(ruleset.getTransactionType())) notNullRulesCount++;
         if (ruleset.getValueFrom() != null) notNullRulesCount++;
         if (ruleset.getValueTo() != null) notNullRulesCount++;
 
         // BANK TRANSFER
-        if (ruleset.getPartyAccountPrefix() != null) notNullRulesCount++;
-        if (ruleset.getPartyAccountNumber() != null) notNullRulesCount++;
-        if (ruleset.getPartyBankCode() != null) notNullRulesCount++;
-        if (ruleset.getPayerMessage() != null) notNullRulesCount++;
-        if (ruleset.getPayeeMessage() != null) notNullRulesCount++;
-        if (ruleset.getConstantSymbol() != null) notNullRulesCount++;
-        if (ruleset.getVariableSymbol() != null) notNullRulesCount++;
-        if (ruleset.getSpecificSymbol() != null) notNullRulesCount++;
+        if (isNotNullOrEmpty(ruleset.getPartyAccountPrefix())) notNullRulesCount++;
+        if (isNotNullOrEmpty(ruleset.getPartyAccountNumber())) notNullRulesCount++;
+        if (isNotNullOrEmpty(ruleset.getPartyBankCode())) notNullRulesCount++;
+        if (isNotNullOrEmpty(ruleset.getPayerMessage())) notNullRulesCount++;
+        if (isNotNullOrEmpty(ruleset.getPayeeMessage())) notNullRulesCount++;
+        if (isNotNullOrEmpty(ruleset.getConstantSymbol())) notNullRulesCount++;
+        if (isNotNullOrEmpty(ruleset.getVariableSymbol())) notNullRulesCount++;
+        if (isNotNullOrEmpty(ruleset.getSpecificSymbol())) notNullRulesCount++;
 
         // CARDS
-        if (ruleset.getBookingTimeFrom() != null) notNullRulesCount++;
-        if (ruleset.getBookingTimeTo() != null) notNullRulesCount++;
-        if (ruleset.getCardNumber() != null) notNullRulesCount++;
+        if (isNotNullOrEmpty(ruleset.getBookingTimeFrom())) notNullRulesCount++;
+        if (isNotNullOrEmpty(ruleset.getBookingTimeTo())) notNullRulesCount++;
+        if (isNotNullOrEmpty(ruleset.getCardNumber())) notNullRulesCount++;
 
         return notNullRulesCount;
     }
