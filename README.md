@@ -141,7 +141,7 @@ S kategoriemi pracujeme podle jejich ID:
 
 Všechny kategorie jsou napevno definované v enumu. Ani v prototypu, ani v plné verzi NEpočítáme s tím, že by si uživatelé tvořili vlastní. Výčet kategorií v prototypu není úplný, chybí například vše týkající se investiční sféry. V plné verzi by byly tyto a další kategorie doplněny. A taky pro jednoduchost NEřešíme podkategorie (např. u jízdného dělení na vlak / bus / letadlo).
 
-Kvůli problémům s duplicitami mají kategorie příchozích plateb předponu I__nazevKategorie _(I podle slova incoming).
+Kvůli problémům s duplicitami mají kategorie příchozích plateb předponu I_nazevKategorie (I podle slova incoming).
 
 
 #### Implementované kategorie – outgoing
@@ -494,7 +494,7 @@ Pro každou nezařazenou transakci
         *   číslo účtu
             *   porovná se, jestli prefix i číslo účtu z transakce obsahuje hodnoty z pravidla
             *   pokud ano, ke skóre se přičte 2, což nám zajistí, že transakce se kategorizuje výhradně podle tohoto pravidla
-            *   pokud ne, tak se nastaví **isBankAccountFilledButDifferent **na true a celkové skóre se vynuluje.
+            *   pokud ne, tak se nastaví **isBankAccountFilledButDifferent** na true a celkové skóre se vynuluje.
         *   jméno protistrany
             *   podle typu platby je ošetřeno zpracování buďto MerchantName (platba kartou) nebo PartyDescription (ostatní typy plateb)
             *   porovnává, jestli je partyName pravidla obsaženo v parametrech transakce
@@ -525,7 +525,7 @@ Pro každou nezařazenou transakci
             *   pokud je typ jediným parametrem rulesetu
                 *   pokud ano, ke skóre se přičte 1 (má větší váhu)
                 *   pokud ne, ke skóre se přičte 0.5
-    *   po vyhodnocení všech parametrů pravidla proběhne vyhodnocení podmínky** isBankAccountFilledButDifferent **
+    *   po vyhodnocení všech parametrů pravidla proběhne vyhodnocení podmínky **isBankAccountFilledButDifferent**
                 *   pokud je true, tak se skore nastavi na 0
                 *   pokud je false, neděje se nic a skore zůstává stejné
 *   Ke každému rulesetu, jehož skóre je >=1 (našla se aspoň 1 shoda s nějakou transakcí) se uloží hodnota skóre do tree mapy ve tvaru <score, categoryID>
@@ -622,7 +622,7 @@ _Tim zajistime, ze cisla uctu budou vzdycky ve stejnem standardizovanem formatu.
 
 
     
-TODO: obrazky grafu
+![Grafy](http://www.polreich.cz/images/grafy.png)
 
 
 
@@ -806,10 +806,8 @@ TransactionsToDtoMapper (přesunuto do Utils) využitý v loadAllTransactions() 
 
 	Vysvětlení zástupných znaků:
 
-	`^ - začne na začátku stringu`
-
-
 ```
+^ - začne na začátku stringu
 0 - hledaný řetězec
 + - 1 nebo více výskytů hledaného řetězce
 (?!$) - "negative lookahead" (pokud nejsou na konci řádku)
@@ -924,7 +922,7 @@ Joby:
     *   Xicht je dostupny na [http://194.182.88.14:8080](http://194.182.88.14:8080/)
 
 
-## Použité technologie a knihovny  \
+## Použité technologie a knihovny
 TODO:
 
 
