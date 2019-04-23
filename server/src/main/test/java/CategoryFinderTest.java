@@ -77,23 +77,23 @@ public class CategoryFinderTest {
 
         // vydaj - splatka hypoteky
         TransactionValue transactionValue4 = TestUtils.createTransactionValue(new BigDecimal(4099), "czk");
-        testTransactionsList.add(TestUtils.createTestTransaction("4", 6666, transactionValue4, new TransactionPartyAccount("00000001", "785845484688", "1500"), "Hypotecni banka", "OUTGOING", "MORTGAGE", TestUtils.parseDate(8, 30, 0), TestUtils.parseDate(8, 30, 0), "Splatka hypoteky", null, null, null, null, null, null, null, null, null));
+        testTransactionsList.add(TestUtils.createTestTransaction("4", 6669, transactionValue4, new TransactionPartyAccount("00000001", "785845484688", "1500"), "Hypotecni banka", "OUTGOING", "MORTGAGE", TestUtils.parseDate(8, 30, 0), TestUtils.parseDate(8, 30, 0), "Splatka hypoteky", null, null, null, null, null, null, null, null, null));
 
         // prijem - kamos splatil dluh
         TransactionValue transactionValue7 = TestUtils.createTransactionValue(new BigDecimal(262), "czk");
-        testTransactionsList.add(TestUtils.createTestTransaction("7", 6666, transactionValue7, new TransactionPartyAccount("00000000", "191816107239", "0800"), null, "INCOMING", "PAYMENT_HOME", TestUtils.parseDate(8, 30, 0), TestUtils.parseDate(8, 30, 0), "amigo", null, null, null, null, null, null, null, null, null));
+        testTransactionsList.add(TestUtils.createTestTransaction("7", 6669, transactionValue7, new TransactionPartyAccount("00000000", "191816107239", "0800"), null, "INCOMING", "PAYMENT_HOME", TestUtils.parseDate(8, 30, 0), TestUtils.parseDate(8, 30, 0), "amigo", null, null, null, null, null, null, null, null, null));
 
         // prijem - vyplata
         TransactionValue transactionValue12 = TestUtils.createTransactionValue(new BigDecimal(17325), "czk");
-        testTransactionsList.add(TestUtils.createTestTransaction("12", 6666, transactionValue12, new TransactionPartyAccount("67010000", "717717717", "0600"), "McDonalds", "INCOMING", "PAYMENT_HOME", TestUtils.parseDate(8, 30, 0), TestUtils.parseDate(8, 30, 0), "Muj zamestanavatel", null, null, null, null, null, null, null, null, null));
+        testTransactionsList.add(TestUtils.createTestTransaction("12", 6669, transactionValue12, new TransactionPartyAccount("67010000", "717717717", "0600"), "McDonalds", "INCOMING", "PAYMENT_HOME", TestUtils.parseDate(8, 30, 0), TestUtils.parseDate(8, 30, 0), "Muj zamestanavatel", null, null, null, null, null, null, null, null, null));
 
         // vydaj - nakum na Steamu
         TransactionValue transactionValue17 = TestUtils.createTransactionValue(new BigDecimal(1963), "czk");
-        testTransactionsList.add(TestUtils.createTestTransaction("17", 6666, transactionValue17, null, "STEAM STORE", "OUTGOING","CARD", TestUtils.parseDate(8, 30, 0), TestUtils.parseDate(8, 30, 0), null, null, null, null, null, null, null, null, new TransactionAdditionalInfoCard("3542658921352648","4955","Steam Store"), null));
+        testTransactionsList.add(TestUtils.createTestTransaction("17", 6669, transactionValue17, null, "STEAM STORE", "OUTGOING","CARD", TestUtils.parseDate(8, 30, 0), TestUtils.parseDate(8, 30, 0), null, null, null, null, null, null, null, null, new TransactionAdditionalInfoCard("3542658921352648","4955","Steam Store"), null));
 
         // vydaj - vyber z bankomatu
         TransactionValue transactionValue18 = TestUtils.createTransactionValue(new BigDecimal(5000), "czk");
-        testTransactionsList.add(TestUtils.createTestTransaction("18", 6666, transactionValue18, new TransactionPartyAccount(), "CSOB", "OUTGOING", "CASH", TestUtils.parseDate(8, 30, 0), TestUtils.parseDate(8, 30, 0), "vyber z bankomatu", null, null, null, null, null, null, null, null, null));
+        testTransactionsList.add(TestUtils.createTestTransaction("18", 6669, transactionValue18, new TransactionPartyAccount(), "CSOB", "OUTGOING", "CASH", TestUtils.parseDate(8, 30, 0), TestUtils.parseDate(8, 30, 0), "vyber z bankomatu", null, null, null, null, null, null, null, null, null));
 
         categoryFinder = new CategoryFinder(testRulesetsList);
     }

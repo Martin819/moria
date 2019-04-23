@@ -107,7 +107,7 @@ public class CategoryFinder {
         if (totalScore >= 1.0) {
             possibleCategories.put(totalScore, ruleset.getCategoryId());
             //for testing only
-            System.out.print(transaction.getId() + "  " + totalScore + "  " + ruleset.getCategoryId() + " " + getNotNullRulesCount(ruleset) + "\n");
+            System.out.println(transaction.getId() + "  " + totalScore + "  " + ruleset.getCategoryId() + " " + getNotNullRulesCount(ruleset));
         }
     }
 

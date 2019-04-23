@@ -8,15 +8,16 @@ Client build: [![Build Status](http://194.182.88.14:8082/buildStatus/icon?job=bu
 
 ## IMPLEMENTOVANÉ USE CASY
 
-V prototypu počítáme s jedním uživatelem a jeho jedním účtem.
+V prototypu počítáme s jedním uživatelem a jeho jedním bankovním účtem.
 
 1) Zobrazení výpisu plateb ([http://localhost:3000](http://localhost:3000))
 
 
 
 *   fetchnutí z API
-*   změna kategorie pro jednotlivou platbu (možnou přepsání automatického zařazení)
-*   možnost filtrování 
+*   ruční kategorizace libovolné platby (možnou přepsání automatického zařazení)
+*   rozdělní platby na několik dílčích plateb
+*   možnost filtrování výpisu
     *   podle data
     *   příchozí/odchozí 
 
@@ -25,15 +26,15 @@ V prototypu počítáme s jedním uživatelem a jeho jedním účtem.
 
 
 *   CRUD uživatelem vytvořených
-*   v základu obsahuje několik předdefinovaných (ze kterých si může uživatel odvodit svoje)
+*   v základu obsahuje několik předdefinovaných na ukázku
 
 3) Statistiky ([http://localhost:3000/stats](http://localhost:3000/stats))
 
-
-
+*   Příjmy a výdaje za časové období
+*   Příjmy a výdaje v jednotlivých kategoriích
 *   grafické znázornění
 *   negrafické znázornění (tabulky)
-*   možnost filtrování
+
 
 
 ## ZDROJE DAT (API)
@@ -43,7 +44,7 @@ V prototypu počítáme s jedním uživatelem a jeho jedním účtem.
 
 [https://mois-banking.herokuapp.com/v1/api-docs](https://mois-banking.herokuapp.com/v1/api-docs)
 
-Data pro tuto aplikaci jsou dostupná skrz AccountID = 6668
+Data pro tuto aplikaci jsou dostupná skrz AccountID = 6669
 
 
 ## DATABÁZE + DATA
@@ -51,29 +52,36 @@ Data pro tuto aplikaci jsou dostupná skrz AccountID = 6668
 
 #### Vzdálená DB (produkční)
 
-Pro bezpečnost nedržíme údaje o připojení k DB v souboru application.properties, ale přímo v konfiguraci projektu v IDEI – před spuštěním projektu je potřeba otevřít _Run/Debug Configurations_ a zadat přihlašovací údaje.
+Pro bezpečnost nedržíme údaje o připojení k DB v souboru _application.properties_, ale přímo v konfiguraci projektu v IDEI – před spuštěním projektu je potřeba otevřít _Run/Debug Configurations_ a zadat následující údaje. Pozor na přebytečné mezery na konci.
 
+```
+MORIA_DB_HOST = AdresaVasiDB
+MORIA_DB_USERNAME = VaseUsername
+MORIA_DB_PASSWORD = VaseHeslo
+```
 
 #### Lokální DB (vývojová)
 
-Pro vývoj je lepší vytvořit si v _Run/Debug Configurations _ještě druhou spouštěcí konfiguraci
+Pro vývoj je lepší vytvořit si v _Run/Debug Configurations_ ještě druhou spouštěcí konfiguraci
 
 A přepsat tyto parametry:
 
+```
 spring.datasource.url = jdbc:mysql://localhost:3306/moria?useTimezone=true&serverTimezone=GMT%2B8
-
 spring.datasource.username = root
-
 spring.datasource.password =		// nechat pole prázdné (pozor na mezery)
+```
 
 ### Inicializace DB a mock data
 
 
 #### Inicializace DB
 
-V application.properties máme aktuálně nastaveno: 
+V _application.properties_ máme aktuálně nastaveno: 
 
-spring.jpa.hibernate.ddl-auto = **create**
+```
+spring.jpa.hibernate.ddl-auto = create
+```
 
 To funguje tak, že při každém spuštění se původní DB dropne a vytvoří znovu. Schéma vytvoří automaticky Hibernate a naplní se daty ze souboru import.sql (defaultní název požadovaný Springem).
 
@@ -120,9 +128,10 @@ Mock data jsou přehledně definovaná a okomentovaná v excelovském souboru _2
 
 
 
-*   Každé by mělo zkategorizovat po jedné platbě, s vyjímkou pravidla na nákupy v Bille, které by mělo zkategorizovat platby dvě
+*   Každé by mělo zkategorizovat po jedné platbě, s výjímkou pravidla na nákupy v Bille, které by mělo zkategorizovat platby dvě
 
-_Jaký přesně je očekávaný průběh kategorizace?_
+
+[_Jaký přesně je očekávaný průběh kategorizace?_](https://github.com/OstruszkaAdam/moriaReadme/blob/master/README.md#jak-ověřím-že-kategorizace-funguje-aspoň-v-principu-správně)
 
 
 ## KATEGORIZACE PLATEB
@@ -141,7 +150,7 @@ S kategoriemi pracujeme podle jejich ID:
 
 Všechny kategorie jsou napevno definované v enumu. Ani v prototypu, ani v plné verzi NEpočítáme s tím, že by si uživatelé tvořili vlastní. Výčet kategorií v prototypu není úplný, chybí například vše týkající se investiční sféry. V plné verzi by byly tyto a další kategorie doplněny. A taky pro jednoduchost NEřešíme podkategorie (např. u jízdného dělení na vlak / bus / letadlo).
 
-Kvůli problémům s duplicitami mají kategorie příchozích plateb předponu I_nazevKategorie (I podle slova incoming).
+Kvůli problémům s duplicitami mají kategorie příchozích plateb předponu _I_nazevKategorie_ (I podle slova incoming).
 
 
 #### Implementované kategorie – outgoing
@@ -524,14 +533,14 @@ Pro každou nezařazenou transakci
             *   porovnává se, jestli je typ z pravidla obsažen v typu transakce
             *   pokud je typ jediným parametrem rulesetu
                 *   pokud ano, ke skóre se přičte 1 (má větší váhu)
-                *   pokud ne, ke skóre se přičte 0.5
+                *   pokud ne, ke skóre se přičte 0,5
     *   po vyhodnocení všech parametrů pravidla proběhne vyhodnocení podmínky **isBankAccountFilledButDifferent**
                 *   pokud je true, tak se skore nastavi na 0
                 *   pokud je false, neděje se nic a skore zůstává stejné
 *   Ke každému rulesetu, jehož skóre je >=1 (našla se aspoň 1 shoda s nějakou transakcí) se uloží hodnota skóre do tree mapy ve tvaru <score, categoryID>
 *   Vyber hodnotu nejvyššího skóre v mapě a podle ní ulož k transakci kategorii
 
-_**  _FuzzySearch.partialRatio _nám vrátí hodnotu <0,100>, která definuje míru shody dvou Stringů. v algoritmu máme určený threshold 75. Pokud nám Fuzzy vrátí hodnotu větší než 75, považujeme Stringy za shodné._
+** _Poznámka: FuzzySearch.partialRatio nám vrátí hodnotu <0,100>, která udává míru shody dvou Stringů. V algoritmu máme určený threshold 75. Pokud nám Fuzzy vrátí hodnotu větší než 75, považujeme Stringy za shodné._
 
 
 #### Pipeline kategorizace plateb
@@ -632,13 +641,11 @@ _Tim zajistime, ze cisla uctu budou vzdycky ve stejnem standardizovanem formatu.
 
 *   kategorizují se pouze platby bez přiřazené kategorie (tzn. napoprvé celkem 15 plateb)
 *   platbám s už přiřazenou kategorií se kategorie nezmění
-*   5 plateb nově získá kategorii, z toho 2x příjmy a 3x výdaje
     *   jeden příjem spadne do kategorie 17 (Loans)
     *   jeden příjem spadne do kategorie 11 (Salary / wage)
 
         (zbývající tři příjmy zůstanou nekategorizovány)
 
-    *   jeden výdaj spadne do kategorie 20 (Other)
     *   jeden výdaj spadne do kategorie 128 (Loans & mortgages)
     *   jeden výdaj spadne do kategorie 124 (Entertainment)
 
@@ -654,7 +661,7 @@ _Tim zajistime, ze cisla uctu budou vzdycky ve stejnem standardizovanem formatu.
 
 ### Princip rozdělování 
 
-spočívá v tom , že máme transakci, kterou chceme dále specifikovat (např. výběr z bankomatu). 
+spočívá v tom, že máme transakci, kterou chceme dále specifikovat (např. že z výběru 2000 Kč z bankomatu jsme použili 1000 Kč na jídlo, 500 Kč na alkohol a dalších 500 na hazard). 
 
 **Myšlenka**
 
@@ -669,16 +676,7 @@ Pokud má dojít k rozdělení transakce je hodnota amount vynullovana a hodnota
 Na FE uživatel zadá rozdělení transakce a na na backend pošle id rodičovské transakce, částku dílčí transakce a její kategorii. V případě smazání přichází z FE pouze id transakce pro smazání.
 
 
-### Implementace
-
-_Pojmy (občas se vyskytují jiné výrazy pro stejnou věc, tak aby bylo jasno)_
-
-
-
-*   _parentí transakce_
-*   _dílčí transakce = child transakce, subtransakce_
-*   _zbytková transakce = dopočítávací transakce_
-
+### Implementace rozdělování
 
 #### Splitování transakce
 
@@ -755,7 +753,7 @@ _Pojmy (občas se vyskytují jiné výrazy pro stejnou věc, tak aby bylo jasno)
 </table>
 
 
-_CategorizedTransactionController_
+#### StoredTransactionsController
 
 
 <table>
@@ -814,7 +812,7 @@ TransactionsToDtoMapper (přesunuto do Utils) využitý v loadAllTransactions() 
 ```
 
 
-_IncomingTransactionController_
+#### IncomingTransactionsController
 
 
 <table>
@@ -886,9 +884,9 @@ Testuju jen jednu “vrstvu” (logiku), pokud v průběhu testu potřebuju data
 
 
 
-*   Příchozí/odchozí tuzemsko (číslo a jmeno účtu, platební symboly, zpráva, částka, datum, čas)
-*   Platba kartou? (název obchodníka, částka, datum, čas)
-*   Výběry? (bankomat, částka, datum, čas)
+*   Příchozí/odchozí tuzemsko:  číslo a jmeno účtu, platební symboly, zpráva, částka, datum, čas)
+*   Platba kartou:  název obchodníka, částka, datum, čas)
+*   Výběry: bankomat, částka, datum, čas
 
 
 ## DEPLOYMENT
@@ -921,11 +919,7 @@ Joby:
     *   Spusti deployment
     *   Xicht je dostupny na [http://194.182.88.14:8080](http://194.182.88.14:8080/)
 
-
-## Použité technologie a knihovny
-TODO:
-
-
+## Autoři
 ![alt text][Náš tým]
 
 [Náš tým]: http://diymag.com/images/uploads/hobbitfull600.jpg
