@@ -51,6 +51,8 @@ public class RulesetsController {
     @PostMapping (path = "rules/remove")
     public ResponseEntity<Void> removeRule(@RequestBody List<Integer> ids) {
         rulesetService.deleteByIdIn(ids);
+        TransactionCategorizer transactionCategorizer = new TransactionCategorizer();
+        transactionCategorizer.categorizeTransactions();
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
