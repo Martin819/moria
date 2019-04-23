@@ -35,8 +35,8 @@ public class CategoryFinder {
 
             // pokud se smery platby shoduji, pokracuju dal k vyhodnoceni
             if (ruleset.getDirection().equals(transaction.getDirection())) {
-                    compareParametersAndUpdateScore(ruleset, transaction, possibleCategories);
-                }
+                compareParametersAndUpdateScore(ruleset, transaction, possibleCategories);
+            }
             // pokud ne, nedelam nic (zadny vystup do hashmapy)
         }
 
@@ -66,8 +66,7 @@ public class CategoryFinder {
 
         if (ruleset.getDirection().equals("INCOMING")) {
             totalScore += scoreMessage(ruleset.getPayeeMessage(), transaction.getPayeeMessage());
-        }
-        else if (ruleset.getDirection().equals("OUTGOING")) {
+        } else if (ruleset.getDirection().equals("OUTGOING")) {
             totalScore += scoreMessage(ruleset.getPayerMessage(), transaction.getPayerMessage());
         }
 
@@ -77,8 +76,7 @@ public class CategoryFinder {
         }
 
 
-        if (isNotNullOrEmpty(ruleset.getPartyName()) && isNotNullOrEmpty(transaction.getPartyDescription()) ||  checkMerchantNameNotNull(transaction))
-        {
+        if (isNotNullOrEmpty(ruleset.getPartyName()) && isNotNullOrEmpty(transaction.getPartyDescription())) {
             totalScore += scorePartyName(ruleset.getPartyName());
         }
 
@@ -111,7 +109,6 @@ public class CategoryFinder {
             //for testing only
             System.out.print(transaction.getId() + "  " + totalScore + "  " + ruleset.getCategoryId() + " " + getNotNullRulesCount(ruleset) + "\n");
         }
-
     }
 
     private double scorePartyName(String rulePartyName) {
@@ -121,7 +118,9 @@ public class CategoryFinder {
         if (isNotNullOrEmpty(transaction.getPartyDescription())) {
             transactionPartyName = transaction.getPartyDescription();
         } else if (checkMerchantNameNotNull(transaction)) {
-            transactionPartyName = transaction.getAdditionalInfoCard().getMerchantName();
+            if (checkMerchantNameNotNull(transaction)) {
+                transactionPartyName = transaction.getAdditionalInfoCard().getMerchantName();
+            }
         }
 
         if (transactionPartyName.toLowerCase().contains(rulePartyName.toLowerCase())) {
@@ -133,10 +132,9 @@ public class CategoryFinder {
     private double scoreType(String ruleTransactionType, String transactionType, int notNullRulesCount) {
         double score = 0;
         if ((transactionType.toLowerCase().equals(ruleTransactionType.toLowerCase())) || FuzzySearch.partialRatio(ruleTransactionType, transactionType) > THRESHOLD) {
-            if (notNullRulesCount >1) {
-                score+= 0.5;
-            }
-            else {
+            if (notNullRulesCount > 1) {
+                score += 0.5;
+            } else {
                 score++;
             }
         }
@@ -206,24 +204,24 @@ public class CategoryFinder {
     private double scoreValue(BigDecimal rulesetValueFrom, BigDecimal rulesetValueTo) {
         double score = 0;
         //neni vyplneno
-        if (rulesetValueFrom == null & rulesetValueTo == null){
+        if (rulesetValueFrom == null & rulesetValueTo == null) {
             return score;
         }
         //castka do
-        else if (rulesetValueFrom == null & rulesetValueTo != null){
-            if (transaction.getValue().getAmount().compareTo(rulesetValueTo) < 0){
+        else if (rulesetValueFrom == null & rulesetValueTo != null) {
+            if (transaction.getValue().getAmount().compareTo(rulesetValueTo) < 0) {
                 score++;
             }
         }
         //castka od
-        else if (rulesetValueFrom != null & rulesetValueTo == null){
-            if (transaction.getValue().getAmount().compareTo(rulesetValueFrom) > 0){
+        else if (rulesetValueFrom != null & rulesetValueTo == null) {
+            if (transaction.getValue().getAmount().compareTo(rulesetValueFrom) > 0) {
                 score++;
             }
         }
         //castka mezi
         else {
-            if (transaction.getValue().getAmount().compareTo(rulesetValueFrom) > 0 && transaction.getValue().getAmount().compareTo(rulesetValueTo) < 0){
+            if (transaction.getValue().getAmount().compareTo(rulesetValueFrom) > 0 && transaction.getValue().getAmount().compareTo(rulesetValueTo) < 0) {
                 score++;
             }
         }
@@ -249,10 +247,7 @@ public class CategoryFinder {
         if (transactionPartyAccount.getPrefix().contains(rulesetPartyPrefix) && transactionPartyAccount.getAccountNumber().contains(rulesetPartyAccountNumber)
                 && transactionPartyAccount.getBankCode().equals(rulesetPartyBankCode)) {
             score += 2;
-        }
-
-
-        else if (!rulesetPartyAccountNumber.isEmpty()) {
+        } else if (!rulesetPartyAccountNumber.isEmpty()) {
             // pokud cislo je vyplnene, ale neshoduje se s rulesetem, prislusny ruleset se znevyhodni snizenim skore
             score -= 5;
         }
