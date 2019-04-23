@@ -76,7 +76,7 @@ public class CategoryFinder {
         }
 
 
-        if (isNotNullOrEmpty(ruleset.getPartyName()) && isNotNullOrEmpty(transaction.getPartyDescription())) {
+        if (isNotNullOrEmpty(ruleset.getPartyName())) {
             totalScore += scorePartyName(ruleset.getPartyName());
         }
 
@@ -118,13 +118,13 @@ public class CategoryFinder {
         if (isNotNullOrEmpty(transaction.getPartyDescription())) {
             transactionPartyName = transaction.getPartyDescription();
         } else if (checkMerchantNameNotNull(transaction)) {
-            if (checkMerchantNameNotNull(transaction)) {
-                transactionPartyName = transaction.getAdditionalInfoCard().getMerchantName();
-            }
+            transactionPartyName = transaction.getAdditionalInfoCard().getMerchantName();
         }
 
-        if (transactionPartyName.toLowerCase().contains(rulePartyName.toLowerCase())) {
-            score++;
+        if (transactionPartyName != null){
+            if (transactionPartyName.toLowerCase().contains(rulePartyName.toLowerCase())) {
+                score++;
+            }
         }
         return score;
     }
